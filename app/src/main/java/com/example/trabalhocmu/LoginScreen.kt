@@ -61,7 +61,7 @@ fun Login(navController: NavController) {
             modifier = Modifier.size(110.dp)
         )
 
-        Text(text = "Register", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Login", fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = "Enter your username and password to login")
 
