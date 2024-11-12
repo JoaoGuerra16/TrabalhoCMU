@@ -182,7 +182,7 @@ fun RegisterScreen() {
         Text(
             text = "Do you have an account? Login",
             modifier = Modifier.clickable {
-                // Lógica de clique aqui
+                modifer
             }
         )
 

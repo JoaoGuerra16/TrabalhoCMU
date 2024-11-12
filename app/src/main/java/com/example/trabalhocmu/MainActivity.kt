@@ -11,15 +11,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.ui.theme.TrabalhoCMUTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-        RegisterScreen()
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = "PaginaInicial", builder={
+                composable("PaginaInicial",){
+                    PaginaInicial(navController)
+                }
+                composable("Login",){
+                    LoginScreen(navController)
+                }
+                composable("Register",){
+                    RegisterScreen(navController)
+                }
+            })
         }
     }
 }
-
