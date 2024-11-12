@@ -7,8 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,21 +20,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+
 
 @Composable
-fun LoginScreen() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login") {
-        composable("login") { Login(navController) }
-        composable("register") { RegisterScreen() }
-    }
-}
-
-@Composable
-fun Login(navController: NavController) {
+fun LoginScreen(navController: NavController) {
     val scrollState = rememberScrollState()
     val currentLanguage = remember { mutableStateOf("PT") }
 
@@ -71,12 +60,12 @@ fun Login(navController: NavController) {
             value = email.value,
             onValueChange = { email.value = it },
             label = { Text(text = "Email Address") },
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Senha com ícone para mostrar/ocultar
         OutlinedTextField(
             value = password.value,
             onValueChange = { password.value = it },
@@ -86,17 +75,18 @@ fun Login(navController: NavController) {
             trailingIcon = {
                 IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
                     Icon(
-                        imageVector = if (passwordVisible.value) Icons.Default.Search else Icons.Filled.Lock,
+                        imageVector = if (passwordVisible.value) Icons.Filled.VisibilityOff else  Icons.Filled.Visibility,
                         contentDescription = if (passwordVisible.value) "Hide password" else "Show password"
                     )
                 }
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {},
+            onClick = { /* Lógica para login */ },
             modifier = Modifier.width(175.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF454B60)
@@ -109,36 +99,21 @@ fun Login(navController: NavController) {
 
         Text(
             text = "Don't you have an account? Register",
+            color = Color.Blue, // Tornar o texto clicável mais visível
             modifier = Modifier.clickable {
-                navController.navigate("register")
+                navController.navigate("Register")
             }
         )
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp) // Adiciona padding para manter o texto longe da borda da tela
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()) // Permite dar scroll do conteúdo principal
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
 
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        // Seletor de idioma no canto inferior direito
         Row(
             modifier = Modifier
-                .align(Alignment.BottomEnd) // Alinha ao canto inferior direito
+                .align(Alignment.End)
                 .clickable {
                     currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
                 }
-                .padding(bottom = 16.dp, end = 16.dp), // Opcional: padding para ajustar distância da borda
+                .padding(top = 16.dp), // Opcional: ajuste de padding
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -150,8 +125,3 @@ fun Login(navController: NavController) {
     }
 }
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 1040)
-@Composable
-fun PreviewMainScreen() {
-    LoginScreen()
-}
