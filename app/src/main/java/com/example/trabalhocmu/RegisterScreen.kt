@@ -7,7 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -25,6 +24,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 
 import androidx.compose.ui.text.input.VisualTransformation
 
@@ -138,7 +139,7 @@ fun RegisterScreen() {
                 // Ícone de olho para mostrar/ocultar a senha
                 IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
                     Icon(
-                        imageVector = if (passwordVisible.value) Icons.Default.Search else Icons.Filled.Lock,
+                        imageVector = if (passwordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                         contentDescription = if (passwordVisible.value) "Hide password" else "Show password"
                     )
                 }
@@ -158,7 +159,7 @@ fun RegisterScreen() {
                 // Ícone de olho para mostrar/ocultar a senha
                 IconButton(onClick = { confirmPasswordVisible.value = !confirmPasswordVisible.value }) {
                     Icon(
-                        imageVector = if (confirmPasswordVisible.value)Icons.Default.Search else Icons.Filled.Lock,
+                        imageVector = if (confirmPasswordVisible.value)Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                         contentDescription = if (confirmPasswordVisible.value) "Hide password" else "Show password"
                     )
                 }
@@ -182,7 +183,7 @@ fun RegisterScreen() {
         Text(
             text = "Do you have an account? Login",
             modifier = Modifier.clickable {
-                modifer
+              /**/
             }
         )
 

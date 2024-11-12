@@ -21,16 +21,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "PaginaInicial", builder={
-                composable("PaginaInicial",){
-                    PaginaInicial(navController)
-                }
-                composable("Login",){
-                    LoginScreen(navController)
-                }
-                composable("Register",){
-                    RegisterScreen(navController)
-                }
+            NavHost(navController = navController, startDestination = "", builder={
+
+
             })
         }
     }
