@@ -17,11 +17,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.runtime.rememberCoroutineScope
 
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StartingPage(navController: NavController) {
+fun StartingPage(navController: NavController ) {
     val currentLanguage = remember { mutableStateOf("ENG") }
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -116,10 +122,4 @@ fun StartingPage(navController: NavController) {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewStartingPage() {
-    StartingPage(navController = rememberNavController())
 }
