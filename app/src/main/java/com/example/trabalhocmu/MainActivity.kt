@@ -23,7 +23,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "StartingPage", builder =  {
         composable("StartingPage") {
-            StartingPage(navController)
+            Profile(navController)
         }
         composable("Login") {
             LoginScreen(navController)
@@ -31,8 +31,7 @@ fun AppNavigation() {
         composable("Register") {
             RegisterScreen(navController)
         }
-//        composable("ForgotPassword") {
-//            ForgotPassword(navController)
+//        composable("rate") {         ForgotPassword(navController)
 //        }
     }
     )
