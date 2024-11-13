@@ -3,11 +3,15 @@ package com.example.trabalhocmu
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.runtime.Composable
-
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,20 +24,25 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppNavigation() {
+    // Criar o estado do drawer (ModalNavigationDrawer)
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "StartingPage", builder =  {
+
+    // Usar o navController dentro da NavHost
+    NavHost(navController = navController, startDestination = "StartingPage") {
         composable("StartingPage") {
-            StartingPage(navController)
+           
+                StartingPage(navController = navController)
+
         }
         composable("Login") {
-            LoginScreen(navController)
+
+                LoginScreen(navController = navController)
+
         }
         composable("Register") {
-            RegisterScreen(navController)
+            // Aqui, a Sidebar não será exibida
+            RegisterScreen(navController = navController)
         }
-//        composable("ForgotPassword") {
-//            ForgotPassword(navController)
-//        }
     }
-    )
 }
