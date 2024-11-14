@@ -1,13 +1,11 @@
 package com.example.trabalhocmu
 
 import RatingViewModel
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
@@ -18,22 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
-
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarRate
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarRate
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.math.roundToInt
@@ -41,17 +30,21 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Profile(navController: NavController, ratingViewModel: RatingViewModel = viewModel()) {
-    val scrollState = rememberScrollState()
-    val currentLanguage = remember { mutableStateOf("PT") }
-    val fullName = remember { mutableStateOf("John Doe") }
-    val username = remember { mutableStateOf("JohnDoe") }
-    val mobile = remember { mutableStateOf("+1234567890") }
-    val email = remember { mutableStateOf("john.doe@example.com") }
-    val age = remember { mutableStateOf("30") }
-    val gender = remember { mutableStateOf("Male") }
-    val averageRating by ratingViewModel.averageRating.collectAsState()
+fun Profile(
+    navController: NavController,
+    fullName: MutableState<String>,
+    username: MutableState<String>,
+    mobile: MutableState<String>,
+    email: MutableState<String>,
+    age: MutableState<String>,
+    gender: MutableState<String>,
+    ratingViewModel: RatingViewModel = viewModel()
+) {
 
+
+    val currentLanguage = remember { mutableStateOf("PT") }
+    val averageRating by ratingViewModel.averageRating.collectAsState()
+    val scrollState = rememberScrollState()
     val roundedRating = averageRating.roundToInt()
 
     TopAppBar(
@@ -91,7 +84,7 @@ fun Profile(navController: NavController, ratingViewModel: RatingViewModel = vie
                     fontWeight = FontWeight.Bold,
                 )
                 IconButton(onClick = {
-                    navController.navigate("Rate")
+                    navController.navigate("edit_profile")
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Create,
@@ -204,8 +197,3 @@ fun RatingStars(rating: Int) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewProfile() {
-    Profile(navController = rememberNavController())
-}
