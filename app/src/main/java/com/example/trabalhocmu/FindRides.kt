@@ -20,210 +20,190 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FindRides(navController: NavController, drawerState: DrawerState) {
-    val scrollState = rememberScrollState()
-    val currentLanguage = remember { mutableStateOf("PT") }
-    var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
-    val selectedDate = remember { mutableStateOf("Select Date") }
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
+fun FindRides(navController: NavController) {
+    SidebarScaffold(navController = navController) { paddingValues ->
+        val scrollState = rememberScrollState()
+        val currentLanguage = remember { mutableStateOf("PT") }
+        var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+        val selectedDate = remember { mutableStateOf("Select Date") }
+        val context = LocalContext.current
 
-    // Função para exibir o DatePickerDialog
-    val showDatePicker = {
-        val datePicker = DatePickerDialog(context, { _, year, month, dayOfMonth ->
-            selectedDate.value = "$dayOfMonth/${month + 1}/$year"
-        }, 2024, 0, 1)  // Data inicial (ano, mês, dia)
+        // Função para exibir o DatePickerDialog
+        val showDatePicker = {
+            val datePicker = DatePickerDialog(context, { _, year, month, dayOfMonth ->
+                selectedDate.value = "$dayOfMonth/${month + 1}/$year"
+            }, 2024, 0, 1)  // Data inicial (ano, mês, dia)
+            datePicker.show()
+        }
 
-        datePicker.show()
-    }
+        // Rides disponíveis
+        val rides = listOf(
+            Ride("Lisboa", "Porto", 3, "08:00", "12:00", LocalDate.of(2024, 11, 13)),
+            Ride("Porto", "Coimbra", 2, "13:00", "15:00", LocalDate.of(2024, 11, 14)),
+            Ride("Lisboa", "Faro", 4, "09:00", "13:00", LocalDate.of(2024, 11, 15)),
+            Ride("Coimbra", "Lisboa", 1, "11:00", "14:00", LocalDate.of(2024, 11, 15)),
+            Ride("Faro", "Lisboa", 3, "14:00", "18:00", LocalDate.of(2024, 11, 15)),
+            Ride("Lisboa", "Braga", 2, "06:00", "10:00", LocalDate.of(2024, 11, 16)),
+            Ride("Porto", "Faro", 4, "17:00", "22:00", LocalDate.of(2024, 11, 16)),
+            Ride("Lisboa", "Coimbra", 2, "10:00", "12:30", LocalDate.of(2024, 11, 17))
+        )
 
-    // Rides disponíveis
-    val rides = listOf(
-        Ride("Lisboa", "Porto", 3, "08:00", "12:00", LocalDate.of(2024, 11, 13)),
-        Ride("Porto", "Coimbra", 2, "13:00", "15:00", LocalDate.of(2024, 11, 14)),
-        Ride("Lisboa", "Faro", 4, "09:00", "13:00", LocalDate.of(2024, 11, 15)),
-        Ride("Coimbra", "Lisboa", 1, "11:00", "14:00", LocalDate.of(2024, 11, 15)),
-        Ride("Faro", "Lisboa", 3, "14:00", "18:00", LocalDate.of(2024, 11, 15)),
-        Ride("Lisboa", "Braga", 2, "06:00", "10:00", LocalDate.of(2024, 11, 16)),
-        Ride("Porto", "Faro", 4, "17:00", "22:00", LocalDate.of(2024, 11, 16)),
-        Ride("Lisboa", "Coimbra", 2, "10:00", "12:30", LocalDate.of(2024, 11, 17))
-    )
+        // Guardar as rides filtradas
+        var filteredRides by remember { mutableStateOf(rides) }
 
-    // Controlo de paginas
-    var pageIndex by remember { mutableStateOf(0) }
-    val itemsPerPage = 4
-    val pageCount = (rides.size + itemsPerPage - 1) / itemsPerPage  // Total de páginas
-
-    // Obter as rides para a página atual
-    val currentPageRides = rides
-        .drop(pageIndex * itemsPerPage)
-        .take(itemsPerPage)
-
-    TopAppBar(
-        title = {},
-        navigationIcon = {
-            IconButton(onClick = {
-                scope.launch {
-                    if (drawerState.isOpen) {
-                        drawerState.close()
-                    } else {
-                        drawerState.open()
-                    }
-                }
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "Menu Icon",
-                    modifier = Modifier.size(24.dp),
-                    tint = Color.Gray
-                )
+        // Filtrar rides pela data selecionada
+        LaunchedEffect(selectedDate.value) {
+            filteredRides = if (selectedDate.value != "Select Date") {
+                val selectedDateParsed = LocalDate.parse(selectedDate.value, DateTimeFormatter.ofPattern("d/M/yyyy"))
+                rides.filter { it.date == selectedDateParsed }
+            } else {
+                rides
             }
-        },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Transparent)
-    )
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
+        }
+
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(paddingValues)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Logo",
-                modifier = Modifier.size(70.dp)
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-
-            Text(text = "Find Rides", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    label = { Text("Search") },
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Filled.Search, contentDescription = "Search Icon")
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .height(40.dp),
-                    singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Blue,
-                        unfocusedBorderColor = Color.Gray
-                    )
+                Spacer(modifier = Modifier.height(20.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(70.dp)
                 )
+                Spacer(modifier = Modifier.height(30.dp))
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Text(text = "Find Rides", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    OutlinedTextField(
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
+                        label = { Text("Search") },
+                        leadingIcon = {
+                            Icon(imageVector = Icons.Filled.Search, contentDescription = "Search Icon")
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(40.dp),
+                        singleLine = true,
+                        shape = RoundedCornerShape(12.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Blue,
+                            unfocusedBorderColor = Color.Gray
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Button(
+                            onClick = { showDatePicker() },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.Gray,
+                                contentColor = Color.White
+                            )
+                        ) {
+                            Text(text = "Select Date")
+                        }
+
+                        // Botão para cancelar a seleção de data
+                        if (selectedDate.value != "Select Date") {
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Button(
+                                onClick = { selectedDate.value = "Select Date" },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Red,
+                                    contentColor = Color.White
+                                )
+                            ) {
+                                Text(text = "Cancel Date")
+                            }
+                        }
+                    }
+
+                    if (selectedDate.value != "Select Date") {
+                        Text(
+                            text = "Selected Date: ${selectedDate.value}",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    // Exibir mensagem se não houver rides disponíveis
+                    if (filteredRides.isEmpty()) {
+                        Text(
+                            text = "No rides available",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Red
+                        )
+                    } else {
+                        // Exibir as rides filtradas
+                        filteredRides.forEach { ride ->
+                            RideInformation(
+                                from = ride.from,
+                                to = ride.to,
+                                availableSeats = ride.availableSeats,
+                                startTime = ride.startTime,
+                                arrivalTime = ride.arrivalTime,
+                                date = ride.date
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                }
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .clickable {
+                            currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
-                    Button(
-                        onClick = { showDatePicker() },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Gray,
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Text(text = "Select Date")
-                    }
-                }
-
-                if (selectedDate.value != "Select Date") {
                     Text(
-                        text = "Selected Date: ${selectedDate.value}",
-                        fontSize = 18.sp,
+                        text = if (currentLanguage.value == "ENG") "ENG | PT" else "PT | ENG",
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // Exibir as rides da página atual
-                currentPageRides.forEach { ride ->
-                    RideInformation(
-                        from = ride.from,
-                        to = ride.to,
-                        availableSeats = ride.availableSeats,
-                        startTime = ride.startTime,
-                        arrivalTime = ride.arrivalTime
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                // Botões de navegação de página
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Button(
-                        onClick = { if (pageIndex > 0) pageIndex-- },
-                        enabled = pageIndex > 0
-                    ) {
-                        Text("Previous")
-                    }
-                    Text(
-                        text = "Page ${pageIndex + 1} of $pageCount",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Button(
-                        onClick = { if (pageIndex < pageCount - 1) pageIndex++ },
-                        enabled = pageIndex < pageCount - 1
-                    ) {
-                        Text("Next")
-                    }
-                }
-
-                Spacer(modifier = Modifier.weight(1f)) // Empurra o conteúdo para cima
             }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-                    .clickable {
-                        currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
-                    },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Absolute.Right
-            ) {
-                Text(
-                    text = if (currentLanguage.value == "ENG") "ENG | PT" else "PT | ENG",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
         }
     }
 }
 
 @Composable
-fun RideInformation(from: String, to: String, availableSeats: Int, startTime: String, arrivalTime: String) {
+fun RideInformation(from: String, to: String, availableSeats: Int, startTime: String, arrivalTime: String , date: LocalDate) {
     Card(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
@@ -273,6 +253,13 @@ fun RideInformation(from: String, to: String, availableSeats: Int, startTime: St
             ) {
                 Text(text = "Arrival Time:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 Text(text = arrivalTime, fontSize = 16.sp)
+            }// Exibe a data da ride
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "Date:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = date.toString(), fontSize = 16.sp)
             }
         }
     }
@@ -292,5 +279,5 @@ data class Ride(
 fun FindRidesPreview() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    FindRides(navController, drawerState)
+    FindRides(navController)
 }

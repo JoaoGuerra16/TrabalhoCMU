@@ -50,7 +50,7 @@ fun AppNavigation() {
                     Sidebar(navController = navController, drawerState = drawerState)
                 }
             ) {
-                FindRides(navController = navController, drawerState = drawerState)
+                FindRides(navController = navController)
             }
         }
 
