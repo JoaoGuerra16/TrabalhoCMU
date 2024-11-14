@@ -8,8 +8,46 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SidebarScaffold(
+    navController: NavController,
+    content: @Composable (PaddingValues) -> Unit
+) {
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    // Container principal que inclui o drawer e a top bar
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            Sidebar(navController, drawerState)
+        }
+    ) {
+        // Scaffold para TopBar e conteúdo da página
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            scope.launch { drawerState.open() }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Menu,
+                                contentDescription = "Open Menu"
+                            )
+                        }
+                    }
+                )
+            },
+            content = content
+        )
+    }
+}
 
 @Composable
 fun Sidebar(navController: NavController, drawerState: DrawerState) {
@@ -17,19 +55,15 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
 
     // Conteúdo do Drawer
     ModalDrawerSheet {
-        // Icone para abrir/fechar o menu, caso necessário
+        // Icone para fechar o menu
         IconButton(onClick = {
             scope.launch {
-                if (drawerState.isOpen) {
-                    drawerState.close()
-                } else {
-                    drawerState.open()
-                }
+                drawerState.close()
             }
         }) {
             Icon(
                 imageVector = Icons.Default.Menu,
-                contentDescription = "Menu Icon",
+                contentDescription = "Close Menu",
                 modifier = Modifier.size(24.dp),
                 tint = Color.Gray
             )
