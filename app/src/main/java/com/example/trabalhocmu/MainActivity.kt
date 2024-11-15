@@ -22,6 +22,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun AppNavigation() {
     // Criar o estado do drawer (ModalNavigationDrawer)
@@ -31,18 +32,37 @@ fun AppNavigation() {
     // Usar o navController dentro da NavHost
     NavHost(navController = navController, startDestination = "StartingPage") {
         composable("StartingPage") {
-           
+            //  Sidebar será exibida
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    Sidebar(navController = navController, drawerState = drawerState)
+                }
+            ) {
                 StartingPage(navController = navController)
-
+            }
         }
-        composable("Login") {
-
-                LoginScreen(navController = navController)
-
+        composable("Find Rides") {
+            //  Sidebar será exibida
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    Sidebar(navController = navController, drawerState = drawerState)
+                }
+            ) {
+                FindRides(navController = navController)
+            }
         }
+
+
         composable("Register") {
             // Aqui, a Sidebar não será exibida
             RegisterScreen(navController = navController)
         }
+        composable("Login") {
+            // Aqui, a Sidebar não será exibida
+            LoginScreen(navController = navController)
+        }
     }
 }
+
