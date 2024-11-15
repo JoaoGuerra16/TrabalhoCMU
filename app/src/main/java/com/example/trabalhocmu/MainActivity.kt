@@ -51,7 +51,7 @@ fun AppNavigation() {
                     Sidebar(navController = navController, drawerState = drawerState)
                 }
             ) {
-                Profile(navController = navController)
+                StartingPage(navController = navController)
             }
         }
         composable("Find Rides") {
