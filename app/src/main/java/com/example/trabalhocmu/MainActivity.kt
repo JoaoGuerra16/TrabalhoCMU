@@ -35,28 +35,13 @@ class MainActivity : ComponentActivity() {
 fun AppNavigation() {
     val navController = rememberNavController()
 
-    // Defina os estados do perfil aqui
-    val fullName = remember { mutableStateOf("John Doe") }
-    val username = remember { mutableStateOf("JohnDoe") }
-    val mobile = remember { mutableStateOf("+1234567890") }
-    val email = remember { mutableStateOf("john.doe@example.com") }
-    val age = remember { mutableStateOf("30") }
-    val gender = remember { mutableStateOf("Male") }
 
     NavHost(navController = navController, startDestination = "splash_screen") {
         composable("splash_screen") {
-            SplashScreen(navController = navController)
+            SplashScreen( navController)
         }
         composable("StartingPage") {
-            Profile(
-                navController = navController,
-                fullName = fullName,
-                username = username,
-                mobile = mobile,
-                email = email,
-                age = age,
-                gender = gender
-            )
+            Profile( navController)
         }
         composable("Login") {
             LoginScreen(navController)
@@ -65,15 +50,7 @@ fun AppNavigation() {
             RegisterScreen(navController)
         }
         composable("edit_profile") {
-            EditProfileScreen(
-                navController = navController,
-                fullName = fullName,
-                username = username,
-                mobile = mobile,
-                email = email,
-                age = age,
-                gender = gender
-            )
+            EditProfileScreen(navController)
         }
     }
 }
@@ -86,7 +63,7 @@ fun SplashScreen(navController: NavController) {
     // Lógica para aumentar o progresso da barra
     LaunchedEffect(Unit) {
         while (progress < 1f) {
-            delay(50) // Ajuste a velocidade da barra
+            delay(20) // Ajuste a velocidade da barra
             progress += 0.02f // Incremento do progresso
         }
         navController.navigate("StartingPage") {
