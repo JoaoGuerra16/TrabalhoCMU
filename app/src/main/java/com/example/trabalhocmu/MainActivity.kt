@@ -51,6 +51,7 @@ fun AppNavigation() {
                 }
             ) {
                 FindRides(navController = navController)
+
             }
         }
 
