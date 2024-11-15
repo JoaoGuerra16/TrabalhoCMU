@@ -1,1 +1,18 @@
-/local.properties
+# Android/Gradle files
+.gradle/
+build/
+.idea/
+
+# Android Studio
+*.iml
+
+# Arquivos gerados pela IDE
+*.log
+*.bak
+
+# Arquivos específicos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de compilação temporários
+local.properties
