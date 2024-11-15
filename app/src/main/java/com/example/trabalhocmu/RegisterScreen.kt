@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.navigation.NavController
 
 val PoppinsFamily = FontFamily(
     Font(R.font.poppinsregular),  // Fonte Regular
@@ -34,7 +35,7 @@ val PoppinsFamily = FontFamily(
 )
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(navController: NavController) {
     val scrollState = rememberScrollState()
     val currentLanguage = remember { mutableStateOf("PT") }
 
@@ -51,6 +52,7 @@ fun RegisterScreen() {
     // Estado para controlar a visibilidade da senha
     val passwordVisible = remember { mutableStateOf(false) }
     val confirmPasswordVisible = remember { mutableStateOf(false) }
+
 
     Column(
         modifier = Modifier
@@ -182,7 +184,7 @@ fun RegisterScreen() {
         Text(
             text = "Do you have an account? Login",
             modifier = Modifier.clickable {
-                // Lógica de clique aqui
+                navController.navigate("Login")
             }
         )
 
@@ -204,8 +206,3 @@ fun RegisterScreen() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 360, heightDp = 1040)
-@Composable
-fun PreviewRegisterScreen() {
-    RegisterScreen()
-}
