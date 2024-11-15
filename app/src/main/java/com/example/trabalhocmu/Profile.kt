@@ -1,5 +1,6 @@
 package com.example.trabalhocmu
 
+import RatingViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,18 +30,22 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Profile(navController: NavController) {
-    val fullName = remember { mutableStateOf("John Doe") }
-    val username = remember { mutableStateOf("JohnDoe") }
-    val mobile = remember { mutableStateOf("+1234567890") }
-    val email = remember { mutableStateOf("john.doe@example.com") }
-    val age = remember { mutableStateOf("30") }
-    val gender = remember { mutableStateOf("Male") }
+fun Profile(
+    navController: NavController,
+    fullName: MutableState<String>,
+    username: MutableState<String>,
+    mobile: MutableState<String>,
+    email: MutableState<String>,
+    age: MutableState<String>,
+    gender: MutableState<String>,
+    ratingViewModel: RatingViewModel = viewModel()
+) {
+
 
     val currentLanguage = remember { mutableStateOf("PT") }
-
+    val averageRating by ratingViewModel.averageRating.collectAsState()
     val scrollState = rememberScrollState()
-
+    val roundedRating = averageRating.roundToInt()
 
     TopAppBar(
         title = { },
@@ -108,7 +113,7 @@ fun Profile(navController: NavController) {
             Spacer(modifier = Modifier.height(10.dp))
 
             // Estrelas de Avaliação
-            RatingStars(rating = 2)   // Começa com zero estrelas preenchidas
+            RatingStars(rating = roundedRating)   // Começa com zero estrelas preenchidas
             Spacer(modifier = Modifier.height(45.dp))
 
             Column(modifier = Modifier.fillMaxWidth()) {

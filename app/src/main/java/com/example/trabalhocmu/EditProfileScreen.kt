@@ -19,13 +19,14 @@ import com.example.trabalhocmu.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
-    navController: NavController) {
-    val fullName = remember { mutableStateOf("John Doe") }
-    val username = remember { mutableStateOf("JohnDoe") }
-    val mobile = remember { mutableStateOf("+1234567890") }
-    val email = remember { mutableStateOf("john.doe@example.com") }
-    val age = remember { mutableStateOf("30") }
-    val gender = remember { mutableStateOf("Male") }
+    navController: NavController,
+    fullName: MutableState<String>,
+    username: MutableState<String>,
+    mobile: MutableState<String>,
+    email: MutableState<String>,
+    age: MutableState<String>,
+    gender: MutableState<String>
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
