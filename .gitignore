@@ -16,3 +16,4 @@ Thumbs.db
 
 # Arquivos de compilação temporários
 local.properties
+/.gradle
