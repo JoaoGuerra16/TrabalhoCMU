@@ -1,5 +1,6 @@
 package com.example.trabalhocmu
 
+import LanguageViewModel
 import RatingViewModel
 import android.os.Bundle
 import android.provider.Telephony.Mms.Rate
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -47,6 +49,7 @@ fun AppNavigation() {
     // Criar o estado do drawer (ModalNavigationDrawer)
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val navController = rememberNavController()
     val ratingViewModel: RatingViewModel = viewModel() // ViewModel compartilhado entre telas
 
@@ -70,13 +73,13 @@ fun AppNavigation() {
             SplashScreen(navController)
         }
 
-        // Tela inicial (com Drawer)
         composable("StartingPage") {
+            val context = LocalContext.current // Obtém o contexto atual
+            val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(context)) // Passando o contexto ao criar o ViewModel
             DrawerWrapper {
-                StartingPage(navController = navController)
+                SettingsScreen(navController = navController, languageViewModel = languageViewModel)
             }
         }
-
         // Tela de busca de caronas (com Drawer)
         composable("Find Rides") {
             DrawerWrapper {
@@ -106,6 +109,7 @@ fun AppNavigation() {
         // Tela de avaliação
         composable("Rate") {
             RateScreen(navController, ratingViewModel) // Passando o ViewModel para RateScreen
+
         }
 
         composable("My Rides") {
@@ -118,6 +122,8 @@ fun AppNavigation() {
                 MyRides(navController = navController)
             }
         }
+
+
 
         // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
