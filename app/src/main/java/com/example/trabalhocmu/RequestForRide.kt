@@ -64,6 +64,7 @@ fun RequestForRide(navController: NavController) {
 
                 // Request Information exemplo
                 RequestInformation(
+                    navController = navController,
                     name = "Maria João",
                     gender = "Female",
                     pickupPoint = "Rua do jardim, Felgueiras",
@@ -72,14 +73,17 @@ fun RequestForRide(navController: NavController) {
                 )
 
                 RequestInformation(
+                    navController = navController,
                     name = "Maria Miguel",
                     gender = "Female",
                     pickupPoint = "Rua xpto",
                     onAccept = { /* Ação para aceitar a solicitação */ },
                     onDecline = { /* Ação para recusar a solicitação */ }
+
                 )
 
                 RequestInformation(
+                    navController = navController,
                     name = "Maria Ângela",
                     gender = "Female",
                     pickupPoint = "Porto, rua do Porto",
@@ -88,6 +92,7 @@ fun RequestForRide(navController: NavController) {
                 )
 
                 RequestInformation(
+                    navController = navController,
                     name = "Maria Rafaela",
                     gender = "Female",
                     pickupPoint = "Lixa, rua do cemitério",
@@ -105,13 +110,17 @@ fun RequestInformation(
     gender: String,
     pickupPoint: String,
     onAccept: () -> Unit,
-    onDecline: () -> Unit
+    onDecline: () -> Unit,
+    navController: NavController
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable {
+        navController.navigate("RequestInfo/$name/$gender/$pickupPoint")
+    },
         colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

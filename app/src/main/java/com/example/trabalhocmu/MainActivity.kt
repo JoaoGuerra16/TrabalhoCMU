@@ -70,6 +70,13 @@ fun AppNavigation() {
             SplashScreen(navController)
         }
 
+        composable("RequestInfo/{name}/{gender}/{pickupPoint}") { backStackEntry ->
+            val name = backStackEntry.arguments?.getString("name") ?: "N/A"
+            val gender = backStackEntry.arguments?.getString("gender") ?: "N/A"
+            val pickupPoint = backStackEntry.arguments?.getString("pickupPoint") ?: "N/A"
+            RequestInfo(navController, name, gender, pickupPoint)
+        }
+
         // Tela inicial (com Drawer)
         composable("StartingPage") {
             DrawerWrapper {
@@ -122,6 +129,7 @@ fun AppNavigation() {
                 MyRides(navController = navController)
             }
         }
+
 
         // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
