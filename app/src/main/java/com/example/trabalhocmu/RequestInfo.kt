@@ -39,7 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
 @Composable
-fun RequestInfo(navController: NavController, name: String, gender: String) {
+fun RequestInfo(navController: NavController, name: String, gender: String, pickupPoint: String) {
     SidebarScaffold(navController = navController) { paddingValues ->
         val currentLanguage = remember { mutableStateOf("PT") }
         val scrollState = rememberScrollState()
@@ -87,7 +87,20 @@ fun RequestInfo(navController: NavController, name: String, gender: String) {
                 UserInfoRow(label = "Gender", gender ?: "N/A")
 
                 Spacer(modifier = Modifier.height(15.dp))
-                
+
+
+                Image(
+                    painter = painterResource(id = R.drawable.mapa),
+                    contentDescription = "Mapa",
+                    modifier = Modifier
+                        .size(350.dp)
+                        .align(Alignment.CenterHorizontally)  // Garante que o mapa está centralizado
+                )
+
+                UserInfoRow(label = "Pick up", info = "Felgueiras")
+                Spacer(modifier = Modifier.height(15.dp))
+                UserInfoRow(label = "Dropoff", info= "Lixa")
+
             }
         }
 
@@ -114,6 +127,7 @@ fun RequestInfo(navController: NavController, name: String, gender: String) {
         RequestInfo(
             navController = rememberNavController(),
             name = "John Doe",
-            gender = "Male"
+            gender = "Male",
+            pickupPoint = "Felgueiras, rua do jardim"
         )
     }
