@@ -108,6 +108,10 @@ fun AppNavigation() {
             RateScreen(navController, ratingViewModel) // Passando o ViewModel para RateScreen
         }
 
+        composable("RequestForRide") {
+            RequestForRide(navController)
+        }
+
         composable("My Rides") {
             ModalNavigationDrawer(
                 drawerState = drawerState,

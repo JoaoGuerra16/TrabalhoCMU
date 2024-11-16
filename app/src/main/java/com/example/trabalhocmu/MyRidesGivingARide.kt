@@ -131,7 +131,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                     verticalAlignment = Alignment.CenterVertically // Alinha verticalmente
                 ) {
                     Button(
-                        onClick = { /* Ação para o botão People Requests */ },
+                        onClick = { navController.navigate("RequestForRide") },
                         colors = ButtonDefaults.buttonColors(containerColor = darkBlue) // Cor azul
                     ) {
                         Text(
