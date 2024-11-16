@@ -46,55 +46,78 @@ class MainActivity : ComponentActivity() {
 fun AppNavigation() {
     // Criar o estado do drawer (ModalNavigationDrawer)
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
     val navController = rememberNavController()
-    val ratingViewModel: RatingViewModel = viewModel() // Colocando o ViewModel aqui, para ser compartilhado
+    val ratingViewModel: RatingViewModel = viewModel() // ViewModel compartilhado entre telas
+
+    // Função para gerenciar o drawer com as telas que o utilizam
+    @Composable
+    fun DrawerWrapper(content: @Composable () -> Unit) {
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                Sidebar(navController = navController, drawerState = drawerState)
+            }
+        ) {
+            content()
+        }
+    }
 
     // Definir o comportamento de navegação para as telas
     NavHost(navController = navController, startDestination = "splash_screen") {
+        // Tela de splash
         composable("splash_screen") {
             SplashScreen(navController)
         }
+
+        // Tela inicial (com Drawer)
         composable("StartingPage") {
-            ModalNavigationDrawer(
-                drawerState = drawerState,
-                drawerContent = {
-                    Sidebar(navController = navController, drawerState = drawerState)
-                }
-            ) {
+            DrawerWrapper {
                 StartingPage(navController = navController)
             }
         }
+
+        // Tela de busca de caronas (com Drawer)
         composable("Find Rides") {
-            ModalNavigationDrawer(
-                drawerState = drawerState,
-                drawerContent = {
-                    Sidebar(navController = navController, drawerState = drawerState)
-                }
-            ) {
+            DrawerWrapper {
                 FindRides(navController = navController)
             }
         }
+
+        // Telas de autenticação e registro
         composable("Register") {
             RegisterScreen(navController = navController)
         }
         composable("Login") {
             LoginScreen(navController = navController)
         }
-        composable("EditProfile") {
-            EditProfileScreen(navController)
-        }
-        composable("Profile") {
-            Profile(navController, ratingViewModel)  // Passando o ViewModel para Profile
-        }
-        composable("Rate") {
-            RateScreen(navController, ratingViewModel) // Passando o ViewModel para RateScreen
-        }
         composable("ForgotPassword") {
             ForgotPassword(navController)
         }
 
+        // Telas de perfil
+        composable("EditProfile") {
+            EditProfileScreen(navController)
+        }
+        composable("Profile") {
+            Profile(navController, ratingViewModel) // Passando o ViewModel para Profile
+        }
+
+        // Tela de avaliação
+        composable("Rate") {
+            RateScreen(navController, ratingViewModel) // Passando o ViewModel para RateScreen
+        }
+
+        // Tela de detalhes da carona
+        composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val date = backStackEntry.arguments?.getString("date")
+            RideDetailsScreen(navController, from, to, date)
+        }
     }
 }
+
 
 @Composable
 fun SplashScreen(navController: NavController) {
