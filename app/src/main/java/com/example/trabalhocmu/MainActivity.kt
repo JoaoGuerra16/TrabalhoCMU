@@ -126,6 +126,47 @@ fun AppNavigation() {
             val date = backStackEntry.arguments?.getString("date")
             RideDetailsScreen(navController, from, to, date)
         }
+        composable("MyRidesGivingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val startTime = backStackEntry.arguments?.getString("startTime")
+            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+            val date = backStackEntry.arguments?.getString("date")
+            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: 0
+
+            // Passando os parâmetros para a tela MyRidesGivingARide
+            MyRidesGivingARide(
+                navController = navController,
+                from = from,
+                to = to,
+                startTime = startTime,
+                arrivalTime = arrivalTime,
+                date = date,
+                availableSeats = availableSeats.toString()
+            )
+        }
+
+        composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val startTime = backStackEntry.arguments?.getString("startTime")
+            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+            val date = backStackEntry.arguments?.getString("date")
+            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: 0
+
+            // Passando os parâmetros para a tela MyRidesGivingARide
+            MyRidesTakingARide(
+                navController = navController,
+                from = from,
+                to = to,
+                startTime = startTime,
+                arrivalTime = arrivalTime,
+                date = date,
+                availableSeats = availableSeats.toString()
+            )
+        }
+
+
     }
 }
 
