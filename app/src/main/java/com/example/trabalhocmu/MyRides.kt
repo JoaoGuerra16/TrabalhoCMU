@@ -184,6 +184,7 @@ fun MyRides(navController: NavController) {
                     // Mostra as rides filtradas
                     filteredRides.forEach { ride ->
                         MyRidesInformation(
+                            navController = navController,
                             from = ride.from,
                             to = ride.to,
                             availableSeats = ride.availableSeats,
@@ -229,7 +230,8 @@ fun MyRidesInformation(
     arrivalTime: String,
     date: LocalDate,
     isGivingRide: Boolean,
-    onCancelRide: () -> Unit
+    onCancelRide: () -> Unit,
+    navController: NavController
 ) {
     // Variável para controlar se o dialog de confirmação deve aparecer
     var showDialog by remember { mutableStateOf(false) }
@@ -267,7 +269,14 @@ fun MyRidesInformation(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable {
+                if (isGivingRide) {
+                    navController.navigate("MyRidesGivingARide/$from/$to/$startTime/$arrivalTime/${date.toString()}/${availableSeats.toString()}")
+                } else {
+                navController.navigate("MyRidesTakingARide/$from/$to/$startTime/$arrivalTime/${date.toString()}/${availableSeats.toString()}")
+            }
+            },
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
