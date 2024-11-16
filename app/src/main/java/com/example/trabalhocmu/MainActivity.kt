@@ -1,30 +1,39 @@
 package com.example.trabalhocmu
 
-
+import RatingViewModel
 import android.os.Bundle
+import android.provider.Telephony.Mms.Rate
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-
 import kotlinx.coroutines.delay
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
+    companion object {
+        val PoppinsFamily = FontFamily(
+            Font(R.font.poppinsregular),  // Fonte Regular
+            Font(R.font.poppinsbold)     // Fonte Bold
+        )
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -38,6 +47,7 @@ fun AppNavigation() {
     // Criar o estado do drawer (ModalNavigationDrawer)
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val navController = rememberNavController()
+    val ratingViewModel: RatingViewModel = viewModel() // Colocando o ViewModel aqui, para ser compartilhado
 
     // Definir o comportamento de navegação para as telas
     NavHost(navController = navController, startDestination = "splash_screen") {
@@ -70,10 +80,19 @@ fun AppNavigation() {
         composable("Login") {
             LoginScreen(navController = navController)
         }
-
-        composable("edit_profile"){
-            EditProfileScreen(navController )
+        composable("EditProfile") {
+            EditProfileScreen(navController)
         }
+        composable("Profile") {
+            Profile(navController, ratingViewModel)  // Passando o ViewModel para Profile
+        }
+        composable("Rate") {
+            RateScreen(navController, ratingViewModel) // Passando o ViewModel para RateScreen
+        }
+        composable("ForgotPassword") {
+            ForgotPassword(navController)
+        }
+
     }
 }
 
