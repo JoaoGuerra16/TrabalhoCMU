@@ -73,7 +73,7 @@ fun Profile(
                 modifier = Modifier.padding(start = 35.dp)
             ) {
                 Text(
-                    text = "Profile",
+                    text = "Ride info",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                 )

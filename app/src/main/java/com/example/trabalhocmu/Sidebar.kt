@@ -47,6 +47,7 @@ fun SidebarScaffold(
             content = content
         )
     }
+
 }
 
 @Composable

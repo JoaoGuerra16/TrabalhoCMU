@@ -64,6 +64,16 @@ fun AppNavigation() {
                 FindRides(navController = navController)
             }
         }
+        composable("Profile") {
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    Sidebar(navController = navController, drawerState = drawerState)
+                }
+            ) {
+                Profile(navController = navController)
+            }
+        }
         composable("Register") {
             RegisterScreen(navController = navController)
         }
@@ -74,8 +84,16 @@ fun AppNavigation() {
         composable("edit_profile"){
             EditProfileScreen(navController )
         }
+
+        composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val date = backStackEntry.arguments?.getString("date")
+            RideDetailsScreen(navController, from, to, date)
+        }
     }
 }
+
 
 @Composable
 fun SplashScreen(navController: NavController) {

@@ -174,7 +174,10 @@ fun FindRides(navController: NavController) {
                                 availableSeats = ride.availableSeats,
                                 startTime = ride.startTime,
                                 arrivalTime = ride.arrivalTime,
-                                date = ride.date
+                                date = ride.date,
+                                onClick = {
+                                    navController.navigate("ride_details/${ride.from}/${ride.to}/${ride.date}")
+                                }
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                         }
@@ -201,15 +204,23 @@ fun FindRides(navController: NavController) {
         }
     }
 }
-
 @Composable
-fun RideInformation(from: String, to: String, availableSeats: Int, startTime: String, arrivalTime: String , date: LocalDate) {
+fun RideInformation(
+    from: String,
+    to: String,
+    availableSeats: Int,
+    startTime: String,
+    arrivalTime: String,
+    date: LocalDate,
+    onClick: () -> Unit
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA))
+            .padding(8.dp)
+            .clickable { onClick() }, // Chamar o callback ao clicar
+            colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Ride Information", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black)
@@ -253,7 +264,8 @@ fun RideInformation(from: String, to: String, availableSeats: Int, startTime: St
             ) {
                 Text(text = "Arrival Time:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 Text(text = arrivalTime, fontSize = 16.sp)
-            }// Exibe a data da ride
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -264,6 +276,7 @@ fun RideInformation(from: String, to: String, availableSeats: Int, startTime: St
         }
     }
 }
+
 
 data class Ride(
     val from: String,
