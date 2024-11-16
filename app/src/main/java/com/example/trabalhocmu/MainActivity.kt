@@ -108,6 +108,17 @@ fun AppNavigation() {
             RateScreen(navController, ratingViewModel) // Passando o ViewModel para RateScreen
         }
 
+        composable("My Rides") {
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                drawerContent = {
+                    Sidebar(navController = navController, drawerState = drawerState)
+                }
+            ) {
+                MyRides(navController = navController)
+            }
+        }
+
         // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
             val from = backStackEntry.arguments?.getString("from")

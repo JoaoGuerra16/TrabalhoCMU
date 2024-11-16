@@ -130,7 +130,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
             label = { Text("My rides") },
             selected = false,
             onClick = {
-                navController.navigate("Rides")
+                navController.navigate("My Rides")
                 scope.launch { drawerState.close() }
             },
             modifier = Modifier.padding(8.dp)
