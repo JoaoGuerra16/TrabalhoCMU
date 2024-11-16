@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.platform.LocalContext
+import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -73,7 +74,7 @@ fun FindRides(navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(8.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -82,15 +83,10 @@ fun FindRides(navController: NavController) {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "Logo",
-                    modifier = Modifier.size(70.dp)
-                )
-                Spacer(modifier = Modifier.height(30.dp))
 
-                Text(text = "Find Rides", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+
+
+                Text(text = "Find Rides", fontSize = 25.sp, fontWeight = FontWeight.Bold,fontFamily = PoppinsFamily)
 
                 Column(
                     modifier = Modifier
@@ -129,7 +125,7 @@ fun FindRides(navController: NavController) {
                                 contentColor = Color.White
                             )
                         ) {
-                            Text(text = "Select Date")
+                            Text(text = "Select Date", fontFamily = PoppinsFamily)
                         }
 
                         // Botão para cancelar a seleção de data
@@ -142,7 +138,7 @@ fun FindRides(navController: NavController) {
                                     contentColor = Color.White
                                 )
                             ) {
-                                Text(text = "Cancel Date")
+                                Text(text = "Cancel Date",fontFamily = PoppinsFamily,)
                             }
                         }
                     }
@@ -150,6 +146,7 @@ fun FindRides(navController: NavController) {
                     if (selectedDate.value != "Select Date") {
                         Text(
                             text = "Selected Date: ${selectedDate.value}",
+                            fontFamily = PoppinsFamily,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -161,6 +158,7 @@ fun FindRides(navController: NavController) {
                     if (filteredRides.isEmpty()) {
                         Text(
                             text = "No rides available",
+                            fontFamily = PoppinsFamily,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Red
@@ -194,6 +192,7 @@ fun FindRides(navController: NavController) {
                 ) {
                     Text(
                         text = if (currentLanguage.value == "ENG") "ENG | PT" else "PT | ENG",
+                        fontFamily = PoppinsFamily,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -216,14 +215,14 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
         colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Ride Information", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            Text(text = "Ride Information", fontFamily = PoppinsFamily,fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "From:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "From:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
                 Text(text = from, fontSize = 16.sp)
             }
 
@@ -231,7 +230,7 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "To:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "To:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
                 Text(text = to, fontSize = 16.sp)
             }
 
@@ -239,7 +238,7 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Available Seats:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Available Seats:", fontFamily = PoppinsFamily,fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 Text(text = availableSeats.toString(), fontSize = 16.sp)
             }
 
@@ -247,7 +246,7 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Start Time:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Start Time:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
                 Text(text = startTime, fontSize = 16.sp)
             }
 
@@ -255,14 +254,14 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Arrival Time:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Arrival Time:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
                 Text(text = arrivalTime, fontSize = 16.sp)
             }// Exibe a data da ride
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Date:", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Date:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
                 Text(text = date.toString(), fontSize = 16.sp)
             }
         }
