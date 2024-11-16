@@ -169,6 +169,7 @@ fun FindRides(navController: NavController) {
                         // Exibir as rides filtradas
                         filteredRides.forEach { ride ->
                             RideInformation(
+                                navController = navController,
                                 from = ride.from,
                                 to = ride.to,
                                 availableSeats = ride.availableSeats,
@@ -203,12 +204,15 @@ fun FindRides(navController: NavController) {
 }
 
 @Composable
-fun RideInformation(from: String, to: String, availableSeats: Int, startTime: String, arrivalTime: String , date: LocalDate) {
+fun RideInformation(  navController: NavController,from: String, to: String, availableSeats: Int, startTime: String, arrivalTime: String , date: LocalDate) {
     Card(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable {
+                navController.navigate("ride_Details/$from/$to/${date.toString()}")
+            },
         colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
