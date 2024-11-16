@@ -17,109 +17,123 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.rememberCoroutineScope
+import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StartingPage(navController: NavController ) {
+fun StartingPage(navController: NavController) {
     val currentLanguage = remember { mutableStateOf("ENG") }
-
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Coluna principal com os elementos do layout
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(50.dp))
+        BackgroundWithImage {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(25.dp))
 
-            // App Logo
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "App Logo",
-                modifier = Modifier.size(110.dp)
-            )
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            // App Name
-            Text(
-                text = "APP NAME",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF37474F)
-            )
-
-            Spacer(modifier = Modifier.height(100.dp))
-
-            // Login e Register
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
-                Text(text = "Do you have an account?", color = Color(0xFF37474F), fontSize = 20.sp)
+                // App Logo
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "App Logo",
+                    modifier = Modifier.size(110.dp)
+                )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
+                // App Name
+                Text(
+                    text = if (currentLanguage.value == "PT") "NOME DO APP" else "APP NAME",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF37474F),
+                    fontFamily = PoppinsFamily // Aplica Poppins
+                )
 
-                Button(
-                    onClick = {navController.navigate("Login")},
-                    modifier = Modifier.width(175.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF454B60)
-                    )
-                ) {
+                Spacer(modifier = Modifier.height(100.dp))
+
+                // Login e Register
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
-                        text = "Login",
+                        text = if (currentLanguage.value == "PT") "Você tem uma conta?" else "Do you have an account?",
+                        color = Color(0xFF37474F),
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFFFFFF)
+                        fontFamily = PoppinsFamily
                     )
-                }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                Text(text = "Or create one!", color = Color(0xFF37474F), fontSize = 20.sp)
-                Spacer(modifier = Modifier.height(20.dp))
-                Button(
-                    onClick = {navController.navigate("Register")},
-                    modifier = Modifier.width(175.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF454B60)
-                    )
-                ) {
+                    Button(
+                        onClick = { navController.navigate("Login") },
+                        modifier = Modifier.width(175.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF454B60)
+                        )
+                    ) {
+                        Text(
+                            text = if (currentLanguage.value == "PT") "Entrar" else "Login",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFFFFFFF),
+                            fontFamily = PoppinsFamily // Aplica Poppins
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
                     Text(
-                        text = "Register",
+                        text = if (currentLanguage.value == "PT") "Ou crie uma conta!" else "Or create one!",
+                        color = Color(0xFF37474F),
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFFFFFFFF)
+                        fontFamily = PoppinsFamily
                     )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Button(
+                        onClick = { navController.navigate("Register") },
+                        modifier = Modifier.width(175.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF454B60)
+                        )
+                    ) {
+                        Text(
+                            text = if (currentLanguage.value == "PT") "Cadastrar" else "Register",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFFFFFFFF),
+                            fontFamily = PoppinsFamily // Aplica Poppins
+                        )
+                    }
                 }
             }
-
         }
 
-        // Seletor de idioma no canto inferior esquerdo
+        // Seletor de idioma no canto inferior direito
         Row(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
                 .clickable {
+                    // Alterna o idioma entre "PT" e "ENG"
                     currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = if (currentLanguage.value == "ENG") "PT | ENG" else "PT | ENG ",
+                text = if (currentLanguage.value == "ENG") "PT | ENG" else "ENG | PT ",
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontFamily = PoppinsFamily // Aplica Poppins
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewStartingPage() {
+    StartingPage(navController = rememberNavController())
 }
