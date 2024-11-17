@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">APP NAME</string>
+    <string name="app_name">RIDES</string>
     <string name="how_would_you_rate">How would you rate this user?</string>
     <string name="rating">Rating: %1$d Star%2$s</string>
     <string name="submit_rating">Submit Rating</string>
@@ -9,6 +9,7 @@
     <string name="profile_title">Profile</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="username">Username</string>
+    <string name="Rider_profile">Rider Profile</string>
     <string name="mobile">Mobile</string>
     <string name="email">Email</string>
     <string name="age">Age</string>
@@ -86,4 +87,6 @@
 
     <string name="english">English</string>
     <string name="portuguese">Portuguese</string>
+    <string name="notifications">Enable / Disable Notifications</string>
+
 </resources>

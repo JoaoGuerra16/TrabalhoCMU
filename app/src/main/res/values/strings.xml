@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">NOME DO APP</string>
+    <string name="app_name">RIDES</string>
     <string name="how_would_you_rate">Como você avaliaria este utilizador?</string>
     <string name="rating">Avaliação: %1$d Estrela%2$s</string>
     <string name="submit_rating">Enviar Avaliação</string>
     <string name="profile_image_desc">Imagem de Perfil</string>
     <string name="profile_title">Perfil</string>
+    <string name="Rider_profile">Perfil Condutor</string>
     <string name="edit_profile">Editar Perfil</string>
     <string name="username">Nome de Utilizador</string>
     <string name="mobile">Telefone</string>
@@ -82,5 +83,6 @@
 
     <string name="english">Inglês</string>
     <string name="portuguese">Português</string>
+    <string name="notifications">Ativar / Desativar Notificações</string>
 
 </resources>
