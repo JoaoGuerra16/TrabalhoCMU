@@ -139,6 +139,10 @@ fun AppNavigation() {
             RiderProfile(navController)
         }
 
+        composable("Create Ride"){
+            CreateRide(navController)
+        }
+
 
         // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->

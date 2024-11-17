@@ -59,22 +59,12 @@ fun RequestInfo(navController: NavController, name: String, gender: String, pick
             ) {
 
                 Text(
-                    text = "My Rides",
+                    text = "Create Ride",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
 
                     )
-                Spacer(modifier = Modifier.height(20.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.profile),
-                    contentDescription = "Profile Image",
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                RatingStars(rating = 4)
-                Spacer(modifier = Modifier.height(40.dp))
+
 
                 UserInfoRow(label = "Username", info = name ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
