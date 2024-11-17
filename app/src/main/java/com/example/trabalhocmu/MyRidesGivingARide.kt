@@ -142,13 +142,13 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                     }
                     // Botão "Start" verde
                     Button(
-                        onClick = { /* Ação para o botão Start */ },
+                        onClick = { (navController.navigate(  "StartRide/$from/$to/$startTime/$arrivalTime/$date/$availableSeats")) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Green) // Cor verde
                     ) {
                         Text(text = "Start", color = Color.White, fontFamily = PoppinsFamily)
                     }
 
-                    // Botão "People Requests" azul
+
 
                 }
             }
