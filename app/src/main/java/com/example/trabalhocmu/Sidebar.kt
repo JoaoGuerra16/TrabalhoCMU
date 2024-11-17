@@ -150,7 +150,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
             label = { Text("Ride's History") },
             selected = false,
             onClick = {
-                navController.navigate("Ride's History")
+                navController.navigate("RidesHistory")
                 scope.launch { drawerState.close() }
             },
             modifier = Modifier.padding(8.dp)
