@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.DrawerState
@@ -71,6 +72,14 @@ fun AppNavigation() {
             SplashScreen(navController)
         }
 
+        composable("RequestInfo/{name}/{gender}/{pickupPoint}") { backStackEntry ->
+            val name = backStackEntry.arguments?.getString("name") ?: "N/A"
+            val gender = backStackEntry.arguments?.getString("gender") ?: "N/A"
+            val pickupPoint = backStackEntry.arguments?.getString("pickupPoint") ?: "N/A"
+            RequestInfo(navController, name, gender, pickupPoint)
+        }
+
+        // Tela inicial (com Drawer)
         composable("StartingPage") {
             DrawerWrapper(navController, drawerState) {
                 StartingPage(navController)
@@ -112,18 +121,69 @@ fun AppNavigation() {
             RateScreen(navController, ratingViewModel) // Passando o ViewModel para RateScreen
         }
 
+        composable("RequestForRide") {
+            RequestForRide(navController)
+        }
+
+        composable("RidesHistory") {
+            RidesHistory(navController)
+        }
+
         composable("My Rides") {
             DrawerWrapper(navController, drawerState) {
                 MyRides(navController)
             }
         }
 
+
+        // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
             val from = backStackEntry.arguments?.getString("from")
             val to = backStackEntry.arguments?.getString("to")
             val date = backStackEntry.arguments?.getString("date")
             RideDetailsScreen(navController, from, to, date)
         }
+        composable("MyRidesGivingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val startTime = backStackEntry.arguments?.getString("startTime")
+            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+            val date = backStackEntry.arguments?.getString("date")
+            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: 0
+
+            // Passando os parâmetros para a tela MyRidesGivingARide
+            MyRidesGivingARide(
+                navController = navController,
+                from = from,
+                to = to,
+                startTime = startTime,
+                arrivalTime = arrivalTime,
+                date = date,
+                availableSeats = availableSeats.toString()
+            )
+        }
+
+        composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val startTime = backStackEntry.arguments?.getString("startTime")
+            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+            val date = backStackEntry.arguments?.getString("date")
+            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: 0
+
+            // Passando os parâmetros para a tela MyRidesGivingARide
+            MyRidesTakingARide(
+                navController = navController,
+                from = from,
+                to = to,
+                startTime = startTime,
+                arrivalTime = arrivalTime,
+                date = date,
+                availableSeats = availableSeats.toString()
+            )
+        }
+
+
     }
 }
 
@@ -183,4 +243,8 @@ fun SplashScreen(navController: NavController) {
     }
 }
 
-// As telas como StartingPage, FindRides, SettingsScreen, etc. devem ser compostas conforme já estão no código original
+@Preview(showBackground = true)
+@Composable
+fun PreviewSplashScreen() {
+    SplashScreen(navController = rememberNavController())
+}

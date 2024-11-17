@@ -150,7 +150,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
             label = { Text(stringResource(id = R.string.ride_history)) },
             selected = false,
             onClick = {
-                navController.navigate("Rate")
+                navController.navigate("RidesHistory")
                 scope.launch { drawerState.close() }
             },
             modifier = Modifier.padding(8.dp)
@@ -187,7 +187,6 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
