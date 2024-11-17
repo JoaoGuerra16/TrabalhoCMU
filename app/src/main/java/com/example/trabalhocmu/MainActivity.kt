@@ -167,6 +167,25 @@ fun AppNavigation() {
             )
         }
 
+        composable("StartRide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val startTime = backStackEntry.arguments?.getString("startTime")
+            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+            val date = backStackEntry.arguments?.getString("date")
+            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: 0
+
+            MyRidesGivingARide(
+                navController = navController,
+                from = from,
+                to = to,
+                startTime = startTime,
+                arrivalTime = arrivalTime,
+                date = date,
+                availableSeats = availableSeats.toString()
+            )
+        }
+
         composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
             val from = backStackEntry.arguments?.getString("from")
             val to = backStackEntry.arguments?.getString("to")
@@ -186,7 +205,26 @@ fun AppNavigation() {
                 availableSeats = availableSeats.toString()
             )
         }
+        composable(
+            "StartRide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}"
+        ) { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val startTime = backStackEntry.arguments?.getString("startTime")
+            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+            val date = backStackEntry.arguments?.getString("date")
+            val availableSeats = backStackEntry.arguments?.getString("availableSeats")
 
+            StartRide(
+                navController = navController,
+                from = from,
+                to = to,
+                startTime = startTime,
+                arrivalTime = arrivalTime,
+                date = date,
+                availableSeats = availableSeats ?: "0"
+            )
+        }
 
     }
 }
