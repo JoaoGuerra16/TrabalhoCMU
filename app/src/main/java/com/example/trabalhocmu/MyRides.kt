@@ -96,7 +96,7 @@ fun MyRides(navController: NavController) {
                     )
                     // Botão "+"
                     IconButton(
-                        onClick = { /* Ação do botão "+" */ }
+                        onClick = { navController.navigate("Create Ride") }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
