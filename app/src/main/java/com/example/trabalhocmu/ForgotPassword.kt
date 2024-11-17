@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,8 +26,21 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun ForgotPassword(navController: NavController) {
     val scrollState = rememberScrollState()
-    val currentLanguage = remember { mutableStateOf("PT") }
+    var currentLanguage by remember { mutableStateOf("PT") } // Estado para o idioma
     val email = remember { mutableStateOf("") }
+
+    // Função para alterar o idioma
+    val changeLanguage = {
+        currentLanguage = if (currentLanguage == "PT") "ENG" else "PT"
+    }
+
+    // Strings que vão mudar dinamicamente com base no idioma
+    val forgotPasswordText = if (currentLanguage == "PT") "Esqueceu a senha" else "Forgot Password"
+    val resetUsingEmailText = if (currentLanguage == "PT") "Redefina usando seu e-mail" else "Reset using your email"
+    val emailLabelText = if (currentLanguage == "PT") "Endereço de E-mail" else "Email Address"
+    val submitText = if (currentLanguage == "PT") "Enviar" else "Submit"
+    val cancelText = if (currentLanguage == "PT") "Cancelar" else "Cancel"
+    val languageToggleText = if (currentLanguage == "PT") "PT | ENG" else "ENG | PT"
 
     // Usando o componente BackgroundWithImage
     Box(modifier = Modifier.fillMaxSize()) {
@@ -47,14 +61,14 @@ fun ForgotPassword(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "Forgot Password",
+                    text = forgotPasswordText, // Usando a string com base no idioma
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = PoppinsFamily
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = "Reset using your email",
+                    text = resetUsingEmailText, // Usando a string com base no idioma
                     fontFamily = PoppinsFamily
                 )
 
@@ -63,7 +77,7 @@ fun ForgotPassword(navController: NavController) {
                 OutlinedTextField(
                     value = email.value,
                     onValueChange = { email.value = it },
-                    label = { Text(text = "Email Address", fontFamily = PoppinsFamily) },
+                    label = { Text(text = emailLabelText, fontFamily = PoppinsFamily) },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -86,7 +100,7 @@ fun ForgotPassword(navController: NavController) {
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text(text = "Submit", color = Color.White, fontFamily = PoppinsFamily)
+                        Text(text = submitText, color = Color.White, fontFamily = PoppinsFamily)
                     }
 
                     Button(
@@ -105,7 +119,7 @@ fun ForgotPassword(navController: NavController) {
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
-                            text = "Cancel",
+                            text = cancelText,
                             color = Color(0xFFFFFFFF),
                             fontFamily = PoppinsFamily
                         )
@@ -125,14 +139,12 @@ fun ForgotPassword(navController: NavController) {
         ) {
             Row(
                 modifier = Modifier
-                    .clickable {
-                        currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
-                    }
+                    .clickable { changeLanguage() } // Altera o idioma ao clicar
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = if (currentLanguage.value == "PT") "PT | ENG" else "ENG | PT",
+                    text = languageToggleText, // Texto baseado no idioma selecionado
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -142,7 +154,6 @@ fun ForgotPassword(navController: NavController) {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

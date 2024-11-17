@@ -1,5 +1,6 @@
 package com.example.trabalhocmu
 
+import LanguageViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,8 +24,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
-import androidx.compose.material3.Icon
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,31 +42,28 @@ fun EditProfileScreen(
 
         content = { padding ->
             Column(
-
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(15.dp)
-                    .padding(top = 25.dp), // Usa o padding fornecido pela SidebarScaffold
-
+                    .padding(top = 25.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 // Título Edit Profile
                 Text(
-                    text = "Edit Profile",
+                    text = stringResource(R.string.edit_profile_title),
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = PoppinsFamily, // Definindo a fonte personalizada
+                    fontFamily = PoppinsFamily,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp)) // Ajuste o espaço após o título
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Área da foto de perfil com a opção de "Mudar Foto"
                 Box(contentAlignment = Alignment.BottomCenter) {
                     Image(
                         painter = painterResource(id = R.drawable.profile),
-                        contentDescription = "Profile Image",
+                        contentDescription = stringResource(R.string.profile_image_desc),
                         modifier = Modifier
                             .size(100.dp)
                             .clip(CircleShape)
@@ -79,7 +76,7 @@ fun EditProfileScreen(
                             .padding(bottom = 10.dp)
                             .size(50.dp)
                             .clip(CircleShape)
-                            .background(Color(0x80000000)) // Cor semitransparente preta
+                            .background(Color(0x80000000))
                             .clickable {
                                 // Lógica para trocar a foto
                             },
@@ -87,77 +84,54 @@ fun EditProfileScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Filled.CameraAlt,
-                            contentDescription = "Change Photo",
-                            tint = Color.White // Ícone branco para contraste
+                            contentDescription = stringResource(R.string.change_photo),
+                            tint = Color.White
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp)) // Ajuste do espaço após a foto
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Campos de edição de informações
-                OutlinedTextField(
+                ProfileTextField(
                     value = fullName.value,
-                    shape = RoundedCornerShape(12.dp),
                     onValueChange = { fullName.value = it },
-                    label = {
-                        Text(
-                            "Full Name",
-                            fontFamily = PoppinsFamily
-                        )
-                    }, // Fonte aplicada ao rótulo
-                    textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily), // Fonte aplicada ao texto digitado
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(R.string.full_name)
                 )
-                Spacer(modifier = Modifier.height(12.dp)) // Ajuste o espaço entre os campos
+                Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedTextField(
+                ProfileTextField(
                     value = username.value,
-                    shape = RoundedCornerShape(12.dp),
                     onValueChange = { username.value = it },
-                    label = { Text("Username", fontFamily = PoppinsFamily) },
-                    textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily),
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(R.string.username)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedTextField(
+                ProfileTextField(
                     value = mobile.value,
-                    shape = RoundedCornerShape(12.dp),
                     onValueChange = { mobile.value = it },
-                    label = { Text("Mobile", fontFamily = PoppinsFamily) },
-                    textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily),
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(R.string.mobile)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedTextField(
+                ProfileTextField(
                     value = email.value,
-                    shape = RoundedCornerShape(12.dp),
                     onValueChange = { email.value = it },
-                    label = { Text("Email", fontFamily = PoppinsFamily) },
-                    textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily),
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(R.string.email)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedTextField(
+                ProfileTextField(
                     value = age.value,
-                    shape = RoundedCornerShape(12.dp),
                     onValueChange = { age.value = it },
-                    label = { Text("Age", fontFamily = PoppinsFamily) },
-                    textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily),
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(R.string.age)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedTextField(
+                ProfileTextField(
                     value = gender.value,
-                    shape = RoundedCornerShape(12.dp),
                     onValueChange = { gender.value = it },
-                    label = { Text("Gender", fontFamily = PoppinsFamily) },
-                    textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily),
-                    modifier = Modifier.fillMaxWidth()
+                    label = stringResource(R.string.gender)
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -171,10 +145,26 @@ fun EditProfileScreen(
                         containerColor = Color(0xFF4CAF50)
                     )
                 ) {
-                    Text("Save Changes", fontFamily = PoppinsFamily) // Fonte personalizada no botão
+                    Text(stringResource(R.string.save_changes), fontFamily = PoppinsFamily)
                 }
             }
         })
+}
+
+@Composable
+fun ProfileTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String
+) {
+    OutlinedTextField(
+        value = value,
+        shape = RoundedCornerShape(12.dp),
+        onValueChange = onValueChange,
+        label = { Text(label, fontFamily = PoppinsFamily) },
+        textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily),
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 @Preview(showBackground = true)

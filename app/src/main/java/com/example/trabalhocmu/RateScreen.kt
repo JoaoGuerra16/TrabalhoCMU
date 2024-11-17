@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,12 +23,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.trabalhocmu.R
+
 
 @Composable
 fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = viewModel()) {
     var rating by remember { mutableStateOf(0) }
 
+    // Definir o conteúdo da tela com SidebarScaffold
     SidebarScaffold(
         navController = navController,
         content = { padding ->
@@ -43,25 +44,25 @@ fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = 
                         .fillMaxSize()
                         .padding(top = 80.dp) // Ajuste o valor para aproximar a imagem do topo
                 ) {
-                    // Imagem do perfil
+                    // Exibição da imagem do perfil
                     Image(
                         painter = painterResource(id = R.drawable.profile),
-                        contentDescription = "Profile Image",
+                        contentDescription = stringResource(id = R.string.profile_image_desc), // Usando string do resources
                         modifier = Modifier
                             .size(100.dp)
                             .clip(CircleShape)
-                            .align(Alignment.CenterHorizontally) // Centraliza horizontalmente
+                            .align(Alignment.CenterHorizontally)
                     )
 
                     Spacer(modifier = Modifier.height(65.dp))
 
-                    // Centraliza o restante do conteúdo
+                    // Exibição de texto e interações com a avaliação
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxHeight()
                     ) {
                         Text(
-                            text = "How would you rate this user?",
+                            text = stringResource(id = R.string.how_would_you_rate), // Usando string do resources
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 16.dp)
@@ -86,7 +87,7 @@ fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = 
                         Spacer(modifier = Modifier.height(20.dp))
 
                         Text(
-                            text = "Rating: $rating Star${if (rating > 1) "s" else ""}",
+                            text = stringResource(id = R.string.rating, rating, if (rating > 1) "s" else ""),
                             fontSize = 18.sp
                         )
                         Spacer(modifier = Modifier.height(20.dp))
@@ -101,7 +102,7 @@ fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = 
                                 containerColor = Color(0xFF4CAF50) // Define a cor do botão
                             )
                         ) {
-                            Text("Submit Rating")
+                            Text(stringResource(id = R.string.submit_rating)) // Usando string do resources
                         }
                     }
                 }
@@ -109,7 +110,6 @@ fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = 
         }
     )
 }
-
 
 @Preview(showBackground = true)
 @Composable

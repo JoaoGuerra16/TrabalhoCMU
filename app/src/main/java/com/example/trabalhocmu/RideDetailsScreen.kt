@@ -18,16 +18,17 @@ import androidx.navigation.NavController
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun RideDetailsScreen(navController: NavController, from: String?, to: String?, date: String?) {
     SidebarScaffold(navController = navController) { paddingValues ->
-        val currentLanguage = remember { mutableStateOf("PT") }
         val scrollState = rememberScrollState()
-        var buttonText by remember { mutableStateOf("Ask for ride") }
+        val askForRideText = stringResource(id = R.string.ask_for_ride)
+        val orderSentText = stringResource(id = R.string.order_sent)
+
+        var buttonTextState by remember { mutableStateOf(askForRideText) }
         var isButtonEnabled by remember { mutableStateOf(true) }
-        // Estado para controlar se o mapa e mensagens serão exibidos
         var isRouteChecked by remember { mutableStateOf(false) }
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -40,15 +41,14 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
             ) {
 
                 Text(
-                    text = "Ride Details",
+                    text = stringResource(id = R.string.ride_details_title),
                     fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-
+                    fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Image(
                     painter = painterResource(id = R.drawable.profile),
-                    contentDescription = "Profile Image",
+                    contentDescription = stringResource(id = R.string.profile_image_description),
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape)
@@ -57,18 +57,17 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                 RatingStars(rating = 4)
                 Spacer(modifier = Modifier.height(40.dp))
 
-                UserInfoRow(label = "Starting point", info = from ?: "N/A")
+                UserInfoRow(label = stringResource(id = R.string.starting_point), info = from ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
-                UserInfoRow(label = "Finish point", info = to ?: "N/A")
+                UserInfoRow(label = stringResource(id = R.string.finish_point), info = to ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
-                UserInfoRow(label = "Starting date", info = date ?: "N/A")
+                UserInfoRow(label = stringResource(id = R.string.starting_date), info = date ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
-                UserInfoRow(label = "Expected arrival", info = date ?: "N/A")
+                UserInfoRow(label = stringResource(id = R.string.expected_arrival), info = date ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
-                UserInfoRow(label = "Available places", info = "2")
+                UserInfoRow(label = stringResource(id = R.string.available_places), info = "2")
 
                 Spacer(modifier = Modifier.height(15.dp))
-
 
                 Row(
                     modifier = Modifier
@@ -77,8 +76,8 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Pets allowed", fontWeight = FontWeight.Bold)
-                    Checkbox(checked = true, onCheckedChange = null)  // Marcação fixa
+                    Text(text = stringResource(id = R.string.pets_allowed), fontWeight = FontWeight.Bold)
+                    Checkbox(checked = true, onCheckedChange = null)
                 }
                 Spacer(modifier = Modifier.height(15.dp))
                 Row(
@@ -88,8 +87,8 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Baggage allowed", fontWeight = FontWeight.Bold)
-                    Checkbox(checked = false, onCheckedChange = null)  // Marcação fixa
+                    Text(text = stringResource(id = R.string.baggage_allowed), fontWeight = FontWeight.Bold)
+                    Checkbox(checked = false, onCheckedChange = null)
                 }
                 Spacer(modifier = Modifier.height(15.dp))
 
@@ -100,8 +99,8 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Smoking allowed", fontWeight = FontWeight.Bold)
-                    Checkbox(checked = true, onCheckedChange = null)  // Marcação fixa
+                    Text(text = stringResource(id = R.string.smoking_allowed), fontWeight = FontWeight.Bold)
+                    Checkbox(checked = true, onCheckedChange = null)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(
@@ -111,8 +110,7 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Need for a pick up?",
-                        fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(id = R.string.need_for_pickup), fontWeight = FontWeight.Bold)
                     Checkbox(
                         checked = isRouteChecked,
                         onCheckedChange = { isRouteChecked = it }
@@ -121,16 +119,16 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
 
                 // Exibe o mapa e as mensagens somente se a checkbox estiver marcada
                 if (isRouteChecked) {
-                    Text(text = "Where do you want to be picked up?",
+                    Text(
+                        text = stringResource(id = R.string.pickup_location),
                         fontWeight = FontWeight.Bold
-
                     )
                     Image(
                         painter = painterResource(id = R.drawable.mapa),
-                        contentDescription = "Mapa",
+                        contentDescription = stringResource(id = R.string.map_image_description),
                         modifier = Modifier
                             .size(350.dp)
-                            .align(Alignment.CenterHorizontally)  // Garante que o mapa está centralizado
+                            .align(Alignment.CenterHorizontally)
                     )
 
                     Column(
@@ -138,13 +136,13 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Pick up - Felgueiras, rua do jardim",
+                            text = stringResource(id = R.string.pickup_location),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold
                         )
-                        Spacer(modifier = Modifier.height(30.dp))  // Adiciona um pequeno espaço entre as frases
+                        Spacer(modifier = Modifier.height(30.dp))
                         Text(
-                            text = "Drop off - Amarante, rua do Juíz",
+                            text = stringResource(id = R.string.dropoff_location),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -156,22 +154,22 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                 // Botão de "Ask for ride"
                 Button(
                     onClick = {
-                        // Altera o texto e desativa o botão após o clique
-                        buttonText = "Order sent"
+                        buttonTextState = orderSentText
                         isButtonEnabled = false
                     },
                     modifier = Modifier.width(175.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF454B60)
                     ),
-                    enabled = isButtonEnabled // Desativa o botão se for false
+                    enabled = isButtonEnabled
                 ) {
-                    Text(text = buttonText)
+                    Text(text = buttonTextState)
                 }
             }
         }
     }
 }
+
 // Composable para mostrar as informações do usuário com label e valor
 @Composable
 fun UserInfoRow(label: String, info: String) {
@@ -184,10 +182,7 @@ fun UserInfoRow(label: String, info: String) {
         Text(text = "$label:", fontWeight = FontWeight.Bold)
         Text(text = info)
     }
-
 }
-
-
 
 @Preview(showBackground = true)
 @Composable

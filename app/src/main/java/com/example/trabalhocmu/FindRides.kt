@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -83,10 +84,12 @@ fun FindRides(navController: NavController) {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-
-
-                Text(text = "Find Rides", fontSize = 25.sp, fontWeight = FontWeight.Bold,fontFamily = PoppinsFamily)
+                Text(
+                    text = stringResource(id = R.string.find_rides),
+                    fontSize = 25.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = PoppinsFamily
+                )
 
                 Column(
                     modifier = Modifier
@@ -97,7 +100,7 @@ fun FindRides(navController: NavController) {
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
-                        label = { Text("Search") },
+                        label = { Text(stringResource(id = R.string.search)) },
                         leadingIcon = {
                             Icon(imageVector = Icons.Filled.Search, contentDescription = "Search Icon")
                         },
@@ -125,7 +128,7 @@ fun FindRides(navController: NavController) {
                                 contentColor = Color.White
                             )
                         ) {
-                            Text(text = "Select Date", fontFamily = PoppinsFamily)
+                            Text(text = stringResource(id = R.string.select_date), fontFamily = PoppinsFamily)
                         }
 
                         // Botão para cancelar a seleção de data
@@ -138,7 +141,7 @@ fun FindRides(navController: NavController) {
                                     contentColor = Color.White
                                 )
                             ) {
-                                Text(text = "Cancel Date",fontFamily = PoppinsFamily,)
+                                Text(text = stringResource(id = R.string.cancel_date), fontFamily = PoppinsFamily)
                             }
                         }
                     }
@@ -157,7 +160,7 @@ fun FindRides(navController: NavController) {
                     // Exibir mensagem se não houver rides disponíveis
                     if (filteredRides.isEmpty()) {
                         Text(
-                            text = "No rides available",
+                            text = stringResource(id = R.string.no_rides_available),
                             fontFamily = PoppinsFamily,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
@@ -179,31 +182,23 @@ fun FindRides(navController: NavController) {
                         }
                     }
                 }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .clickable {
-                            currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
-                        },
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Text(
-                        text = if (currentLanguage.value == "ENG") "ENG | PT" else "PT | ENG",
-                        fontFamily = PoppinsFamily,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
             }
         }
     }
 }
 
+
+
 @Composable
-fun RideInformation(  navController: NavController,from: String, to: String, availableSeats: Int, startTime: String, arrivalTime: String , date: LocalDate) {
+fun RideInformation(
+    navController: NavController,
+    from: String,
+    to: String,
+    availableSeats: Int,
+    startTime: String,
+    arrivalTime: String,
+    date: LocalDate
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
@@ -215,14 +210,20 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
         colors = CardDefaults.cardColors(containerColor = Color(0xFFE0F7FA))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Ride Information", fontFamily = PoppinsFamily,fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            Text(
+                text = stringResource(id = R.string.ride_information),
+                fontFamily = PoppinsFamily,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
             Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "From:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
+                Text(text = stringResource(id = R.string.from), fontSize = 16.sp, fontFamily = PoppinsFamily, fontWeight = FontWeight.Bold)
                 Text(text = from, fontSize = 16.sp)
             }
 
@@ -230,7 +231,7 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "To:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
+                Text(text = stringResource(id = R.string.to), fontSize = 16.sp, fontFamily = PoppinsFamily, fontWeight = FontWeight.Bold)
                 Text(text = to, fontSize = 16.sp)
             }
 
@@ -238,7 +239,12 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Available Seats:", fontFamily = PoppinsFamily,fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(id = R.string.available_seats),
+                    fontFamily = PoppinsFamily,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 Text(text = availableSeats.toString(), fontSize = 16.sp)
             }
 
@@ -246,7 +252,12 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Start Time:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(id = R.string.start_time),
+                    fontSize = 16.sp,
+                    fontFamily = PoppinsFamily,
+                    fontWeight = FontWeight.Bold
+                )
                 Text(text = startTime, fontSize = 16.sp)
             }
 
@@ -254,19 +265,32 @@ fun RideInformation(  navController: NavController,from: String, to: String, ava
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Arrival Time:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(id = R.string.arrival_time),
+                    fontSize = 16.sp,
+                    fontFamily = PoppinsFamily,
+                    fontWeight = FontWeight.Bold
+                )
                 Text(text = arrivalTime, fontSize = 16.sp)
-            }// Exibe a data da ride
+            }
+
+            // Exibe a data da ride
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Date:", fontSize = 16.sp, fontFamily = PoppinsFamily,fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(id = R.string.date),
+                    fontSize = 16.sp,
+                    fontFamily = PoppinsFamily,
+                    fontWeight = FontWeight.Bold
+                )
                 Text(text = date.toString(), fontSize = 16.sp)
             }
         }
     }
 }
+
 
 data class Ride(
     val from: String,

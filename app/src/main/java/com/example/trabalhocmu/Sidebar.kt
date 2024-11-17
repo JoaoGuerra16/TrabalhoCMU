@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SidebarScaffold(
@@ -44,7 +46,7 @@ fun SidebarScaffold(
                         ) {
                             Image(
                                 painter = painterResource(id = R.drawable.logo), // Substitua pelo seu recurso
-                                contentDescription = "Logo",
+                                contentDescription = stringResource(id = R.string.logo_description),
                                 modifier = Modifier.size(60.dp) // Ajuste o tamanho do logotipo
                             )
                         }
@@ -55,12 +57,11 @@ fun SidebarScaffold(
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
-                                contentDescription = "Open Menu"
+                                contentDescription = stringResource(id = R.string.open_menu)
                             )
                         }
                     },
                     actions = {
-                        // Espaço vazio para balancear o ícone de menu à esquerda
                         Spacer(modifier = Modifier.size(56.dp)) // Mesma largura do botão de menu
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -73,7 +74,7 @@ fun SidebarScaffold(
                     // Imagem de fundo
                     Image(
                         painter = painterResource(id = R.drawable.background), // Substitua pela sua imagem
-                        contentDescription = "Background Image",
+                        contentDescription = stringResource(id = R.string.background_description),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
@@ -95,7 +96,6 @@ fun SidebarScaffold(
 @Composable
 fun Sidebar(navController: NavController, drawerState: DrawerState) {
     val scope = rememberCoroutineScope()
-    val currentLanguage = remember { mutableStateOf("PT") }
 
     // Conteúdo do Drawer
     ModalDrawerSheet {
@@ -107,7 +107,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
         }) {
             Icon(
                 imageVector = Icons.Default.Menu,
-                contentDescription = "Close Menu",
+                contentDescription = stringResource(id = R.string.close_menu),
                 modifier = Modifier.size(24.dp),
                 tint = Color.Gray
             )
@@ -117,7 +117,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
 
         // Itens de navegação do Drawer
         NavigationDrawerItem(
-            label = { Text("Profile") },
+            label = { Text(stringResource(id = R.string.profile)) },
             selected = false,
             onClick = {
                 navController.navigate("Profile")
@@ -127,7 +127,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
         )
 
         NavigationDrawerItem(
-            label = { Text("My rides") },
+            label = { Text(stringResource(id = R.string.my_rides)) },
             selected = false,
             onClick = {
                 navController.navigate("My Rides")
@@ -137,7 +137,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
         )
 
         NavigationDrawerItem(
-            label = { Text("Find rides") },
+            label = { Text(stringResource(id = R.string.find_rides)) },
             selected = false,
             onClick = {
                 navController.navigate("Find rides")
@@ -147,7 +147,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
         )
 
         NavigationDrawerItem(
-            label = { Text("Ride's History") },
+            label = { Text(stringResource(id = R.string.ride_history)) },
             selected = false,
             onClick = {
                 navController.navigate("RidesHistory")
@@ -157,7 +157,7 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
         )
 
         NavigationDrawerItem(
-            label = { Text("Settings") },
+            label = { Text(stringResource(id = R.string.settings)) },
             selected = false,
             onClick = {
                 navController.navigate("Settings")
@@ -178,21 +178,10 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
         ) {
             // Logout Button
             Text(
-                text = "Logout",
+                text = stringResource(id = R.string.logout),
                 color = Color.Red,
                 modifier = Modifier.clickable {
                     navController.navigate("Login")
-                }
-            )
-
-            // Seletor de idioma (PT|ENG)
-            Text(
-                text = if (currentLanguage.value == "PT") "PT | ENG" else "ENG | PT",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable {
-                    // Alterna o idioma
-                    currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
                 }
             )
         }

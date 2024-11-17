@@ -1,8 +1,8 @@
 package com.example.trabalhocmu
 
+import LanguageViewModel
 import RatingViewModel
 import android.os.Bundle
-import android.provider.Telephony.Mms.Rate
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.LinearProgressIndicator
@@ -16,9 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.DrawerState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -26,46 +26,48 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
-    companion object {
-        val PoppinsFamily = FontFamily(
-            Font(R.font.poppinsregular),  // Fonte Regular
-            Font(R.font.poppinsbold)     // Fonte Bold
-        )
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Configurar o idioma global
+        setAppLanguage()
+
         setContent {
             AppNavigation()
         }
+    }
+
+    // Função para configurar o idioma global
+    private fun setAppLanguage() {
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val savedLanguage = sharedPreferences.getString("selected_language", "English") ?: "English"
+        val locale = when (savedLanguage) {
+            "English" -> Locale("en")
+            "Português" -> Locale("pt")
+            else -> Locale("en")
+        }
+
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 }
 
 @Composable
 fun AppNavigation() {
-    // Criar o estado do drawer (ModalNavigationDrawer)
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
     val navController = rememberNavController()
     val ratingViewModel: RatingViewModel = viewModel() // ViewModel compartilhado entre telas
+    val languageViewModel: LanguageViewModel = viewModel(factory = LanguageViewModelFactory(LocalContext.current))
 
-    // Função para gerenciar o drawer com as telas que o utilizam
-    @Composable
-    fun DrawerWrapper(content: @Composable () -> Unit) {
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                Sidebar(navController = navController, drawerState = drawerState)
-            }
-        ) {
-            content()
-        }
-    }
+    // Criar o estado do drawer (ModalNavigationDrawer)
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
 
     // Definir o comportamento de navegação para as telas
     NavHost(navController = navController, startDestination = "splash_screen") {
-        // Tela de splash
         composable("splash_screen") {
             SplashScreen(navController)
         }
@@ -79,38 +81,42 @@ fun AppNavigation() {
 
         // Tela inicial (com Drawer)
         composable("StartingPage") {
-            DrawerWrapper {
-                StartingPage(navController = navController)
+            DrawerWrapper(navController, drawerState) {
+                StartingPage(navController)
             }
         }
-
-        // Tela de busca de caronas (com Drawer)
         composable("Find Rides") {
-            DrawerWrapper {
-                FindRides(navController = navController)
+            DrawerWrapper(navController, drawerState) {
+                FindRides(navController)
             }
         }
 
-        // Telas de autenticação e registro
+        composable("Settings") {
+            DrawerWrapper(navController, drawerState) {
+                SettingsScreen(navController = navController, languageViewModel = languageViewModel)
+            }
+        }
+
         composable("Register") {
             RegisterScreen(navController = navController)
         }
+
         composable("Login") {
             LoginScreen(navController = navController)
         }
+
         composable("ForgotPassword") {
             ForgotPassword(navController)
         }
 
-        // Telas de perfil
         composable("EditProfile") {
             EditProfileScreen(navController)
         }
+
         composable("Profile") {
             Profile(navController, ratingViewModel) // Passando o ViewModel para Profile
         }
 
-        // Tela de avaliação
         composable("Rate") {
             RateScreen(navController, ratingViewModel) // Passando o ViewModel para RateScreen
         }
@@ -124,13 +130,8 @@ fun AppNavigation() {
         }
 
         composable("My Rides") {
-            ModalNavigationDrawer(
-                drawerState = drawerState,
-                drawerContent = {
-                    Sidebar(navController = navController, drawerState = drawerState)
-                }
-            ) {
-                MyRides(navController = navController)
+            DrawerWrapper(navController, drawerState) {
+                MyRides(navController)
             }
         }
 
@@ -186,10 +187,20 @@ fun AppNavigation() {
     }
 }
 
+@Composable
+fun DrawerWrapper(navController: NavController, drawerState: DrawerState, content: @Composable () -> Unit) {
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            Sidebar(navController = navController, drawerState = drawerState)
+        }
+    ) {
+        content()
+    }
+}
 
 @Composable
 fun SplashScreen(navController: NavController) {
-    // Estado da barra de progresso
     var progress by remember { mutableStateOf(0f) }
 
     // Lógica para aumentar o progresso da barra
