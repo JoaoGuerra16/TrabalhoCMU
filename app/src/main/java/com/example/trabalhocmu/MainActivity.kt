@@ -119,6 +119,10 @@ fun AppNavigation() {
             RequestForRide(navController)
         }
 
+        composable("RidesHistory") {
+            RidesHistory(navController)
+        }
+
         composable("My Rides") {
             ModalNavigationDrawer(
                 drawerState = drawerState,
