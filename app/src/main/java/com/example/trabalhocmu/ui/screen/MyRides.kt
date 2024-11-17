@@ -1,4 +1,4 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.ui.screen
 
 import android.app.DatePickerDialog
 import androidx.compose.foundation.clickable
@@ -21,23 +21,21 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
-import kotlin.random.Random
-
+import androidx.compose.ui.res.stringResource
+import com.example.trabalhocmu.R
+import com.example.trabalhocmu.ui.component.SidebarScaffold
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun RidesHistory(navController: NavController) {
+fun MyRides(navController: NavController) {
     SidebarScaffold(navController = navController) { paddingValues ->
-
+        val selectDateText = stringResource(id = R.string.select_date)
         val scrollState = rememberScrollState()
-        val currentLanguage = remember { mutableStateOf("PT") }
         var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
-        val selectedDate = remember { mutableStateOf("Select Date") }
+        val selectedDate = remember { mutableStateOf(selectDateText) }
         val context = LocalContext.current
 
         // Função para exibir o DatePickerDialog
@@ -61,7 +59,7 @@ fun RidesHistory(navController: NavController) {
 
         // Filtrar rides pela data selecionada
         LaunchedEffect(selectedDate.value) {
-            filteredRides = if (selectedDate.value != "Select Date") {
+            filteredRides = if (selectedDate.value != selectDateText) {
                 val selectedDateParsed = LocalDate.parse(selectedDate.value, DateTimeFormatter.ofPattern("d/M/yyyy"))
                 rides.filter { it.date == selectedDateParsed }
             } else {
@@ -87,22 +85,34 @@ fun RidesHistory(navController: NavController) {
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Box(
+                        modifier = Modifier.size(48.dp) // Define um tamanho fixo, simulando o espaço de um ícone
+                    )
                     Text(
-                        text = "Ride's History",
+                        text = stringResource(id = R.string.my_rides),
                         fontFamily = PoppinsFamily,
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f),  // Esse modificador faz com que o texto ocupe o espaço disponível
                         textAlign = TextAlign.Center // Centraliza o texto dentro do espaço
                     )
+                    // Botão "+"
+                    IconButton(
+                        onClick = { navController.navigate("Create Ride") }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(id = R.string.add_ride),
+                            tint = Color.Gray
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    label = { Text("Search",  fontFamily = PoppinsFamily) },
-
+                    label = { Text(stringResource(id = R.string.search), fontFamily = PoppinsFamily) },
                     leadingIcon = {
                         Icon(imageVector = Icons.Filled.Search, contentDescription = "Search Icon")
                     },
@@ -130,29 +140,29 @@ fun RidesHistory(navController: NavController) {
                             contentColor = Color.White
                         )
                     ) {
-                        Text(text = "Select Date",
+                        Text(text = stringResource(id = R.string.select_date),
                             fontFamily = PoppinsFamily,)
                     }
 
                     // Botão para cancelar a seleção de data
-                    if (selectedDate.value != "Select Date") {
+                    if (selectedDate.value != stringResource(id = R.string.select_date)) {
                         Spacer(modifier = Modifier.width(16.dp))
                         Button(
-                            onClick = { selectedDate.value = "Select Date" },
+                            onClick = { selectedDate.value = selectDateText },
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.Red,
                                 contentColor = Color.White
                             )
                         ) {
-                            Text(text = "Cancel Date",
+                            Text(text = stringResource(id = R.string.cancel_date),
                                 fontFamily = PoppinsFamily,)
                         }
                     }
                 }
 
-                if (selectedDate.value != "Select Date") {
+                if (selectedDate.value != stringResource(id = R.string.select_date)) {
                     Text(
-                        text = "Selected Date: ${selectedDate.value},",
+                        text = "${stringResource(id = R.string.selected_date)}: ${selectedDate.value}",
                         fontFamily = PoppinsFamily,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
@@ -164,7 +174,7 @@ fun RidesHistory(navController: NavController) {
                 // Mostra mensagem se não houver rides disponíveis
                 if (filteredRides.isEmpty()) {
                     Text(
-                        text = "No rides available",
+                        text = stringResource(id = R.string.no_rides_available),
                         fontFamily = PoppinsFamily,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
@@ -173,8 +183,7 @@ fun RidesHistory(navController: NavController) {
                 } else {
                     // Mostra as rides filtradas
                     filteredRides.forEach { ride ->
-                        val isGivingRide = Random.nextBoolean()
-                        RidesHistoryInformation(
+                        MyRidesInformation(
                             navController = navController,
                             from = ride.from,
                             to = ride.to,
@@ -182,7 +191,10 @@ fun RidesHistory(navController: NavController) {
                             startTime = ride.startTime,
                             arrivalTime = ride.arrivalTime,
                             date = ride.date,
-                            isGivingRide = isGivingRide)
+                            isGivingRide = ride.availableSeats > 0,
+                            onCancelRide = { /* Não esquecer de fazer a lógica para cancelar a ride */ }
+
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
@@ -192,7 +204,7 @@ fun RidesHistory(navController: NavController) {
 }
 
 @Composable
-fun RidesHistoryInformation(
+fun MyRidesInformation(
     from: String,
     to: String,
     availableSeats: Int,
@@ -200,23 +212,58 @@ fun RidesHistoryInformation(
     arrivalTime: String,
     date: LocalDate,
     isGivingRide: Boolean,
+    onCancelRide: () -> Unit,
     navController: NavController
 ) {
     // Variável para controlar se o dialog de confirmação deve aparecer
     var showDialog by remember { mutableStateOf(false) }
 
     // Caixa de diálogo de confirmação
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text(text = stringResource(id = R.string.confirm_cancellation)) },
+            text = { Text(stringResource(id = R.string.confirm_cancel_message)) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        // Lógica para cancelar a ride (por exemplo, remover a ride da lista ou atualizar seu estado)
+                        onCancelRide()
+                        showDialog = false // Fecha o diálogo
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                ) {
+                    Text(text = stringResource(id = R.string.yes), color = Color.White)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog = false }, // Apenas fecha o diálogo
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text(text = stringResource(id = R.string.no), color = Color.White)
+                }
+            }
+        )
+    }
 
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable {
+                if (isGivingRide) {
+                    navController.navigate("MyRidesGivingARide/$from/$to/$startTime/$arrivalTime/${date.toString()}/${availableSeats.toString()}")
+                } else {
+                navController.navigate("MyRidesTakingARide/$from/$to/$startTime/$arrivalTime/${date.toString()}/${availableSeats.toString()}")
+            }
+            },
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = if (isGivingRide) "Giving a Ride" else "Taking a Ride",
+                text = if (isGivingRide) stringResource(id = R.string.giving_ride) else stringResource(id = R.string.taking_ride),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = PoppinsFamily,
@@ -228,7 +275,7 @@ fun RidesHistoryInformation(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Route:", fontSize = 16.sp, fontWeight = FontWeight.Bold,  fontFamily = PoppinsFamily)
+                Text(text = stringResource(id = R.string.route), fontSize = 16.sp, fontWeight = FontWeight.Bold,  fontFamily = PoppinsFamily)
                 Text(text = "$from to $to", fontSize = 16.sp,  fontFamily = PoppinsFamily,)
             }
 
@@ -236,7 +283,7 @@ fun RidesHistoryInformation(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Start:", fontSize = 16.sp, fontWeight = FontWeight.Bold , fontFamily = PoppinsFamily)
+                Text(text = stringResource(id = R.string.start), fontSize = 16.sp, fontWeight = FontWeight.Bold , fontFamily = PoppinsFamily)
                 Text(text = "$startTime", fontSize = 16.sp,  fontFamily = PoppinsFamily)
             }
 
@@ -244,7 +291,7 @@ fun RidesHistoryInformation(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Arrival:", fontSize = 16.sp, fontWeight = FontWeight.Bold,  fontFamily = PoppinsFamily)
+                Text(text = stringResource(id = R.string.arrival), fontSize = 16.sp, fontWeight = FontWeight.Bold,  fontFamily = PoppinsFamily)
                 Text(text = "$arrivalTime", fontSize = 16.sp,  fontFamily = PoppinsFamily)
             }
 
@@ -254,7 +301,7 @@ fun RidesHistoryInformation(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "Available Seats:", fontSize = 16.sp, fontWeight = FontWeight.Bold , fontFamily = PoppinsFamily)
+                    Text(text = stringResource(id = R.string.available_seats), fontSize = 16.sp, fontWeight = FontWeight.Bold , fontFamily = PoppinsFamily)
                     Text(text = availableSeats.toString(), fontSize = 16.sp,  fontFamily = PoppinsFamily)
                 }
             }
@@ -264,16 +311,33 @@ fun RidesHistoryInformation(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "Date:", fontSize = 16.sp, fontWeight = FontWeight.Bold,   fontFamily = PoppinsFamily)
+                Text(text = stringResource(id = R.string.date), fontSize = 16.sp, fontWeight = FontWeight.Bold,   fontFamily = PoppinsFamily)
                 Text(text = date.toString(), fontSize = 16.sp,   fontFamily = PoppinsFamily)
             }
 
+            // Botão para cancelar a ride
+            Spacer(modifier = Modifier.height(16.dp)) // Espaço antes do botão
+            Button(
+                onClick = { showDialog = true }, // Exibe o diálogo de confirmação
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = RoundedCornerShape(12.dp), // Bordas arredondadas no botão
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.cancel_ride),
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
         }
     }
 }
 
 // Data class para representar uma viagem
-data class RidesHistory(
+data class RideTeste(
     val from: String,
     val to: String,
     val availableSeats: Int,
@@ -282,10 +346,3 @@ data class RidesHistory(
     val date: LocalDate,
     val isGivingRide: Boolean
 )
-@Preview
-@Composable
-fun RidesHistoryPreview() {
-    val navController = rememberNavController()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    RidesHistory(navController)
-}

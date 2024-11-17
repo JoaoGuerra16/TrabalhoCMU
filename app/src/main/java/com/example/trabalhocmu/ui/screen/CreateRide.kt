@@ -1,35 +1,11 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.ui.screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,18 +14,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.trabalhocmu.ui.theme.PoppinsFamily
+import com.example.trabalhocmu.R
+import com.example.trabalhocmu.ui.component.SidebarScaffold
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateRide(navController: NavController) {
     SidebarScaffold(navController = navController) { paddingValues ->
-        val currentLanguage = remember { mutableStateOf("PT") }
         val scrollState = rememberScrollState()
-        var isButtonEnabled by remember { mutableStateOf(true) }
-        // Estado para controlar se o mapa e mensagens serão exibidos
-        var isRouteChecked by remember { mutableStateOf(false) }
-        var buttonState by remember { mutableStateOf("Waiting for confirmation") }
-        var buttonColor by remember { mutableStateOf(Color(0xFF454B60)) }
 
         // Estados para os campos editáveis
         var startingPoint by remember { mutableStateOf("") }
@@ -90,24 +62,22 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(15.dp))
 
-                // Caixa de texto para o "Starting Point"
-                OutlinedTextField(
+                // Usando o CustomOutlinedTextField para o "Starting Point"
+                CustomOutlinedTextField(
                     value = startingPoint,
-                    shape = RoundedCornerShape(12.dp),
                     onValueChange = { startingPoint = it },
-                    label = { Text("Starting Point") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = "Starting Point"
                 )
+
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Caixa de texto para o "Final Destination"
-                OutlinedTextField(
+                // Usando o CustomOutlinedTextField para o "Final Destination"
+                CustomOutlinedTextField(
                     value = finalDestination,
-                    shape = RoundedCornerShape(12.dp),
                     onValueChange = { finalDestination = it },
-                    label = { Text("Final Destination") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = "Final Destination"
                 )
+
                 Spacer(modifier = Modifier.height(20.dp))
 
                 // Mapa
@@ -121,33 +91,29 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Caixa de texto para o "Starting Date"
-                OutlinedTextField(
+                // Usando o CustomOutlinedTextField para o "Starting Date"
+                CustomOutlinedTextField(
                     value = startingDate,
                     onValueChange = { startingDate = it },
-                    shape = RoundedCornerShape(12.dp),
-                    label = { Text("Starting Date") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = "Starting Date"
                 )
+
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Caixa de texto para o "Executed Arrival"
-                OutlinedTextField(
+                // Usando o CustomOutlinedTextField para o "Executed Arrival"
+                CustomOutlinedTextField(
                     value = executedArrival,
                     onValueChange = { executedArrival = it },
-                    shape = RoundedCornerShape(12.dp),
-                    label = { Text("Executed Arrival") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = "Executed Arrival"
                 )
+
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Caixa de texto para o "Available Places"
-                OutlinedTextField(
+                // Usando o CustomOutlinedTextField para o "Available Places"
+                CustomOutlinedTextField(
                     value = availablePlaces,
                     onValueChange = { availablePlaces = it },
-                    shape = RoundedCornerShape(12.dp),
-                    label = { Text("Available Places") },
-                    modifier = Modifier.fillMaxWidth()
+                    label = "Available Places"
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -213,6 +179,26 @@ fun CreateRide(navController: NavController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomOutlinedTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        shape = RoundedCornerShape(12.dp),
+        modifier = modifier.fillMaxWidth(),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            containerColor = Color(0xFFEFEFEF) // Definindo o fundo como branco
+        )
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewCreateRide() {
@@ -222,6 +208,5 @@ fun PreviewCreateRide() {
     // Chama o composable passando parâmetros fictícios
     CreateRide(
         navController = navController,
-
     )
 }

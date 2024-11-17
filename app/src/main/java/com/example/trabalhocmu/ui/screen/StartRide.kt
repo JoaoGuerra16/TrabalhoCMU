@@ -1,4 +1,4 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -10,7 +10,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.trabalhocmu.R
+import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
 

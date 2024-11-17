@@ -1,5 +1,5 @@
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+package com.example.trabalhocmu.viewmodel
+
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

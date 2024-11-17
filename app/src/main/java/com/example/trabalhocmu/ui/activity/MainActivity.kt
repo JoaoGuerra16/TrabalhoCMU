@@ -1,7 +1,7 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.ui.activity
 
-import LanguageViewModel
-import RatingViewModel
+import com.example.trabalhocmu.viewmodel.LanguageViewModel
+import com.example.trabalhocmu.viewmodel.RatingViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,6 +26,29 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.trabalhocmu.viewmodel.LanguageViewModelFactory
+import com.example.trabalhocmu.R
+import com.example.trabalhocmu.ui.screen.CreateRide
+import com.example.trabalhocmu.ui.screen.EditProfileScreen
+import com.example.trabalhocmu.ui.screen.FindRides
+import com.example.trabalhocmu.ui.screen.ForgotPassword
+import com.example.trabalhocmu.ui.screen.LoginScreen
+import com.example.trabalhocmu.ui.screen.MyRides
+import com.example.trabalhocmu.ui.screen.MyRidesGivingARide
+import com.example.trabalhocmu.ui.screen.MyRidesTakingARide
+import com.example.trabalhocmu.ui.screen.Profile
+import com.example.trabalhocmu.ui.screen.RateScreen
+import com.example.trabalhocmu.ui.screen.RegisterScreen
+import com.example.trabalhocmu.ui.screen.RequestForRide
+import com.example.trabalhocmu.ui.screen.RequestInfo
+import com.example.trabalhocmu.ui.screen.RideDetailsScreen
+import com.example.trabalhocmu.ui.screen.RiderProfile
+import com.example.trabalhocmu.ui.screen.RidesHistory
+import com.example.trabalhocmu.ui.screen.SettingsScreen
+import com.example.trabalhocmu.ui.component.Sidebar
+import com.example.trabalhocmu.ui.screen.Passenger
+import com.example.trabalhocmu.ui.screen.StartRide
+import com.example.trabalhocmu.ui.screen.StartingPage
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -219,6 +242,12 @@ fun AppNavigation() {
             val date = backStackEntry.arguments?.getString("date")
             val availableSeats = backStackEntry.arguments?.getString("availableSeats")
 
+            val mockPassengers = listOf(
+                Passenger(R.drawable.profile, "Maria", "Female", "Lisbon"),
+                Passenger(R.drawable.profile, "Maria2", "Female", "Porto"),
+                Passenger(R.drawable.profile, "Maria3", "Female", "Coimbra")
+            )
+
             StartRide(
                 navController = navController,
                 from = from,
@@ -226,7 +255,8 @@ fun AppNavigation() {
                 startTime = startTime,
                 arrivalTime = arrivalTime,
                 date = date,
-                availableSeats = availableSeats ?: "0"
+                availableSeats = availableSeats ?: "0",
+                passengers = mockPassengers
             )
         }
 

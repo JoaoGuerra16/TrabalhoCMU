@@ -1,4 +1,4 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.trabalhocmu.ui.component.BackgroundWithImage
+import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
 
