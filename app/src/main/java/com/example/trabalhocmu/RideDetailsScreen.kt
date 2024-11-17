@@ -1,6 +1,7 @@
 package com.example.trabalhocmu
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -52,6 +53,9 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape)
+                        .clickable{
+                            navController.navigate("Rider Profile")
+                        }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 RatingStars(rating = 4)

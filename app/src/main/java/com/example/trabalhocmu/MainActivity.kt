@@ -135,6 +135,10 @@ fun AppNavigation() {
             }
         }
 
+        composable("Rider Profile"){
+            RiderProfile(navController)
+        }
+
 
         // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
@@ -242,6 +246,8 @@ fun SplashScreen(navController: NavController) {
         }
     }
 }
+
+
 
 @Preview(showBackground = true)
 @Composable

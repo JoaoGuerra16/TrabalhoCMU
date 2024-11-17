@@ -1,6 +1,5 @@
 package com.example.trabalhocmu
 import LanguageViewModel
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -10,13 +9,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import java.util.Locale
 
 
@@ -29,6 +25,7 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
     val selectedLanguage = languageViewModel.selectedLanguage.value
     var isLanguageChanged by remember { mutableStateOf(false) } // Verifica se houve mudança
     val context = LocalContext.current
+    var notificationsEnabled by remember { mutableStateOf(false) } // Estado para o switch de notificações
 
     SidebarScaffold(navController = navController) { padding ->
         Column(
@@ -39,13 +36,41 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            // Usando stringResource para o título da tela
+            // Título da tela
             Text(
                 text = stringResource(id = R.string.settings_title),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
+
+            // Seção para habilitar/desabilitar notificações
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(id = R.string.notifications),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Switch(
+                    checked = notificationsEnabled,
+                    onCheckedChange = { notificationsEnabled = it },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color(0xFF4CAF50), // Verde quando ativado
+                        uncheckedThumbColor = Color.Gray,     // Cinza quando desativado
+                        checkedTrackColor = Color(0xFFC8E6C9), // Trilho verde claro quando ativado
+
+                    ),
+
+
+                )
+
+            }
 
             // Seção para alteração de idioma
             Row(
@@ -54,7 +79,6 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Usando stringResource para o texto "Change Language"
                 Text(
                     text = stringResource(id = R.string.change_language),
                     fontSize = 18.sp,
@@ -101,39 +125,33 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
                 )
             }
 
-            // Se botão "Save Changes" for pressionado, as mudanças são aplicadas
-            Spacer(modifier = Modifier.height(32.dp)) // Espaço entre as opções
+            // Botão "Save Changes"
+            Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = {
                     if (isLanguageChanged) {
-                        // Atualizando o idioma globalmente
                         val newLanguage = languageViewModel.selectedLanguage.value
                         val locale = when (newLanguage) {
                             "Português" -> Locale("pt", "PT")
                             "English" -> Locale("en", "US")
                             else -> Locale.getDefault()
                         }
-
-                        // Aplicando as alterações no idioma
                         Locale.setDefault(locale)
                         val config = context.resources.configuration
                         config.setLocale(locale)
                         context.createConfigurationContext(config)
-
-                        // Forçar recarregamento da tela (navegar de volta e recarregar)
-                        navController.popBackStack() // Volta para a tela anterior
-                        navController.navigate("settings") // Navega novamente para "Settings"
+                        navController.popBackStack()
+                        navController.navigate("settings")
                     }
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .height(40.dp), // Definindo altura do botão
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)) // Cor verde
+                    .height(40.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
             ) {
-                // Usando stringResource para o texto do botão
                 Text(
                     text = stringResource(id = R.string.save_changes),
-                    color = Color.White, // Cor do texto dentro do botão
+                    color = Color.White,
                     fontSize = 14.sp
                 )
             }
