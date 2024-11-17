@@ -38,4 +38,20 @@ class LanguageViewModel(private val context: Context) : ViewModel() {
     private fun getLanguageFromPrefs(): String {
         return sharedPreferences.getString("selected_language", "English") ?: "English" // Default é "English"
     }
+
+    fun applySavedLanguage() {
+        val savedLanguage = getLanguageFromPrefs() // Recupera o idioma salvo
+        val locale = when (savedLanguage) {
+            "English" -> Locale("en")
+            "Português" -> Locale("pt")
+            else -> Locale("en")
+        }
+        Locale.setDefault(locale)
+
+        val config = context.resources.configuration
+        config.setLocale(locale)
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+    }
+
 }
+

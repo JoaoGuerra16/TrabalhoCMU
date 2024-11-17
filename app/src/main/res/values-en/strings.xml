@@ -1,9 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">TrabalhoCMU</string>
+    <string name="app_name">APP NAME</string>
     <string name="how_would_you_rate">How would you rate this user?</string>
     <string name="rating">Rating: %1$d Star%2$s</string>
     <string name="submit_rating">Submit Rating</string>
     <string name="profile_image_desc">Profile Image</string>
+    <string name="profile_title">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="username">Username</string>
+    <string name="mobile">Mobile</string>
+    <string name="email">Email</string>
+    <string name="age">Age</string>
+    <string name="gender">Gender</string>
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="full_name">Full Name</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="my_rides">My Rides</string>
+    <string name="add_ride">Add Ride</string>
+    <string name="search">Search</string>
+    <string name="select_date">Select Date</string>
+    <string name="cancel_date">Cancel Date</string>
+    <string name="selected_date">Selected Date</string>
+    <string name="no_rides_available">No rides available</string>
+    <string name="confirm_cancellation">Confirm Cancellation</string>
+    <string name="confirm_cancel_message">Are you sure you want to cancel this ride?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="route">Route</string>
+    <string name="start">Start</string>
+    <string name="arrival">Arrival</string>
+    <string name="available_seats">Available Seats</string>
+    <string name="date">Date</string>
+    <string name="cancel_ride">Cancel Ride</string>
+    <string name="giving_ride">Giving a Ride</string>
+    <string name="taking_ride">Taking a Ride</string>
+    <string name="have_account">Do you have an account?</string>
+    <string name="login">Login</string>
+    <string name="create_account">Or create one!</string>
+    <string name="register">Register</string>
+    <string name="switch_language">PT | ENG</string>
+
+    <string name="ride_details_title">Ride Details</string>
+    <string name="starting_point">Starting point</string>
+    <string name="finish_point">Finish point</string>
+    <string name="starting_date">Starting date</string>
+    <string name="expected_arrival">Expected arrival</string>
+    <string name="available_places">Available places</string>
+    <string name="pets_allowed">Pets allowed</string>
+    <string name="baggage_allowed">Baggage allowed</string>
+    <string name="smoking_allowed">Smoking allowed</string>
+    <string name="need_for_pickup">Need for a pick up?</string>
+    <string name="order_sent">Order sent</string>
+    <string name="ask_for_ride">Ask for ride</string>
+    <string name="pickup_location">Pick up - Felgueiras, rua do jardim</string>
+    <string name="dropoff_location">Drop off - Amarante, rua do Juíz</string>
+    <string name="profile_image_description">Profile Image</string>
+    <string name="map_image_description">Mapa</string>
+
+    <string name="find_rides">Find Rides</string>
+    <string name="ride_information">Ride Information</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="start_time">Start Time:</string>
+    <string name="arrival_time">Arrival Time:</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+
+
+    <string name="logo_description">Logo</string>
+    <string name="open_menu">Open Menu</string>
+    <string name="background_description">Background Image</string>
+    <string name="close_menu">Close Menu</string>
+    <string name="profile">Profile</string>
+
+
+    <string name="ride_history">Rides History</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+
+
+    <string name="settings_title">Settings</string>
+    <string name="change_language">Change Language</string>
+
+    <string name="english">English</string>
+    <string name="portuguese">Portuguese</string>
 </resources>

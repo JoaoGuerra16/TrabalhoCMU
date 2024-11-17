@@ -1,8 +1,86 @@
 <resources>
-    <string name="app_name">TrabalhoCMU</string>
-    <string name="how_would_you_rate">Como você avaliaria este usuário?</string>
+    <string name="app_name">NOME DO APP</string>
+    <string name="how_would_you_rate">Como você avaliaria este utilizador?</string>
     <string name="rating">Avaliação: %1$d Estrela%2$s</string>
     <string name="submit_rating">Enviar Avaliação</string>
     <string name="profile_image_desc">Imagem de Perfil</string>
+    <string name="profile_title">Perfil</string>
+    <string name="edit_profile">Editar Perfil</string>
+    <string name="username">Nome de Utilizador</string>
+    <string name="mobile">Telefone</string>
+    <string name="email">Email</string>
+    <string name="age">Idade</string>
+    <string name="gender">Género</string>
+    <string name="edit_profile_title">Editar Perfil</string>
+    <string name="change_photo">Alterar Foto</string>
+    <string name="full_name">Nome Completo</string>
+    <string name="save_changes">Guardar Alterações</string>
+    <string name="my_rides">Minhas Viagens</string>
+    <string name="add_ride">Adicionar Viagem</string>
+    <string name="search">Pesquisar</string>
+    <string name="select_date">Selecionar Data</string>
+    <string name="cancel_date">Cancelar Data</string>
+    <string name="selected_date">Data Selecionada</string>
+    <string name="no_rides_available">Nenhuma viagem disponível</string>
+    <string name="confirm_cancellation">Confirmar Cancelamento</string>
+    <string name="confirm_cancel_message">Tem a certeza de que deseja cancelar esta viagem?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="route">Rota</string>
+    <string name="start">Início</string>
+    <string name="arrival">Chegada</string>
+    <string name="available_seats">Assentos Disponíveis</string>
+    <string name="date">Data</string>
+    <string name="cancel_ride">Cancelar Viagem</string>
+    <string name="giving_ride">A Oferecer uma Viagem</string>
+    <string name="taking_ride">A Tomar uma Viagem</string>
+
+    <string name="have_account">Tem uma conta?</string>
+    <string name="login">Entrar</string>
+    <string name="create_account">Ou crie uma conta!</string>
+    <string name="register">Cadastrar</string>
+    <string name="switch_language">ENG | PT</string>
+
+    <string name="ride_details_title">Detalhes da Viagem</string>
+    <string name="starting_point">Ponto de partida</string>
+    <string name="finish_point">Ponto de chegada</string>
+    <string name="starting_date">Data de partida</string>
+    <string name="expected_arrival">Chegada prevista</string>
+    <string name="available_places">Lugares disponíveis</string>
+    <string name="pets_allowed">Animais permitidos</string>
+    <string name="baggage_allowed">Bagagem permitida</string>
+    <string name="smoking_allowed">Fumar permitido</string>
+    <string name="need_for_pickup">Precisa de ser apanhado?</string>
+    <string name="order_sent">Pedido enviado</string>
+    <string name="ask_for_ride">Pedir carona</string>
+    <string name="pickup_location">Ponto de embarque - Felgueiras, rua do jardim</string>
+    <string name="dropoff_location">Ponto de desembarque - Amarante, rua do Juíz</string>
+    <string name="profile_image_description">Imagem de perfil</string>
+    <string name="map_image_description">Mapa</string>
+
+    <string name="find_rides">Encontrar Viagens</string>
+    <string name="ride_information">Informações da Viagem</string>
+    <string name="from">De:</string>
+    <string name="to">Para:</string>
+    <string name="start_time">Hora de Início:</string>
+    <string name="arrival_time">Hora de Chegada:</string>
+    <string name="submit">Enviar</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="logo_description">Logótipo</string>
+    <string name="open_menu">Abrir Menu</string>
+    <string name="background_description">Imagem de Fundo</string>
+    <string name="close_menu">Fechar Menu</string>
+    <string name="profile">Perfil</string>
+
+    <string name="ride_history">Histórico de Viagens</string>
+    <string name="settings">Definições</string>
+    <string name="logout">Sair</string>
+
+    <string name="settings_title">Definições</string>
+    <string name="change_language">Alterar Idioma</string>
+
+    <string name="english">Inglês</string>
+    <string name="portuguese">Português</string>
 
 </resources>
