@@ -1,11 +1,16 @@
+package com.example.trabalhocmu.room.entity
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "users")
+@Entity(tableName = "user_table")
 data class User(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val username: String,
     val email: String,
-    val phone: String
+    val age: Int,
+    val gender: String,
+    val mobileNumber: String,
+    val password: String
 )
