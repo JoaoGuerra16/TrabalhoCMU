@@ -5,21 +5,25 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,7 +48,7 @@ fun RegisterScreen(navController: NavController) {
     val name = remember { mutableStateOf("") }
     val username = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
-    val age = remember { mutableStateOf(0) }
+    var age by remember { mutableStateOf(0) }
     val gender = remember { mutableStateOf("") }
     val mobileNumber = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -128,11 +132,14 @@ fun RegisterScreen(navController: NavController) {
 
             // Idade
             OutlinedTextField(
-                value = age.value,
-                onValueChange = { age.value = it },
-                label = { Text(text = if (currentLanguage.value == "PT") "Idade" else "Age", fontFamily = PoppinsFamily) },
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth() // Faz com que o campo ocupe toda a largura
+                value = age.toString(), // Converte o valor de 'age' para String, pois o TextField aceita String
+                onValueChange = { newValue ->
+                    age = newValue.toIntOrNull() ?: 0 // Converte o valor de String para Int ou usa 0 se não for um número válido
+                },
+                label = { Text(text = "Idade") }, // Define o label da caixa de texto
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number), // Só permite números
+                modifier = Modifier.fillMaxWidth() // Ocupa toda a largura disponível
+
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -204,12 +211,11 @@ fun RegisterScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    val ageValue = age.value.toIntOrNull() ?: 0
                     val user = User(
                         name = name.value,
                         username = username.value,
                         email = email.value,
-                        age = ageValue, // Pode ser uma entrada extra
+                        age = age, // Pode ser uma entrada extra
                         gender = gender.value,  // Pode ser uma entrada extra
                         mobileNumber = mobileNumber.value,  // Pode ser uma entrada extra
                         password = password.value
