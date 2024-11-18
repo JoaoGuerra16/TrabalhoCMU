@@ -17,7 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun CreateRide(navController: NavController) {
     SidebarScaffold(navController = navController) { paddingValues ->
