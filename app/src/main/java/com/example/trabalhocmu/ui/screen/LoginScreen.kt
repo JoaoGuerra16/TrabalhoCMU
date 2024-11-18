@@ -1,5 +1,6 @@
 package com.example.trabalhocmu.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,24 +25,27 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.room.entity.AppDatabase
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
+import com.example.trabalhocmu.viewmodel.LoginViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(viewModel: LoginViewModel = viewModel(), navController: NavController) {
     val scrollState = rememberScrollState()
-
-    val context = LocalContext.current
-    val db = AppDatabase.getDatabase(context).userDao()
-    val coroutineScope = rememberCoroutineScope()
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
     val currentLanguage = remember { mutableStateOf("PT") }
+    val loginError = remember { mutableStateOf(false) }
+
+    if (loginError.value) {
+        Toast.makeText(navController.context, "Erro no login, tente novamente", Toast.LENGTH_SHORT).show()
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -62,15 +66,15 @@ fun LoginScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = if (currentLanguage.value == "PT") "Login" else "Login", // Pode ser alterado para texto diferente em inglês, se necessário
+                    text = if (currentLanguage.value == "PT") "Login" else "Login",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = PoppinsFamily // Aplicando a fonte Poppins
+                    fontFamily = PoppinsFamily
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = if (currentLanguage.value == "PT") "Entre com seu endereço email e senha" else "Enter your email and password",
-                    fontFamily = PoppinsFamily // Fonte Poppins
+                    fontFamily = PoppinsFamily
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -79,11 +83,14 @@ fun LoginScreen(navController: NavController) {
                     value = email.value,
                     onValueChange = { email.value = it },
                     label = {
-                        Text(text = if (currentLanguage.value == "PT") "Endereço de e-mail" else "Email Address", fontFamily = PoppinsFamily) // Fonte Poppins
+                        Text(
+                            text = if (currentLanguage.value == "PT") "Endereço de e-mail" else "Email Address",
+                            fontFamily = PoppinsFamily
+                        )
                     },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth(),
-                    textStyle = TextStyle(fontFamily = PoppinsFamily) // Fonte Poppins
+                    textStyle = TextStyle(fontFamily = PoppinsFamily)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -92,7 +99,10 @@ fun LoginScreen(navController: NavController) {
                     value = password.value,
                     onValueChange = { password.value = it },
                     label = {
-                        Text(text = if (currentLanguage.value == "PT") "Senha" else "Password", fontFamily = PoppinsFamily) // Fonte Poppins
+                        Text(
+                            text = if (currentLanguage.value == "PT") "Senha" else "Password",
+                            fontFamily = PoppinsFamily
+                        )
                     },
                     visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                     shape = RoundedCornerShape(12.dp),
@@ -105,36 +115,30 @@ fun LoginScreen(navController: NavController) {
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    textStyle = TextStyle(fontFamily = PoppinsFamily) // Fonte Poppins
+                    textStyle = TextStyle(fontFamily = PoppinsFamily)
                 )
+
                 Spacer(modifier = Modifier.height(5.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
+                if (loginError.value) {
                     Text(
-                        text = if (currentLanguage.value == "PT") "Esqueceu a senha?" else "Forgot Password?",
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontFamily = PoppinsFamily, // Fonte Poppins
-                        modifier = Modifier.clickable {
-                            navController.navigate("ForgotPassword")
-                        }
+                        text = if (currentLanguage.value == "PT") "Email ou senha inválidos" else "Invalid email or password",
+                        color = Color.Red,
+                        fontFamily = PoppinsFamily,
+                        fontSize = 14.sp
                     )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-
                 Button(
                     onClick = {
-                        coroutineScope.launch {
-                            val user = db.getUserByEmailAndPassword(email.value, password.value)
-                            if (user != null) {
-                                navController.navigate("Profile")
+                        // Chama o ViewModel para autenticar o usuário
+                        viewModel.loginUser(email.value, password.value) { isSuccess ->
+                            if (isSuccess) {
+                                navController.navigate("Profile") // Navega para a tela de perfil
                             } else {
-                                // Exibir erro de login
+                                loginError.value = true // Exibe erro caso o login falhe
                             }
                         }
                     },
@@ -151,7 +155,7 @@ fun LoginScreen(navController: NavController) {
                     modifier = Modifier.clickable {
                         navController.navigate("Register")
                     },
-                    fontFamily = PoppinsFamily // Fonte Poppins
+                    fontFamily = PoppinsFamily
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -164,7 +168,6 @@ fun LoginScreen(navController: NavController) {
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
                 .clickable {
-                    // Alterna o idioma entre "PT" e "ENG"
                     currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
                 },
             verticalAlignment = Alignment.CenterVertically
@@ -173,14 +176,9 @@ fun LoginScreen(navController: NavController) {
                 text = if (currentLanguage.value == "ENG") "PT | ENG" else "ENG | PT ",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = PoppinsFamily // Fonte Poppins
+                fontFamily = PoppinsFamily
             )
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewLoginScreen() {
-    LoginScreen(navController = rememberNavController())
-}

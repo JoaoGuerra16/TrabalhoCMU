@@ -4,6 +4,9 @@ package com.example.trabalhocmu.ui.activity
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +15,7 @@ import com.example.trabalhocmu.ui.component.SplashScreen
 import com.example.trabalhocmu.ui.screen.*
 import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.RatingViewModel
+import com.example.trabalhocmu.viewmodel.UserViewModel
 
 @Composable
 fun MainNavGraph(
@@ -48,7 +52,9 @@ fun MainNavGraph(
         }
 
         composable("Login") {
-            LoginScreen(navController)
+            val userViewModel = ViewModelProvider(LocalContext.current as ViewModelStoreOwner).get(
+                UserViewModel::class.java)
+            LoginScreen(viewModel = userViewModel, navController = navController)
         }
 
         composable("ForgotPassword") {

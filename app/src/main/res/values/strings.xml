@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RIDES</string>
+    <string name="app_name">RideMate</string>
     <string name="how_would_you_rate">Como você avaliaria este utilizador?</string>
     <string name="rating">Avaliação: %1$d Estrela%2$s</string>
     <string name="submit_rating">Enviar Avaliação</string>

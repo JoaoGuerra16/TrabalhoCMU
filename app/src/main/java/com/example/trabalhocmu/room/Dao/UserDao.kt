@@ -1,8 +1,9 @@
-package com.example.trabalhocmu.room.entity
+package com.example.trabalhocmu.room.Dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.trabalhocmu.room.entity.User
 
 @Dao
 interface UserDao {
