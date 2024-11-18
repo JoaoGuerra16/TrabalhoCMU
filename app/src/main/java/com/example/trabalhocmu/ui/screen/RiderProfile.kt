@@ -1,8 +1,7 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.ui.screen
 
-import RatingViewModel
+import com.example.trabalhocmu.viewmodel.RatingViewModel
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
+import com.example.trabalhocmu.R
+import com.example.trabalhocmu.ui.component.SidebarScaffold
 import kotlin.math.roundToInt
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 

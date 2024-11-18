@@ -1,4 +1,4 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.res.stringResource
+import com.example.trabalhocmu.R
+import com.example.trabalhocmu.ui.component.SidebarScaffold
 
 @Composable
 fun RideDetailsScreen(navController: NavController, from: String?, to: String?, date: String?) {

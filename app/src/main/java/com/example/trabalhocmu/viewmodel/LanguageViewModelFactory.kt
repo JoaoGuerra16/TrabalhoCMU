@@ -1,6 +1,5 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.viewmodel
 
-import LanguageViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import android.content.Context

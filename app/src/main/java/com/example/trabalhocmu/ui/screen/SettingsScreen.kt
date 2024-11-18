@@ -1,5 +1,5 @@
-package com.example.trabalhocmu
-import LanguageViewModel
+package com.example.trabalhocmu.ui.screen
+import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.DpOffset
+import com.example.trabalhocmu.R
+import com.example.trabalhocmu.ui.component.SidebarScaffold
 import java.util.Locale
 
 

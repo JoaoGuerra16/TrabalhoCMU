@@ -39,7 +39,7 @@
     <string name="have_account">Tem uma conta?</string>
     <string name="login">Entrar</string>
     <string name="create_account">Ou crie uma conta!</string>
-    <string name="register">Cadastrar</string>
+    <string name="register">Registar</string>
     <string name="switch_language">ENG | PT</string>
 
     <string name="ride_details_title">Detalhes da Viagem</string>
@@ -53,7 +53,7 @@
     <string name="smoking_allowed">Fumar permitido</string>
     <string name="need_for_pickup">Precisa de ser apanhado?</string>
     <string name="order_sent">Pedido enviado</string>
-    <string name="ask_for_ride">Pedir carona</string>
+    <string name="ask_for_ride">Pedir Boleia</string>
     <string name="pickup_location">Ponto de embarque - Felgueiras, rua do jardim</string>
     <string name="dropoff_location">Ponto de desembarque - Amarante, rua do Juíz</string>
     <string name="profile_image_description">Imagem de perfil</string>

@@ -1,4 +1,4 @@
-package com.example.trabalhocmu
+package com.example.trabalhocmu.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -22,7 +22,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.text.TextStyle
 import androidx.navigation.compose.rememberNavController
+import com.example.trabalhocmu.ui.component.BackgroundWithImage
+import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
 @Composable
@@ -77,7 +80,7 @@ fun LoginScreen(navController: NavController) {
                     },
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth(),
-                    textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily) // Fonte Poppins
+                    textStyle = TextStyle(fontFamily = PoppinsFamily) // Fonte Poppins
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -99,7 +102,7 @@ fun LoginScreen(navController: NavController) {
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    textStyle = androidx.compose.ui.text.TextStyle(fontFamily = PoppinsFamily) // Fonte Poppins
+                    textStyle = TextStyle(fontFamily = PoppinsFamily) // Fonte Poppins
                 )
                 Spacer(modifier = Modifier.height(5.dp))
 
