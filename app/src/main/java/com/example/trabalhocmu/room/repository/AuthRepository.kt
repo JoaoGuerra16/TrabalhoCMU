@@ -14,10 +14,9 @@ class AuthRepository(private val context: Context) {
     private val auth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-    // Instância do banco de dados Room
     private val db = AppDatabase.getDatabase(context)
 
-    // Função para fazer login com email e senha
+    // Função para fazer login com email e palavra passe
     suspend fun loginUser(email: String, password: String): Boolean {
         return try {
             val result = auth.signInWithEmailAndPassword(email, password).await()
@@ -38,7 +37,7 @@ class AuthRepository(private val context: Context) {
         }
     }
 
-    // Função para registrar um usuário
+    // Função para registar um utilizador
     suspend fun registerUser(
         name: String,
         username: String,
@@ -49,21 +48,21 @@ class AuthRepository(private val context: Context) {
         mobileNumber: String
     ): Boolean {
         try {
-            // Verificar se o usuário já existe no Firebase
+            // Verificar se o utilizador já existe no Firebase
             val result = auth.fetchSignInMethodsForEmail(email).await()
             if (result.signInMethods?.isNotEmpty() == true) {
-                // Se o e-mail já está registrado no Firebase, retorne falso
+                // Se o e-mail já está registado no Firebase, retorne falso
                 return false
             }
 
-            // Verificar se o usuário já existe no banco local (Room)
+            // Verificar se o utilizador já existe na base dados(Room)
             val existingUser = getUserByEmail(email)
             if (existingUser != null) {
-                // Se o usuário já existe no Room, retorne falso
+                // Se o utilizador já existe no Room, retorne falso
                 return false
             }
 
-            // Criar o usuário no Firebase Authentication
+            // Criar o utilizador no Firebase Authentication
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
             val userId = authResult.user?.uid ?: return false
 
@@ -78,10 +77,10 @@ class AuthRepository(private val context: Context) {
                 mobileNumber = mobileNumber
             )
 
-            // Salvar o usuário no Firestore
+            // Salvar o utilizador no Firestore
             firestore.collection("users").document(userId).set(user).await()
 
-            // Salvar o usuário também no Room (local)
+            // Salvar o utilziador também no Room (local)
             insertUser(user)
 
             return true

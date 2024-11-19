@@ -22,7 +22,7 @@ import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
 
-// Composable da página StartRide
+
 @Composable
 fun StartRide(navController: NavController, from: String?, to: String?, startTime: String?, arrivalTime: String?, date: String?, availableSeats: String, passengers: List<Passenger>) {
     SidebarScaffold(navController = navController) { paddingValues ->
@@ -37,7 +37,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
                     .padding(25.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Título e subtítulo
+
                 Text(
                     text = "My rides",
                     fontSize = 25.sp,
@@ -53,7 +53,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Exibição das informações da viagem
+
                 UserInfoStartRide(label = "Starting point", info = from ?: "N/A")
                 UserInfoStartRide(label = "Final destination", info = to ?: "N/A")
                 UserInfoStartRide(label = "Starting date", info = date ?: "N/A")
@@ -62,7 +62,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
 
                 Spacer(modifier = Modifier.height(15.dp))
 
-                // Checkboxes de permissões
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -100,7 +100,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Exibindo os passageiros
+
                 Text(
                     text = "Passengers:",
                     fontSize = 18.sp,
@@ -117,7 +117,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Botão para encerrar a viagem
+
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
@@ -131,7 +131,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
                 }
             }
 
-            // Diálogo de confirmação
+
             if (showDialog) {
                 AlertDialog(
                     onDismissRequest = { showDialog = false },
@@ -170,7 +170,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
     }
 }
 
-// Composable para exibir informações do usuário
+
 @Composable
 fun UserInfoStartRide(label: String, info: String) {
     Row(
@@ -184,7 +184,7 @@ fun UserInfoStartRide(label: String, info: String) {
     }
 }
 
-// Composable para exibir cada passageiro
+
 @Composable
 fun PassengerCard(profileImage: Int, name: String, gender: String, pickup: String) {
     Row(
@@ -195,7 +195,7 @@ fun PassengerCard(profileImage: Int, name: String, gender: String, pickup: Strin
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Imagem de perfil
+
         Image(
             painter = painterResource(id = profileImage),
             contentDescription = "Profile Picture",
@@ -205,7 +205,7 @@ fun PassengerCard(profileImage: Int, name: String, gender: String, pickup: Strin
         )
         Spacer(modifier = Modifier.width(10.dp))
 
-        // Informações do passageiro
+
         Column {
             Text(text = name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(text = "Gender: $gender", fontSize = 14.sp, color = Color.Gray)
@@ -215,9 +215,9 @@ fun PassengerCard(profileImage: Int, name: String, gender: String, pickup: Strin
 }
 
 
-// Modelo de dados para o Passageiro
+
 data class Passenger(
-    val profileImage: Int, // ID do recurso da imagem do perfil
+    val profileImage: Int,
     val name: String,
     val gender: String,
     val pickup: String

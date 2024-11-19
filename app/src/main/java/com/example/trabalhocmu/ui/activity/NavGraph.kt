@@ -4,9 +4,6 @@ package com.example.trabalhocmu.ui.activity
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -83,6 +80,10 @@ fun MainNavGraph(
         composable("My Rides") {
             MyRides(navController)
         }
+        composable("EditProfile") {
+            EditProfileScreen(navController)
+        }
+
 
         // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
@@ -114,7 +115,7 @@ fun MainNavGraph(
     }
 }
 
-// Wrapper para adicionar o Sidebar ao redor de telas
+// Wrapper para adicionar o Sidebar aos screens
 @Composable
 fun DrawerWrapper(
     navController: NavHostController,

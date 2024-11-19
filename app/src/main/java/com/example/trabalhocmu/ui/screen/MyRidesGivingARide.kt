@@ -111,15 +111,15 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "Smoking allowed", fontWeight = FontWeight.Bold)
-                    Checkbox(checked = true, onCheckedChange = null)  // Marcação fixa
+                    Checkbox(checked = true, onCheckedChange = null)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween, // Coloca os botões nas extremidades
-                    verticalAlignment = Alignment.CenterVertically // Alinha verticalmente
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
                         onClick = { navController.navigate("RequestForRide") },
@@ -134,7 +134,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                     // Botão "Start" verde
                     Button(
                         onClick = { (navController.navigate(  "StartRide/$from/$to/$startTime/$arrivalTime/$date/$availableSeats")) },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Green) // Cor verde
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
                     ) {
                         Text(text = "Start", color = Color.White, fontFamily = PoppinsFamily)
                     }
@@ -146,7 +146,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
         }
     }
 }
-// Composable para mostrar as informações do usuário com label e valor
+
 @Composable
 fun UserInfoRowGivingARide(label: String, info: String) {
     Row(

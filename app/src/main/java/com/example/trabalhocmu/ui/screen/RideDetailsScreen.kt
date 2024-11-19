@@ -123,7 +123,7 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
                     )
                 }
 
-                // Exibe o mapa e as mensagens somente se a checkbox estiver marcada
+
                 if (isRouteChecked) {
                     Text(
                         text = stringResource(id = R.string.pickup_location),
@@ -176,7 +176,7 @@ fun RideDetailsScreen(navController: NavController, from: String?, to: String?, 
     }
 }
 
-// Composable para mostrar as informações do usuário com label e valor
+
 @Composable
 fun UserInfoRow(label: String, info: String) {
     Row(

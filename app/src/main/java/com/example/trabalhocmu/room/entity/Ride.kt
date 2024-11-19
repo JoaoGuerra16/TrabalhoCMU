@@ -5,7 +5,7 @@ import androidx.room.TypeConverters
 @Entity(tableName = "rides")
 data class Ride(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val driverId: Int, // ID do motorista (referência ao User)
+    val driverId: Int, // ID do Condutor (referência ao User)
     val startingPoint: String,
     val finalDestination: String,
     val startingDate: String,

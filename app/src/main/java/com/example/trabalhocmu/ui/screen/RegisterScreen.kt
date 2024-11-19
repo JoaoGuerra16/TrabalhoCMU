@@ -15,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,15 +35,15 @@ import com.example.trabalhocmu.viewmodel.RegisterState
 
 @Composable
 fun RegisterScreen(navController: NavController) {
-    // Obtenha o Contexto
+
     val context = LocalContext.current
 
-    // Crie a instância da viewModel usando a Factory personalizada
+
     val viewModel: AuthViewModel = viewModel(
-        factory = AuthViewModelFactory(context)  // Passando a factory personalizada
+        factory = AuthViewModelFactory(context)
     )
 
-    // Variáveis de estado para armazenar os dados inseridos pelo usuário
+
     val name = remember { mutableStateOf("") }
     val username = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
@@ -52,7 +53,7 @@ fun RegisterScreen(navController: NavController) {
     val password = remember { mutableStateOf("") }
     val confirmPassword = remember { mutableStateOf("") }
 
-    // Estado para controlar a visibilidade da senha
+
     val passwordVisible = remember { mutableStateOf(false) }
     val confirmPasswordVisible = remember { mutableStateOf(false) }
 
@@ -64,7 +65,7 @@ fun RegisterScreen(navController: NavController) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    // Exibindo o estado do registro (Loading, Error, Success)
+
     LaunchedEffect(registerState) {
         when (registerState) {
             is RegisterState.Error -> {
@@ -72,7 +73,7 @@ fun RegisterScreen(navController: NavController) {
             }
             is RegisterState.Success -> {
                 showToast("Registro realizado com sucesso!")
-                navController.navigate("Login")  // Navegar para a tela de login após sucesso
+                navController.navigate("Login")
             }
             else -> {}
         }
@@ -82,7 +83,7 @@ fun RegisterScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState) // Adiciona rolagem ao formulário completo
+                .verticalScroll(scrollState)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -94,7 +95,7 @@ fun RegisterScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Título de Registro
+            // Título de Registo
             Text(
                 text = if (currentLanguage.value == "PT") "Cadastrar" else "Register",
                 fontSize = 20.sp,
@@ -166,7 +167,7 @@ fun RegisterScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Senha com ícone para mostrar/ocultar
+
             OutlinedTextField(
                 value = password.value,
                 onValueChange = { password.value = it },
@@ -185,7 +186,7 @@ fun RegisterScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Confirmar Senha
+
             OutlinedTextField(
                 value = confirmPassword.value,
                 onValueChange = { confirmPassword.value = it },
@@ -204,7 +205,7 @@ fun RegisterScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Texto para Login caso o usuário já tenha uma conta
+
             Text(
                 text = if (currentLanguage.value == "PT") "Já tem uma conta? Faça login" else "Do you have an account? Login",
                 modifier = Modifier.clickable {
@@ -214,11 +215,11 @@ fun RegisterScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botão para Registar
+
             Button(
                 onClick = {
                     if (password.value == confirmPassword.value) {
-                        // Chama o método de registro do ViewModel
+
                         viewModel.registerUser(
                             name.value,
                             username.value,
@@ -230,11 +231,12 @@ fun RegisterScreen(navController: NavController) {
                             mobileNumber.value
                         )
                     } else {
-                        // Exibir erro de senha não confere
+
                         showToast("As senhas não coincidem!")
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60))
             ) {
                 Text("Registar")
             }

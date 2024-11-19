@@ -23,7 +23,7 @@ class AuthViewModel(context: Context) : ViewModel() {
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
 
-    // Função para fazer login com email e senha
+    // Função para fazer login com email e palavara passe
     fun loginUser(email: String, password: String) {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
@@ -40,7 +40,7 @@ class AuthViewModel(context: Context) : ViewModel() {
         _loginState.value = LoginState.Idle
     }
 
-    // Função para login com Google
+    // Função para fazer o login com Google
     fun loginWithGoogle(account: GoogleSignInAccount) {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
@@ -53,14 +53,14 @@ class AuthViewModel(context: Context) : ViewModel() {
         }
     }
 
-    // Função para verificar se o email já está registrado (Room)
+    // Função para verificar se o email já está registado (Room)
     private suspend fun isEmailAlreadyRegistered(email: String): Boolean {
         val user = authRepository.getUserByEmail(email)
         return user != null
     }
 
-    // Função para registrar o usuário
-    // Função para registrar o usuário
+
+    // Função para registrar o utilizador
     fun registerUser(
         name: String,
         username: String,
@@ -78,7 +78,7 @@ class AuthViewModel(context: Context) : ViewModel() {
                 return@launch
             }
 
-            // Verificar se as senhas coincidem
+            // Verificar se as palavrapasses coincidem
             if (password != confirmPassword) {
                 _registerState.value = RegisterState.Error("As senhas não coincidem!")
                 return@launch
@@ -94,7 +94,7 @@ class AuthViewModel(context: Context) : ViewModel() {
             _registerState.value = RegisterState.Loading
 
             try {
-                // Tenta criar o usuário no Firebase Authentication e no Room
+                // Tenta criar um utilizador na Firebase Authentication e no Room
                 val authResult = authRepository.registerUser(
                     name = name,
                     username = username,
@@ -106,35 +106,35 @@ class AuthViewModel(context: Context) : ViewModel() {
                 )
 
                 if (authResult) {
-                    // Alterando o estado para Success
+                    // Modifica o estado para Success
                     _registerState.value = RegisterState.Success
                 } else {
-                    // Caso a criação do usuário falhe
+
                     _registerState.value = RegisterState.Error("Erro ao criar conta. O e-mail pode já estar registrado.")
                 }
             } catch (e: Exception) {
-                // Erro inesperado
+
                 _registerState.value = RegisterState.Error("Erro inesperado: ${e.message}")
             }
         }
     }
 
 
-    // Função para salvar o usuário no Firestore
+    // Função para guardar o utilizador no Firestore
     private fun saveUserToFirestore(user: User) {
         val db = FirebaseFirestore.getInstance()
 
-        // Crie uma referência à coleção de usuários
+        // Crie uma referência à coleção dos utilizadors
         val userRef = db.collection("users").document(user.email) // Usando o e-mail como ID
 
-        // Salve os dados do usuário
+        // Guarda os dados do utilizador
         userRef.set(user)
             .addOnSuccessListener {
-                // Sucesso no salvamento
+
                 Log.d("Firestore", "Usuário salvo com sucesso!")
             }
             .addOnFailureListener { e ->
-                // Erro ao salvar
+
                 Log.w("Firestore", "Erro ao salvar usuário", e)
             }
     }

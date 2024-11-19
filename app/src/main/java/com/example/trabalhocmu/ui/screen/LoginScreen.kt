@@ -1,6 +1,6 @@
 package com.example.trabalhocmu.ui.screen
 
-import android.app.Activity
+
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trabalhocmu.ui.component.BackgroundWithImage
@@ -39,7 +40,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
     val viewModel: AuthViewModel = viewModel(
-        factory = AuthViewModelFactory(context)  // Usando a Factory personalizada
+        factory = AuthViewModelFactory(context)  // Usamos uma Factory personalizada para a app nao crashar
     )
     val currentLanguage = remember { mutableStateOf("PT") }
 
@@ -47,7 +48,7 @@ fun LoginScreen(navController: NavController) {
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
 
-    // Observando o estado do login
+
     val loginState by viewModel.loginState.collectAsState()
 
     val signInResultLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -60,7 +61,7 @@ fun LoginScreen(navController: NavController) {
         }
     }
 
-    // Função para iniciar o login com Google
+
     fun signInWithGoogle() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
@@ -143,14 +144,14 @@ fun LoginScreen(navController: NavController) {
                         }
                     )
                 }
-                // Exibir mensagens de erro ou sucesso
+
                 LaunchedEffect(loginState) {
                     when (loginState) {
                         is LoginState.Success -> {
                             navController.navigate("Profile") {
                                 popUpTo("Login") { inclusive = true }
                             }
-                            viewModel.resetLoginState() // Reseta para evitar múltiplos disparos
+                            viewModel.resetLoginState()
                         }
 
                         is LoginState.Error -> {
@@ -169,7 +170,8 @@ fun LoginScreen(navController: NavController) {
                     onClick = {
                         viewModel.loginUser(email.value, password.value)
                     },
-                    modifier = Modifier.width(175.dp)
+                    modifier = Modifier.width(175.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60)) // Cor hexadecimal
                 ) {
                     Text("Entrar")
                 }
@@ -191,11 +193,11 @@ fun LoginScreen(navController: NavController) {
                         .width(300.dp)
                         .height(50.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surface, // Fundo branco para simular estilo Google
-                        contentColor = MaterialTheme.colorScheme.onSurface // Texto e ícone em cor padrão
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurface
                     ),
                     elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 4.dp // Adiciona um leve efeito de elevação
+                        defaultElevation = 4.dp
                     )
                 ) {
                     Row(
@@ -205,8 +207,8 @@ fun LoginScreen(navController: NavController) {
                         Icon(
                             painter = painterResource(id = R.drawable.google),
                             contentDescription = "Google logo",
-                            tint = androidx.compose.ui.graphics.Color.Unspecified, // Mantém a cor original do ícone
-                            modifier = Modifier.size(24.dp)
+                            tint = androidx.compose.ui.graphics.Color.Unspecified,
+                            modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
