@@ -1,6 +1,9 @@
 package com.example.trabalhocmu.ui.screen
 
+import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,26 +33,130 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.room.entity.AppDatabase
+import com.example.trabalhocmu.room.entity.User
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import com.example.trabalhocmu.viewmodel.LoginViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
+import org.mindrot.jbcrypt.BCrypt
+
+
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel = viewModel(), navController: NavController) {
+    val RC_SIGN_IN = 9001
     val scrollState = rememberScrollState()
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
     val currentLanguage = remember { mutableStateOf("PT") }
     val loginError = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    if (loginError.value) {
-        Toast.makeText(navController.context, "Erro no login, tente novamente", Toast.LENGTH_SHORT).show()
+    // Função para verificar se a senha fornecida corresponde ao hash
+    fun checkPassword(inputPassword: String, storedHashedPassword: String): Boolean {
+        return BCrypt.checkpw(inputPassword, storedHashedPassword)  // Verifica se a senha corresponde ao hash
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    // Função para buscar o usuário e verificar a senha
+    fun loginUser(email: String, password: String) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { result ->
+                if (result.isEmpty) {
+                    // Se não encontrar o usuário, exibe erro
+                    loginError.value = true
+                    return@addOnSuccessListener
+                }
+
+                val userDocument = result.documents.first()
+                val storedHashedPassword = userDocument.getString("password") ?: ""
+
+                // Verifica se a senha fornecida corresponde ao hash armazenado
+                if (checkPassword(password, storedHashedPassword)) {
+                    // Se a senha for correta, navega para a tela de perfil
+                    navController.navigate("Profile")
+                } else {
+                    // Se a senha estiver incorreta, exibe erro
+                    loginError.value = true
+                }
+            }
+            .addOnFailureListener {
+                // Exibe erro de falha ao buscar o usuário
+                loginError.value = true
+            }
+    }
+
+    // Função para autenticar com o Firebase usando o token do Google
+    // Método para autenticar com o Google
+    fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Login bem-sucedido, agora vamos armazenar os dados do usuário
+
+                    // Armazena o usuário no banco de dados local (Room)
+                    val user = User(
+                        name = account.displayName ?: "Nome não disponível",
+                        username = account.displayName ?: "Username não disponível",  // Pode ser o nome ou outra lógica
+                        email = account.email ?: "Email não disponível",
+                        age = 0,  // Idade será fornecida pelo usuário mais tarde
+                        gender = "Indefinido",  // Gênero será fornecido pelo usuário mais tarde
+                        mobileNumber = "Número não disponível",  // Caso tenha número
+                        password = ""  // Senha não necessária
+                    )
+
+                    // Salvar no Room (isso pode ser feito em uma ViewModel ou diretamente na Activity)
+                   // UserViewModel.cre(user) // Chama um método no ViewModel para inserir no banco de dados Room
+
+                    // Navega para a tela de perfil ou outra tela após o login
+                    navController.navigate("Profile")
+                } else {
+                    // Exibe erro se o login falhar
+                    loginError.value = true
+                }
+            }
+    }
+
+    // Tratar o retorno do sign-in
+    val signInResultLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            val account = task.result
+
+            if (account != null) {
+                firebaseAuthWithGoogle(account)
+            } else {
+                // Se não conseguir autenticar com o Google
+                loginError.value = true
+            }
+        }
+    // Função para iniciar o login com Google
+    fun signInWithGoogle() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(context.getString(R.string.default_web_client_id)) // Adicione o ID do cliente
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(context, gso)
+        val signInIntent = googleSignInClient.signInIntent
+        signInResultLauncher.launch(signInIntent)  // Aqui chamamos o launcher para iniciar o processo de autenticação
+    }
+
+
+
+
+
+    Box(modifier = Modifier.fillMaxSize()) {
         BackgroundWithImage {
             Column(
                 modifier = Modifier
@@ -121,26 +228,23 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), navController: NavContr
                 Spacer(modifier = Modifier.height(5.dp))
 
                 if (loginError.value) {
+                    // Exibe o texto de erro na interface
                     Text(
                         text = if (currentLanguage.value == "PT") "Email ou senha inválidos" else "Invalid email or password",
                         color = Color.Red,
                         fontFamily = PoppinsFamily,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(top = 8.dp)  // Adiciona algum espaço acima do texto
                     )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Botão para login com email e senha
                 Button(
                     onClick = {
-                        // Chama o ViewModel para autenticar o usuário
-                        viewModel.loginUser(email.value, password.value) { isSuccess ->
-                            if (isSuccess) {
-                                navController.navigate("Profile") // Navega para a tela de perfil
-                            } else {
-                                loginError.value = true // Exibe erro caso o login falhe
-                            }
-                        }
+                        // Chama a função de login passando o email e a senha
+                        loginUser(email.value, password.value)
                     },
                     modifier = Modifier.width(175.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60))
@@ -150,6 +254,18 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), navController: NavContr
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // Botão para login com Google
+                Button(
+                    onClick = { signInWithGoogle() },
+                    modifier = Modifier.width(175.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4285F4))
+                ) {
+                    Text(text = if (currentLanguage.value == "PT") "Entrar com Google" else "Sign in with Google")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Navegação para a tela de registro
                 Text(
                     text = if (currentLanguage.value == "PT") "Não tem uma conta? Cadastre-se" else "Don't you have an account? Register",
                     modifier = Modifier.clickable {
@@ -161,24 +277,5 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), navController: NavContr
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
-
-        // Seletor de idioma no canto inferior direito
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .clickable {
-                    currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
-                },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = if (currentLanguage.value == "ENG") "PT | ENG" else "ENG | PT ",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = PoppinsFamily
-            )
-        }
     }
 }
-

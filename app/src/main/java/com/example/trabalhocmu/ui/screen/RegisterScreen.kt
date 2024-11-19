@@ -1,5 +1,7 @@
 package com.example.trabalhocmu.ui.screen
 
+import AuthViewModel
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,12 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,41 +26,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.room.entity.AppDatabase
 import com.example.trabalhocmu.room.entity.User
+import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
-import kotlinx.coroutines.launch
 
 
 @Composable
 fun RegisterScreen(navController: NavController) {
     val scrollState = rememberScrollState()
-    val currentLanguage = remember { mutableStateOf("PT") }
-
-    // Criando variáveis de estado para os campos de texto
-    val name = remember { mutableStateOf("") }
-    val username = remember { mutableStateOf("") }
-    val email = remember { mutableStateOf("") }
-    var age by remember { mutableStateOf(0) }
-    val gender = remember { mutableStateOf("") }
-    val mobileNumber = remember { mutableStateOf("") }
-    val password = remember { mutableStateOf("") }
-    val confirmPassword = remember { mutableStateOf("") }
-    // Estado para controlar a visibilidade da senha
-    val passwordVisible = remember { mutableStateOf(false) }
-    val confirmPasswordVisible = remember { mutableStateOf(false) }
-
     val context = LocalContext.current
-    val db = AppDatabase.getDatabase(context).userDao()
-    val coroutineScope = rememberCoroutineScope()
 
+    // Obtenha o ViewModel com Koin ou ViewModelProvider
+    val authViewModel: AuthViewModel = viewModel()
 
-
-
+    // UI para a tela de registro
     BackgroundWithImage {
         Column(
             modifier = Modifier
@@ -82,7 +63,7 @@ fun RegisterScreen(navController: NavController) {
 
             // Título de Registro
             Text(
-                text = if (currentLanguage.value == "PT") "Cadastrar" else "Register",
+                text = "Cadastrar",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = PoppinsFamily
@@ -91,170 +72,122 @@ fun RegisterScreen(navController: NavController) {
 
             // Subtítulo
             Text(
-                text = if (currentLanguage.value == "PT") "Preencha seus dados para cadastrar" else "Enter your details to register",
+                text = "Preencha seus dados para cadastrar",
                 fontFamily = PoppinsFamily
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Nome
+            // Campos de entrada (Nome, Username, Email, Idade, etc.)
             OutlinedTextField(
-                value = name.value,
-                onValueChange = { name.value = it },
-                label = { Text(text = if (currentLanguage.value == "PT") "Nome" else "Name", fontFamily = PoppinsFamily) },
+                value = authViewModel.name.value,
+                onValueChange = { authViewModel.name.value = it },
+                label = { Text(text = "Nome", fontFamily = PoppinsFamily) },
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth() // Faz com que o campo ocupe toda a largura
+                modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Nome de usuário
             OutlinedTextField(
-                value = username.value,
-                onValueChange = { username.value = it },
-                label = { Text(text = if (currentLanguage.value == "PT") "Nome de Usuário" else "Username", fontFamily = PoppinsFamily) },
+                value = authViewModel.username.value,
+                onValueChange = { authViewModel.username.value = it },
+                label = { Text(text = "Nome de Usuário", fontFamily = PoppinsFamily) },
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth() // Faz com que o campo ocupe toda a largura
+                modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Email
             OutlinedTextField(
-                value = email.value,
-                onValueChange = { email.value = it },
-                label = { Text(text = if (currentLanguage.value == "PT") "Email" else "Email Address", fontFamily = PoppinsFamily) },
+                value = authViewModel.email.value,
+                onValueChange = { authViewModel.email.value = it },
+                label = { Text(text = "Email", fontFamily = PoppinsFamily) },
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth() // Faz com que o campo ocupe toda a largura
+                modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Idade
             OutlinedTextField(
-                value = age.toString(), // Converte o valor de 'age' para String, pois o TextField aceita String
-                onValueChange = { newValue ->
-                    age = newValue.toIntOrNull() ?: 0 // Converte o valor de String para Int ou usa 0 se não for um número válido
-                },
-                label = { Text(text = "Idade") }, // Define o label da caixa de texto
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number), // Só permite números
-                modifier = Modifier.fillMaxWidth() // Ocupa toda a largura disponível
-
+                value = authViewModel.age.value.toString(),
+                onValueChange = { newValue -> authViewModel.age.value = newValue.toIntOrNull() ?: 0 },
+                label = { Text(text = "Idade") },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Gênero
             OutlinedTextField(
-                value = gender.value,
-                onValueChange = { gender.value = it },
-                label = { Text(text = if (currentLanguage.value == "PT") "Gênero" else "Gender", fontFamily = PoppinsFamily) },
+                value = authViewModel.gender.value,
+                onValueChange = { authViewModel.gender.value = it },
+                label = { Text(text = "Gênero", fontFamily = PoppinsFamily) },
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth() // Faz com que o campo ocupe toda a largura
+                modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Número de celular
             OutlinedTextField(
-                value = mobileNumber.value,
-                onValueChange = { mobileNumber.value = it },
-                label = { Text(text = if (currentLanguage.value == "PT") "Número de Celular" else "Mobile Number", fontFamily = PoppinsFamily) },
+                value = authViewModel.mobileNumber.value,
+                onValueChange = { authViewModel.mobileNumber.value = it },
+                label = { Text(text = "Número de Celular", fontFamily = PoppinsFamily) },
                 shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.fillMaxWidth() // Faz com que o campo ocupe toda a largura
+                modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Senha com ícone para mostrar/ocultar
+            // Senha
             OutlinedTextField(
-                value = password.value,
-                onValueChange = { password.value = it },
-                label = { Text(text = if (currentLanguage.value == "PT") "Senha" else "Password", fontFamily = PoppinsFamily) },
-                visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+                value = authViewModel.password.value,
+                onValueChange = { authViewModel.password.value = it },
+                label = { Text(text = "Senha", fontFamily = PoppinsFamily) },
+                visualTransformation = if (authViewModel.passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                 shape = RoundedCornerShape(12.dp),
                 trailingIcon = {
-                    // Ícone de olho para mostrar/ocultar a senha
-                    IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
+                    IconButton(onClick = { authViewModel.passwordVisible.value = !authViewModel.passwordVisible.value }) {
                         Icon(
-                            imageVector = if (passwordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (passwordVisible.value) "Hide password" else "Show password"
+                            imageVector = if (authViewModel.passwordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = if (authViewModel.passwordVisible.value) "Hide password" else "Show password"
                         )
                     }
                 },
-                modifier = Modifier.fillMaxWidth() // Faz com que o campo ocupe toda a largura
+                modifier = Modifier.fillMaxWidth()
             )
-
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Confirmar Senha com ícone para mostrar/ocultar
+            // Confirmar Senha
             OutlinedTextField(
-                value = confirmPassword.value,
-                onValueChange = { confirmPassword.value = it },
-                label = { Text(text = if (currentLanguage.value == "PT") "Confirmar Senha" else "Confirm Password", fontFamily = PoppinsFamily) },
-                visualTransformation = if (confirmPasswordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+                value = authViewModel.confirmPassword.value,
+                onValueChange = { authViewModel.confirmPassword.value = it },
+                label = { Text(text = "Confirmar Senha", fontFamily = PoppinsFamily) },
+                visualTransformation = if (authViewModel.confirmPasswordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
                 shape = RoundedCornerShape(12.dp),
                 trailingIcon = {
-                    // Ícone de olho para mostrar/ocultar a senha
-                    IconButton(onClick = { confirmPasswordVisible.value = !confirmPasswordVisible.value }) {
+                    IconButton(onClick = { authViewModel.confirmPasswordVisible.value = !authViewModel.confirmPasswordVisible.value }) {
                         Icon(
-                            imageVector = if (confirmPasswordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = if (confirmPasswordVisible.value) "Hide password" else "Show password"
+                            imageVector = if (authViewModel.confirmPasswordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = if (authViewModel.confirmPasswordVisible.value) "Hide password" else "Show password"
                         )
                     }
                 },
-                modifier = Modifier.fillMaxWidth() // Faz com que o campo ocupe toda a largura
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-
             Button(
-                onClick = {
-                    val user = User(
-                        name = name.value,
-                        username = username.value,
-                        email = email.value,
-                        age = age, // Pode ser uma entrada extra
-                        gender = gender.value,  // Pode ser uma entrada extra
-                        mobileNumber = mobileNumber.value,  // Pode ser uma entrada extra
-                        password = password.value
-                    )
-                    coroutineScope.launch {
-                        db.insertUser(user)
-                    }
-                    navController.navigate("Login")
-                },
+                onClick = { authViewModel.registerUser(context, navController) },
                 modifier = Modifier.width(175.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60))
             ) {
-                Text(text = if (currentLanguage.value == "PT") "Próximo" else "Next")
+                Text(text = "Próximo")
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = if (currentLanguage.value == "PT") "Já tem uma conta? Faça login" else "Do you have an account? Login",
+                text = "Já tem uma conta? Faça login",
                 modifier = Modifier.clickable {
                     navController.navigate("Login")
                 }
             )
-
-            // Seletor de idioma dentro do scroll, no canto inferior
-            Row(
-                modifier = Modifier
-                    .align(Alignment.End) // Alinha o seletor de idioma no canto inferior direito
-                    .clickable {
-                        currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
-                    },
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = if (currentLanguage.value == "PT") "PT | ENG" else "ENG | PT",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
         }
     }
 }

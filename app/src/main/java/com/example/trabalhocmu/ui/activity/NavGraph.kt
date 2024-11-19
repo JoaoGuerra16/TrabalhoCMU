@@ -15,7 +15,7 @@ import com.example.trabalhocmu.ui.component.SplashScreen
 import com.example.trabalhocmu.ui.screen.*
 import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.RatingViewModel
-import com.example.trabalhocmu.viewmodel.UserViewModel
+import com.example.trabalhocmu.viewmodel.LoginViewModel
 
 @Composable
 fun MainNavGraph(
@@ -53,7 +53,7 @@ fun MainNavGraph(
 
         composable("Login") {
             val userViewModel = ViewModelProvider(LocalContext.current as ViewModelStoreOwner).get(
-                UserViewModel::class.java)
+                LoginViewModel::class.java)
             LoginScreen(viewModel = userViewModel, navController = navController)
         }
 
@@ -81,12 +81,26 @@ fun MainNavGraph(
             CreateRide(navController)
         }
 
+        composable("My Rides") {
+            MyRides(navController)
+        }
+
         // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
             val from = backStackEntry.arguments?.getString("from")
             val to = backStackEntry.arguments?.getString("to")
             val date = backStackEntry.arguments?.getString("date")
             RideDetailsScreen(navController, from, to, date)
+        }
+
+        composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val startTime = backStackEntry.arguments?.getString("startTime")
+            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+            val date = backStackEntry.arguments?.getString("date")
+            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: "0"
+            MyRidesTakingARide(navController, from, to, startTime, arrivalTime, date, availableSeats)
         }
 
         composable("MyRidesGivingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
