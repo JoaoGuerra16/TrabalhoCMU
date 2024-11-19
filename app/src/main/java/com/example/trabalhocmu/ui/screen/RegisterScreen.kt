@@ -28,11 +28,20 @@ import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import com.example.trabalhocmu.viewmodel.AuthViewModel
+import com.example.trabalhocmu.viewmodel.AuthViewModelFactory
 import com.example.trabalhocmu.viewmodel.RegisterState
 
 
 @Composable
-fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = viewModel()) {
+fun RegisterScreen(navController: NavController) {
+    // Obtenha o Contexto
+    val context = LocalContext.current
+
+    // Crie a instância da viewModel usando a Factory personalizada
+    val viewModel: AuthViewModel = viewModel(
+        factory = AuthViewModelFactory(context)  // Passando a factory personalizada
+    )
+
     // Variáveis de estado para armazenar os dados inseridos pelo usuário
     val name = remember { mutableStateOf("") }
     val username = remember { mutableStateOf("") }
@@ -49,7 +58,6 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
 
     val scrollState = rememberScrollState()
     val currentLanguage = remember { mutableStateOf("PT") }
-    val context = LocalContext.current
     val registerState by viewModel.registerState.collectAsState()
 
     fun showToast(message: String) {
@@ -210,7 +218,6 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
                             age.value,
                             gender.value,
                             mobileNumber.value
-
                         )
                     } else {
                         // Exibir erro de senha não confere

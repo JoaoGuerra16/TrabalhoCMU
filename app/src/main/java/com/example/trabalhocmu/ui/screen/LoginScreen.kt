@@ -27,17 +27,24 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.viewmodel.AuthViewModel
+import com.example.trabalhocmu.viewmodel.AuthViewModelFactory
 import com.example.trabalhocmu.viewmodel.LoginState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 
 @Composable
-fun LoginScreen(viewModel: AuthViewModel = viewModel(), navController: NavController) {
+fun LoginScreen(navController: NavController) {
+    val context = LocalContext.current
+    val viewModel: AuthViewModel = viewModel(
+        factory = AuthViewModelFactory(context)  // Usando a Factory personalizada
+    )
+
+
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
-    val context = LocalContext.current
+
     // Observando o estado do login
     val loginState by viewModel.loginState.collectAsState()
 
@@ -47,7 +54,7 @@ fun LoginScreen(viewModel: AuthViewModel = viewModel(), navController: NavContro
         if (account != null) {
             viewModel.loginWithGoogle(account)
         } else {
-            viewModel.setLoginError("Falha ao autenticar com Google")
+            LoginState.Error("Falha ao autenticar com Google")
         }
     }
 

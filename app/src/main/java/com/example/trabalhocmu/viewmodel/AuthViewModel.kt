@@ -1,24 +1,25 @@
 package com.example.trabalhocmu.viewmodel
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.trabalhocmu.room.entity.User
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import androidx.lifecycle.viewModelScope
+import com.example.trabalhocmu.room.entity.User
 import com.example.trabalhocmu.room.repository.AuthRepository
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class AuthViewModel : ViewModel() {
-    private val authRepository = AuthRepository()
+class AuthViewModel(context: Context) : ViewModel() {
+    private val authRepository = AuthRepository(context)
 
     private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Idle)
     val registerState: StateFlow<RegisterState> = _registerState
 
-    // Estado que representa o sucesso ou erro do login
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
 
@@ -52,26 +53,13 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    fun setLoginError(message: String) {
-        _loginState.value = LoginState.Error(message)
-    }
-
-    // Função para verificar se o email já está registrado
+    // Função para verificar se o email já está registrado (Room)
     private suspend fun isEmailAlreadyRegistered(email: String): Boolean {
-        val db = FirebaseFirestore.getInstance()
-
-        // Consultar a coleção "users" e verificar se o email já existe
-        val userRef = db.collection("users").whereEqualTo("email", email)
-
-        return try {
-            val documents = userRef.get().await() // Awaiting the result of the query
-            documents.isEmpty
-        } catch (e: Exception) {
-            Log.w("Firestore", "Erro ao verificar email", e)
-            false // Se houver erro, assumimos que o email não foi registrado
-        }
+        val user = authRepository.getUserByEmail(email)
+        return user != null
     }
 
+    // Função para registrar o usuário
     // Função para registrar o usuário
     fun registerUser(
         name: String,
@@ -102,18 +90,11 @@ class AuthViewModel : ViewModel() {
                 return@launch
             }
 
-            // Verificar se o email já está registrado
-            val isAvailable = isEmailAlreadyRegistered(email)
-            if (!isAvailable) {
-                _registerState.value = RegisterState.Error("Esse e-mail já está registrado!")
-                return@launch
-            }
-
             // Alterando o estado para Loading
             _registerState.value = RegisterState.Loading
 
             try {
-                // Tenta criar o usuário no Firebase Authentication
+                // Tenta criar o usuário no Firebase Authentication e no Room
                 val authResult = authRepository.registerUser(
                     name = name,
                     username = username,
@@ -125,25 +106,11 @@ class AuthViewModel : ViewModel() {
                 )
 
                 if (authResult) {
-                    // Criação bem-sucedida, agora podemos salvar os dados do usuário no Firestore
-                    val user = User(
-                        name = name,
-                        username = username,
-                        email = email,
-                        age = age,
-                        gender = gender,
-                        mobileNumber = mobileNumber,
-                        password = password // ou use hashing aqui se necessário
-                    )
-
-                    // Salvar o usuário no Firestore
-                    saveUserToFirestore(user)
-
                     // Alterando o estado para Success
                     _registerState.value = RegisterState.Success
                 } else {
                     // Caso a criação do usuário falhe
-                    _registerState.value = RegisterState.Error("Erro ao criar conta no Firebase.")
+                    _registerState.value = RegisterState.Error("Erro ao criar conta. O e-mail pode já estar registrado.")
                 }
             } catch (e: Exception) {
                 // Erro inesperado
@@ -152,8 +119,9 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+
     // Função para salvar o usuário no Firestore
-    fun saveUserToFirestore(user: User) {
+    private fun saveUserToFirestore(user: User) {
         val db = FirebaseFirestore.getInstance()
 
         // Crie uma referência à coleção de usuários
