@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.R
+import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import com.example.trabalhocmu.viewmodel.AuthViewModel
 import com.example.trabalhocmu.viewmodel.AuthViewModelFactory
 import com.example.trabalhocmu.viewmodel.LoginState
@@ -39,7 +41,7 @@ fun LoginScreen(navController: NavController) {
     val viewModel: AuthViewModel = viewModel(
         factory = AuthViewModelFactory(context)  // Usando a Factory personalizada
     )
-
+    val currentLanguage = remember { mutableStateOf("PT") }
 
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -99,7 +101,12 @@ fun LoginScreen(navController: NavController) {
                 OutlinedTextField(
                     value = email.value,
                     onValueChange = { email.value = it },
-                    label = { Text("Endereço de e-mail") },
+                    label = {
+                        Text(
+                            "Endereço de e-mail",
+                            fontFamily = PoppinsFamily,
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -122,7 +129,20 @@ fun LoginScreen(navController: NavController) {
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
-
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = if (currentLanguage.value == "PT") "Esqueceu a senha?" else "Forgot Password?",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = PoppinsFamily,
+                        modifier = Modifier.clickable {
+                            navController.navigate("ForgotPassword")
+                        }
+                    )
+                }
                 // Exibir mensagens de erro ou sucesso
                 LaunchedEffect(loginState) {
                     when (loginState) {
@@ -132,11 +152,13 @@ fun LoginScreen(navController: NavController) {
                             }
                             viewModel.resetLoginState() // Reseta para evitar múltiplos disparos
                         }
+
                         is LoginState.Error -> {
                             // Exibe o erro como Toast
                             val errorMessage = (loginState as LoginState.Error).message
                             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                         }
+
                         else -> Unit
                     }
                 }
@@ -151,18 +173,53 @@ fun LoginScreen(navController: NavController) {
                 ) {
                     Text("Entrar")
                 }
-
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = if (currentLanguage.value == "PT") "Não tem uma conta? Cadastre-se" else "Don't you have an account? Register",
+                    modifier = Modifier.clickable {
+                        navController.navigate("Register")
+                    },
+                    fontFamily = PoppinsFamily
+                )
                 Spacer(modifier = Modifier.height(25.dp))
 
                 Text("Ou entre com Google")
-
+                Spacer(modifier = Modifier.height(15.dp))
                 Button(
                     onClick = { signInWithGoogle() },
-                    modifier = Modifier.width(175.dp)
+                    modifier = Modifier
+                        .width(300.dp)
+                        .height(50.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.surface, // Fundo branco para simular estilo Google
+                        contentColor = MaterialTheme.colorScheme.onSurface // Texto e ícone em cor padrão
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 4.dp // Adiciona um leve efeito de elevação
+                    )
                 ) {
-                    Text("Entrar com Google")
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.google),
+                            contentDescription = "Google logo",
+                            tint = androidx.compose.ui.graphics.Color.Unspecified, // Mantém a cor original do ícone
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Entrar com Google",
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        )
+                    }
                 }
+
             }
         }
     }
-}
+    }

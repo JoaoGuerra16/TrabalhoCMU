@@ -105,7 +105,7 @@ fun RegisterScreen(navController: NavController) {
 
             // Subtítulo
             Text(
-                text = if (currentLanguage.value == "PT") "Preencha seus dados para cadastrar" else "Enter your details to register",
+                text = if (currentLanguage.value == "PT") "Preencha os seus dados para cadastrar" else "Enter your details to register",
                 fontFamily = PoppinsFamily
             )
 
@@ -204,7 +204,17 @@ fun RegisterScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botão para Registrar
+            // Texto para Login caso o usuário já tenha uma conta
+            Text(
+                text = if (currentLanguage.value == "PT") "Já tem uma conta? Faça login" else "Do you have an account? Login",
+                modifier = Modifier.clickable {
+                    navController.navigate("Login")
+                }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botão para Registar
             Button(
                 onClick = {
                     if (password.value == confirmPassword.value) {
@@ -226,18 +236,14 @@ fun RegisterScreen(navController: NavController) {
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Registrar")
+                Text("Registar")
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Texto para Login caso o usuário já tenha uma conta
-        Text(
-            text = if (currentLanguage.value == "PT") "Já tem uma conta? Faça login" else "Do you have an account? Login",
-            modifier = Modifier.clickable {
-                navController.navigate("Login")
-            }
-        )
+
+
+
     }
 }
 
