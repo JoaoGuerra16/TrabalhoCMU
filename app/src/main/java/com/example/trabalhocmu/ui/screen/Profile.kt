@@ -52,19 +52,19 @@ fun Profile(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    // Título
+
                     ProfileTitle(navController)
 
-                    // Foto de perfil
+
                     ProfileImage()
 
-                    // Nome completo
+
                     ProfileName(user.value.fullName)
 
-                    // Estrelas de Avaliação
+
                     RatingStars(rating = roundedRating)
 
-                    // Detalhes do Perfil
+
                     ProfileDetails(user.value)
                 }
             }

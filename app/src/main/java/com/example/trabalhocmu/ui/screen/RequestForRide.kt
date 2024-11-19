@@ -42,7 +42,7 @@ import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
 @Composable
 fun RequestForRide(navController: NavController) {
-    // Scaffold do menu lateral
+
     SidebarScaffold(navController = navController) { paddingValues ->
         val scrollState = rememberScrollState()
         Box(modifier = Modifier.fillMaxSize()) {
@@ -125,14 +125,14 @@ fun RequestInformation(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
-            // Linha com a foto de perfil, nome e gênero
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start
             ) {
-                // Foto do perfil com a imagem do drawable
+
                 Image(
-                    painter = painterResource(id = R.drawable.profile),  // Usando imagem do drawable
+                    painter = painterResource(id = R.drawable.profile),
                     contentDescription = "Profile Image",
                     modifier = Modifier
                         .size(40.dp)
@@ -164,7 +164,7 @@ fun RequestInformation(
 
 
 
-            // Ponto de Pick-up
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -180,7 +180,7 @@ fun RequestInformation(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botões para aceitar e recusar
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
