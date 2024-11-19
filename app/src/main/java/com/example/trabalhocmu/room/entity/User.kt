@@ -9,7 +9,7 @@ data class User(
     val name: String,
     val username: String,
     val email: String,
-    val age: Int,
+    val age: String,
     val gender: String,
     val mobileNumber: String,
     val password: String

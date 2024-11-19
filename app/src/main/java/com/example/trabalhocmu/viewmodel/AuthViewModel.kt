@@ -1,89 +1,187 @@
-import android.widget.Toast
-import androidx.compose.runtime.mutableStateOf
+package com.example.trabalhocmu.viewmodel
+
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.trabalhocmu.room.entity.User
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import androidx.lifecycle.viewModelScope
+import com.example.trabalhocmu.room.repository.AuthRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import androidx.compose.ui.platform.LocalContext
-import org.mindrot.jbcrypt.BCrypt
+import kotlinx.coroutines.tasks.await
 
 class AuthViewModel : ViewModel() {
-    var name = mutableStateOf("")
-    var username = mutableStateOf("")
-    var email = mutableStateOf("")
-    var age = mutableStateOf(0)
-    var gender = mutableStateOf("")
-    var mobileNumber = mutableStateOf("")
-    var password = mutableStateOf("")
-    var confirmPassword = mutableStateOf("")
+    private val authRepository = AuthRepository()
 
-    var passwordVisible = mutableStateOf(false)
-    var confirmPasswordVisible = mutableStateOf(false)
+    private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Idle)
+    val registerState: StateFlow<RegisterState> = _registerState
 
-    private val auth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
+    // Estado que representa o sucesso ou erro do login
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
+    val loginState: StateFlow<LoginState> = _loginState
+
+    // Função para fazer login com email e senha
+    fun loginUser(email: String, password: String) {
+        viewModelScope.launch {
+            _loginState.value = LoginState.Loading
+            val success = authRepository.loginUser(email, password)
+            _loginState.value = if (success) {
+                LoginState.Success
+            } else {
+                LoginState.Error("Email ou senha inválidos")
+            }
+        }
+    }
+
+    fun resetLoginState() {
+        _loginState.value = LoginState.Idle
+    }
+
+    // Função para login com Google
+    fun loginWithGoogle(account: GoogleSignInAccount) {
+        viewModelScope.launch {
+            _loginState.value = LoginState.Loading
+            val success = authRepository.loginWithGoogle(account)
+            _loginState.value = if (success) {
+                LoginState.Success
+            } else {
+                LoginState.Error("Falha na autenticação com Google")
+            }
+        }
+    }
+
+    fun setLoginError(message: String) {
+        _loginState.value = LoginState.Error(message)
+    }
+
+    // Função para verificar se o email já está registrado
+    private suspend fun isEmailAlreadyRegistered(email: String): Boolean {
+        val db = FirebaseFirestore.getInstance()
+
+        // Consultar a coleção "users" e verificar se o email já existe
+        val userRef = db.collection("users").whereEqualTo("email", email)
+
+        return try {
+            val documents = userRef.get().await() // Awaiting the result of the query
+            documents.isEmpty
+        } catch (e: Exception) {
+            Log.w("Firestore", "Erro ao verificar email", e)
+            false // Se houver erro, assumimos que o email não foi registrado
+        }
+    }
 
     // Função para registrar o usuário
-    fun registerUser(context: android.content.Context, navController: androidx.navigation.NavController) {
-        if (name.value.isBlank() || username.value.isBlank() || email.value.isBlank() || password.value.isBlank() || confirmPassword.value.isBlank()) {
-            Toast.makeText(context, "Todos os campos devem ser preenchidos!", Toast.LENGTH_SHORT).show()
-            return
-        }
+    fun registerUser(
+        name: String,
+        username: String,
+        email: String,
+        password: String,
+        confirmPassword: String,
+        age: String,
+        gender: String,
+        mobileNumber: String
+    ) {
+        viewModelScope.launch {
+            // Verificar se os campos estão preenchidos
+            if (name.isBlank() || username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+                _registerState.value = RegisterState.Error("Todos os campos devem ser preenchidos!")
+                return@launch
+            }
 
-        if (password.value != confirmPassword.value) {
-            Toast.makeText(context, "As senhas não coincidem.", Toast.LENGTH_SHORT).show()
-            return
-        }
+            // Verificar se as senhas coincidem
+            if (password != confirmPassword) {
+                _registerState.value = RegisterState.Error("As senhas não coincidem!")
+                return@launch
+            }
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
-            Toast.makeText(context, "Por favor, insira um email válido.", Toast.LENGTH_SHORT).show()
-            return
-        }
+            // Verificar se o e-mail é válido
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                _registerState.value = RegisterState.Error("Por favor, insira um e-mail válido.")
+                return@launch
+            }
 
-        // Gerar o hash da senha antes de salvar
-        val hashedPassword = hashPassword(password.value)
+            // Verificar se o email já está registrado
+            val isAvailable = isEmailAlreadyRegistered(email)
+            if (!isAvailable) {
+                _registerState.value = RegisterState.Error("Esse e-mail já está registrado!")
+                return@launch
+            }
 
-        // Criar usuário no Firebase Authentication
-        auth.createUserWithEmailAndPassword(email.value, password.value)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+            // Alterando o estado para Loading
+            _registerState.value = RegisterState.Loading
+
+            try {
+                // Tenta criar o usuário no Firebase Authentication
+                val authResult = authRepository.registerUser(
+                    name = name,
+                    username = username,
+                    email = email,
+                    password = password,
+                    age = age,
+                    gender = gender,
+                    mobileNumber = mobileNumber
+                )
+
+                if (authResult) {
+                    // Criação bem-sucedida, agora podemos salvar os dados do usuário no Firestore
                     val user = User(
-                        name = name.value,
-                        username = username.value,
-                        email = email.value,
-                        age = age.value,
-                        gender = gender.value,
-                        mobileNumber = mobileNumber.value,
-                        password = hashedPassword // Salvando a senha com hash
+                        name = name,
+                        username = username,
+                        email = email,
+                        age = age,
+                        gender = gender,
+                        mobileNumber = mobileNumber,
+                        password = password // ou use hashing aqui se necessário
                     )
 
-                    // Salvar no Firestore
-                    saveUserToFirestore(user, context)
+                    // Salvar o usuário no Firestore
+                    saveUserToFirestore(user)
 
-                    // Navegar para a tela de Login após o sucesso
-                    navController.navigate("Login")
+                    // Alterando o estado para Success
+                    _registerState.value = RegisterState.Success
                 } else {
-                    // Exibir erro caso o registro falhe
-                    Toast.makeText(context, "Erro ao criar conta: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    // Caso a criação do usuário falhe
+                    _registerState.value = RegisterState.Error("Erro ao criar conta no Firebase.")
                 }
+            } catch (e: Exception) {
+                // Erro inesperado
+                _registerState.value = RegisterState.Error("Erro inesperado: ${e.message}")
             }
+        }
     }
 
-    // Função para gerar o hash da senha usando bcrypt
-    private fun hashPassword(password: String): String {
-        return BCrypt.hashpw(password, BCrypt.gensalt())  // Gera o hash da senha com o salt
-    }
+    // Função para salvar o usuário no Firestore
+    fun saveUserToFirestore(user: User) {
+        val db = FirebaseFirestore.getInstance()
 
-    private fun saveUserToFirestore(user: User, context: android.content.Context) {
-        val userRef = firestore.collection("users").document(auth.currentUser?.uid ?: "")
+        // Crie uma referência à coleção de usuários
+        val userRef = db.collection("users").document(user.email) // Usando o e-mail como ID
+
+        // Salve os dados do usuário
         userRef.set(user)
             .addOnSuccessListener {
-                // Sucesso ao salvar no Firestore
+                // Sucesso no salvamento
+                Log.d("Firestore", "Usuário salvo com sucesso!")
             }
             .addOnFailureListener { e ->
-                // Lidar com falha ao salvar no Firestore
-                Toast.makeText(context, "Erro ao salvar no Firestore: ${e.message}", Toast.LENGTH_SHORT).show()
+                // Erro ao salvar
+                Log.w("Firestore", "Erro ao salvar usuário", e)
             }
     }
+}
+
+sealed class RegisterState {
+    object Idle : RegisterState()
+    object Loading : RegisterState()
+    object Success : RegisterState()
+    data class Error(val message: String) : RegisterState()
+}
+
+sealed class LoginState {
+    object Idle : LoginState()
+    object Loading : LoginState()
+    object Success : LoginState()
+    data class Error(val message: String) : LoginState()
 }

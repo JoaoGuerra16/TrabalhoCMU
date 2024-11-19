@@ -15,7 +15,7 @@ import com.example.trabalhocmu.ui.component.SplashScreen
 import com.example.trabalhocmu.ui.screen.*
 import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.RatingViewModel
-import com.example.trabalhocmu.viewmodel.LoginViewModel
+
 
 @Composable
 fun MainNavGraph(
@@ -48,13 +48,12 @@ fun MainNavGraph(
         }
 
         composable("Register") {
-            RegisterScreen(navController)
+            RegisterScreen(navController=navController)
         }
 
         composable("Login") {
-            val userViewModel = ViewModelProvider(LocalContext.current as ViewModelStoreOwner).get(
-                LoginViewModel::class.java)
-            LoginScreen(viewModel = userViewModel, navController = navController)
+
+            LoginScreen( navController = navController)
         }
 
         composable("ForgotPassword") {
