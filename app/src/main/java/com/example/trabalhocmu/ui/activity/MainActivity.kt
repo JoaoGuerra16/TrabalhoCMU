@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val drawerState = rememberDrawerState(DrawerValue.Closed)
 
-            // ViewModels compartilhados
+            // ViewModels 
             val ratingViewModel: RatingViewModel = viewModel()
             val languageViewModel: LanguageViewModel =
                 viewModel(factory = LanguageViewModelFactory(this))
