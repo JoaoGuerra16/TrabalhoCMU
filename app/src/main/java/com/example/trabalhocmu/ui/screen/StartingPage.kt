@@ -38,7 +38,7 @@ fun StartingPage(navController: NavController) {
             ) {
                 Spacer(modifier = Modifier.height(25.dp))
 
-
+                // App Logo
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "App Logo",
@@ -47,17 +47,18 @@ fun StartingPage(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-
+                // App Name
                 Text(
                     text = if (currentLanguage.value == "PT") "NOME DO APP" else "APP NAME",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF37474F),
-                    fontFamily = PoppinsFamily
+                    fontFamily = PoppinsFamily // Aplica Poppins
                 )
 
                 Spacer(modifier = Modifier.height(100.dp))
 
+                // Login e Register
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(
                         text = if (currentLanguage.value == "PT") "Você tem uma conta?" else "Do you have an account?",
@@ -112,13 +113,13 @@ fun StartingPage(navController: NavController) {
             }
         }
 
-
+        // Seletor de idioma no canto inferior direito
         Row(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
                 .clickable {
-
+                    // Alterna o idioma entre "PT" e "ENG"
                     currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
                 },
             verticalAlignment = Alignment.CenterVertically

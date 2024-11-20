@@ -96,7 +96,7 @@ fun MyRidesTakingARide(  navController: NavController, from: String?, to: String
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "Pets allowed", fontWeight = FontWeight.Bold)
-                    Checkbox(checked = true, onCheckedChange = null)
+                    Checkbox(checked = true, onCheckedChange = null)  // Marcação fixa
                 }
                 Spacer(modifier = Modifier.height(15.dp))
                 Row(
@@ -107,7 +107,7 @@ fun MyRidesTakingARide(  navController: NavController, from: String?, to: String
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "Baggage allowed", fontWeight = FontWeight.Bold)
-                    Checkbox(checked = false, onCheckedChange = null)
+                    Checkbox(checked = false, onCheckedChange = null)  // Marcação fixa
                 }
                 Spacer(modifier = Modifier.height(15.dp))
 
@@ -119,7 +119,7 @@ fun MyRidesTakingARide(  navController: NavController, from: String?, to: String
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(text = "Smoking allowed", fontWeight = FontWeight.Bold)
-                    Checkbox(checked = true, onCheckedChange = null)
+                    Checkbox(checked = true, onCheckedChange = null)  // Marcação fixa
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Box(
@@ -131,24 +131,24 @@ fun MyRidesTakingARide(  navController: NavController, from: String?, to: String
                     when (buttonState) {
                         "Waiting for confirmation" -> {
                             buttonState = "Confirmed"
-                            buttonColor = Color(0xFF4CAF50)
+                            buttonColor = Color(0xFF4CAF50) // Cor verde
                         }
                         "Confirmed" -> {
                             buttonState = "Recused"
-                            buttonColor = Color(0xFFF44336)
+                            buttonColor = Color(0xFFF44336) // Cor vermelha
                         }
                         "Recused" -> {
                             buttonState = "Waiting for confirmation"
-                            buttonColor = Color(0xFF454B60)
+                            buttonColor = Color(0xFF454B60) // Cor original
                         }
                     }
                 }
                     Button(
                         onClick = { handleButtonClick() },
-                        colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
+                        colors = ButtonDefaults.buttonColors(containerColor = buttonColor), // Cor do botão
                                 modifier = Modifier
-                                .widthIn(min = 250.dp)
-                            .height(50.dp)
+                                .widthIn(min = 250.dp) // Definindo largura mínima para o botão
+                            .height(50.dp) // Definindo altura fixa
                     ) {
                         Text(
                             text = buttonState,
@@ -160,7 +160,7 @@ fun MyRidesTakingARide(  navController: NavController, from: String?, to: String
         }
     }
 }
-
+// Composable para mostrar as informações do usuário com label e valor
 @Composable
 fun UserInfoRowTakingARide(label: String, info: String) {
     Row(

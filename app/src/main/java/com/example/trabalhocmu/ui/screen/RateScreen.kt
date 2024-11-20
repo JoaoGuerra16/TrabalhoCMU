@@ -31,7 +31,7 @@ import com.example.trabalhocmu.ui.component.SidebarScaffold
 fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = viewModel()) {
     var rating by remember { mutableStateOf(0) }
 
-
+    // Definir o conteúdo da tela com SidebarScaffold
     SidebarScaffold(
         navController = navController,
         content = { padding ->
@@ -44,12 +44,12 @@ fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = 
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 80.dp)
+                        .padding(top = 80.dp) // Ajuste o valor para aproximar a imagem do topo
                 ) {
                     // Exibição da imagem do perfil
                     Image(
                         painter = painterResource(id = R.drawable.profile),
-                        contentDescription = stringResource(id = R.string.profile_image_desc),
+                        contentDescription = stringResource(id = R.string.profile_image_desc), // Usando string do resources
                         modifier = Modifier
                             .size(100.dp)
                             .clip(CircleShape)
@@ -58,19 +58,19 @@ fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = 
 
                     Spacer(modifier = Modifier.height(65.dp))
 
-
+                    // Exibição de texto e interações com a avaliação
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.fillMaxHeight()
                     ) {
                         Text(
-                            text = stringResource(id = R.string.how_would_you_rate),
+                            text = stringResource(id = R.string.how_would_you_rate), // Usando string do resources
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
 
-
+                        // Estrelas interativas
                         Row {
                             for (i in 1..5) {
                                 Icon(
@@ -97,14 +97,14 @@ fun RateScreen(navController: NavController, ratingViewModel: RatingViewModel = 
                         // Botão para adicionar a avaliação
                         Button(
                             onClick = {
-                                ratingViewModel.addRating(rating)
-                                navController.navigate("Profile")
+                                ratingViewModel.addRating(rating)  // Adiciona a avaliação ao ViewModel
+                                navController.navigate("Profile")  // Navega para o Profile para ver o resultado
                             },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF4CAF50)
+                                containerColor = Color(0xFF4CAF50) // Define a cor do botão
                             )
                         ) {
-                            Text(stringResource(id = R.string.submit_rating))
+                            Text(stringResource(id = R.string.submit_rating)) // Usando string do resources
                         }
                     }
                 }

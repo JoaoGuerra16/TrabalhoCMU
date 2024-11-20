@@ -17,11 +17,11 @@ import kotlinx.coroutines.delay
 fun SplashScreen(navController: NavController) {
     var progress by remember { mutableStateOf(0f) }
 
-
+    // Lógica para aumentar o progresso da barra
     LaunchedEffect(Unit) {
         while (progress < 1f) {
-            delay(20)
-            progress += 0.02f
+            delay(20) // Ajuste a velocidade da barra
+            progress += 0.02f // Incremento do progresso
         }
         navController.navigate("StartingPage") {
             popUpTo("splash_screen") { inclusive = true }
@@ -36,15 +36,15 @@ fun SplashScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
-
+            // Exibe o logo
             Image(
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = R.drawable.logo), // Seu logotipo
                 contentDescription = "Logo",
                 modifier = Modifier.size(150.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-
+            // Barra de progresso
             LinearProgressIndicator(
                 progress = progress,
                 modifier = Modifier

@@ -18,11 +18,9 @@ import androidx.navigation.NavController
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -81,7 +79,7 @@ fun RidesHistory(navController: NavController) {
                     .verticalScroll(scrollState)
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Top // Ajuste para que o conteúdo fique alinhado ao topo
             ) {
 
                 Row(
@@ -89,12 +87,12 @@ fun RidesHistory(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(id = R.string.rides_history_title),
+                        text = "Ride's History",
                         fontFamily = PoppinsFamily,
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.Center
+                        modifier = Modifier.weight(1f),  // Esse modificador faz com que o texto ocupe o espaço disponível
+                        textAlign = TextAlign.Center // Centraliza o texto dentro do espaço
                     )
                 }
 
@@ -102,7 +100,7 @@ fun RidesHistory(navController: NavController) {
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    label = { Text(stringResource(id = R.string.search_label), fontFamily = PoppinsFamily) },
+                    label = { Text("Search",  fontFamily = PoppinsFamily) },
 
                     leadingIcon = {
                         Icon(imageVector = Icons.Filled.Search, contentDescription = "Search Icon")
@@ -131,7 +129,8 @@ fun RidesHistory(navController: NavController) {
                             contentColor = Color.White
                         )
                     ) {
-                        Text(text = stringResource(id = R.string.select_date_button), fontFamily = PoppinsFamily)
+                        Text(text = "Select Date",
+                            fontFamily = PoppinsFamily,)
                     }
 
                     // Botão para cancelar a seleção de data
@@ -144,14 +143,15 @@ fun RidesHistory(navController: NavController) {
                                 contentColor = Color.White
                             )
                         ) {
-                            Text(text = stringResource(id = R.string.cancel_date_button), fontFamily = PoppinsFamily)
+                            Text(text = "Cancel Date",
+                                fontFamily = PoppinsFamily,)
                         }
                     }
                 }
 
                 if (selectedDate.value != "Select Date") {
                     Text(
-                        text = stringResource(id = R.string.selected_date, selectedDate.value),
+                        text = "Selected Date: ${selectedDate.value},",
                         fontFamily = PoppinsFamily,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
@@ -160,17 +160,17 @@ fun RidesHistory(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-
+                // Mostra mensagem se não houver rides disponíveis
                 if (filteredRides.isEmpty()) {
                     Text(
-                        text = stringResource(id = R.string.no_rides_message),
+                        text = "No rides available",
                         fontFamily = PoppinsFamily,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Red
                     )
                 } else {
-
+                    // Mostra as rides filtradas
                     filteredRides.forEach { ride ->
                         val isGivingRide = Random.nextBoolean()
                         RidesHistoryInformation(
@@ -201,10 +201,10 @@ fun RidesHistoryInformation(
     isGivingRide: Boolean,
     navController: NavController
 ) {
-
+    // Variável para controlar se o dialog de confirmação deve aparecer
     var showDialog by remember { mutableStateOf(false) }
 
-
+    // Caixa de diálogo de confirmação
 
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -215,7 +215,7 @@ fun RidesHistoryInformation(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = if (isGivingRide) stringResource(id = R.string.giving_ride) else stringResource(id = R.string.taking_ride),
+                text = if (isGivingRide) "Giving a Ride" else "Taking a Ride",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = PoppinsFamily,
@@ -227,7 +227,7 @@ fun RidesHistoryInformation(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = stringResource(id = R.string.route_label), fontSize = 16.sp, fontWeight = FontWeight.Bold,  fontFamily = PoppinsFamily)
+                Text(text = "Route:", fontSize = 16.sp, fontWeight = FontWeight.Bold,  fontFamily = PoppinsFamily)
                 Text(text = "$from to $to", fontSize = 16.sp,  fontFamily = PoppinsFamily,)
             }
 
@@ -235,7 +235,7 @@ fun RidesHistoryInformation(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = stringResource(id = R.string.start_label), fontSize = 16.sp, fontWeight = FontWeight.Bold , fontFamily = PoppinsFamily)
+                Text(text = "Start:", fontSize = 16.sp, fontWeight = FontWeight.Bold , fontFamily = PoppinsFamily)
                 Text(text = "$startTime", fontSize = 16.sp,  fontFamily = PoppinsFamily)
             }
 
@@ -243,30 +243,48 @@ fun RidesHistoryInformation(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = stringResource(id = R.string.arrival_label), fontSize = 16.sp, fontWeight = FontWeight.Bold,  fontFamily = PoppinsFamily)
+                Text(text = "Arrival:", fontSize = 16.sp, fontWeight = FontWeight.Bold,  fontFamily = PoppinsFamily)
                 Text(text = "$arrivalTime", fontSize = 16.sp,  fontFamily = PoppinsFamily)
             }
 
-
+            // Mostra "Available Seats" apenas se for "giving a ride"
             if (isGivingRide) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = stringResource(id = R.string.available_seats_label), fontSize = 16.sp, fontWeight = FontWeight.Bold , fontFamily = PoppinsFamily)
+                    Text(text = "Available Seats:", fontSize = 16.sp, fontWeight = FontWeight.Bold , fontFamily = PoppinsFamily)
                     Text(text = availableSeats.toString(), fontSize = 16.sp,  fontFamily = PoppinsFamily)
                 }
             }
 
-
+            // Mostra a data da viagem
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = stringResource(id = R.string.date_label), fontSize = 16.sp, fontWeight = FontWeight.Bold,   fontFamily = PoppinsFamily)
+                Text(text = "Date:", fontSize = 16.sp, fontWeight = FontWeight.Bold,   fontFamily = PoppinsFamily)
                 Text(text = date.toString(), fontSize = 16.sp,   fontFamily = PoppinsFamily)
             }
 
         }
     }
+}
+
+// Data class para representar uma viagem
+data class RidesHistory(
+    val from: String,
+    val to: String,
+    val availableSeats: Int,
+    val startTime: String,
+    val arrivalTime: String,
+    val date: LocalDate,
+    val isGivingRide: Boolean
+)
+@Preview
+@Composable
+fun RidesHistoryPreview() {
+    val navController = rememberNavController()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    RidesHistory(navController)
 }

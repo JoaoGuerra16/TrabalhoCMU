@@ -1,84 +1,53 @@
 package com.example.trabalhocmu.ui.screen
 
-
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.TextStyle
+import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
-import com.example.trabalhocmu.viewmodel.AuthViewModel
-import com.example.trabalhocmu.viewmodel.AuthViewModelFactory
-import com.example.trabalhocmu.viewmodel.LoginState
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-
 
 @Composable
 fun LoginScreen(navController: NavController) {
-    val context = LocalContext.current
-    val viewModel: AuthViewModel = viewModel(
-        factory = AuthViewModelFactory(context)  // Usamos uma Factory personalizada para a app nao crashar
-    )
+    val scrollState = rememberScrollState()
     val currentLanguage = remember { mutableStateOf("PT") }
 
+    // Criando variáveis de estado para os campos de texto
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
+
+    // Estado para controlar a visibilidade da senha
     val passwordVisible = remember { mutableStateOf(false) }
 
-
-    val loginState by viewModel.loginState.collectAsState()
-
-    val signInResultLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-        val account = task.result
-        if (account != null) {
-            viewModel.loginWithGoogle(account)
-        } else {
-            LoginState.Error("Falha ao autenticar com Google")
-        }
-    }
-
-
-    fun signInWithGoogle() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(context.getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        val googleSignInClient = GoogleSignIn.getClient(context, gso)
-        val signInIntent = googleSignInClient.signInIntent
-        signInResultLauncher.launch(signInIntent)
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
         BackgroundWithImage {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(scrollState)
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -90,12 +59,16 @@ fun LoginScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "Login",
+                    text = if (currentLanguage.value == "PT") "Login" else "Login", // Pode ser alterado para texto diferente em inglês, se necessário
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = PoppinsFamily // Aplicando a fonte Poppins
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Text(text = "Entre com seu endereço de email e senha")
+                Text(
+                    text = if (currentLanguage.value == "PT") "Entre com seu endereço email e senha" else "Enter your email and password",
+                    fontFamily = PoppinsFamily // Fonte Poppins
+                )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -103,12 +76,11 @@ fun LoginScreen(navController: NavController) {
                     value = email.value,
                     onValueChange = { email.value = it },
                     label = {
-                        Text(
-                            "Endereço de e-mail",
-                            fontFamily = PoppinsFamily,
-                        )
+                        Text(text = if (currentLanguage.value == "PT") "Endereço de e-mail" else "Email Address", fontFamily = PoppinsFamily) // Fonte Poppins
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(fontFamily = PoppinsFamily) // Fonte Poppins
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -116,20 +88,24 @@ fun LoginScreen(navController: NavController) {
                 OutlinedTextField(
                     value = password.value,
                     onValueChange = { password.value = it },
-                    label = { Text("Senha") },
+                    label = {
+                        Text(text = if (currentLanguage.value == "PT") "Senha" else "Password", fontFamily = PoppinsFamily) // Fonte Poppins
+                    },
                     visualTransformation = if (passwordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+                    shape = RoundedCornerShape(12.dp),
                     trailingIcon = {
                         IconButton(onClick = { passwordVisible.value = !passwordVisible.value }) {
                             Icon(
                                 imageVector = if (passwordVisible.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                contentDescription = if (passwordVisible.value) "Mostrar senha" else "Esconder senha"
+                                contentDescription = if (passwordVisible.value) "Hide password" else "Show password"
                             )
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    textStyle = TextStyle(fontFamily = PoppinsFamily) // Fonte Poppins
                 )
+                Spacer(modifier = Modifier.height(5.dp))
 
-                Spacer(modifier = Modifier.height(10.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
@@ -138,90 +114,62 @@ fun LoginScreen(navController: NavController) {
                         text = if (currentLanguage.value == "PT") "Esqueceu a senha?" else "Forgot Password?",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Normal,
-                        fontFamily = PoppinsFamily,
+                        fontFamily = PoppinsFamily, // Fonte Poppins
                         modifier = Modifier.clickable {
                             navController.navigate("ForgotPassword")
                         }
                     )
                 }
 
-                LaunchedEffect(loginState) {
-                    when (loginState) {
-                        is LoginState.Success -> {
-                            navController.navigate("Profile") {
-                                popUpTo("Login") { inclusive = true }
-                            }
-                            viewModel.resetLoginState()
-                        }
-
-                        is LoginState.Error -> {
-                            // Exibe o erro como Toast
-                            val errorMessage = (loginState as LoginState.Error).message
-                            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
-                        }
-
-                        else -> Unit
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = {
-                        viewModel.loginUser(email.value, password.value)
-                    },
+                    onClick = { navController.navigate("Profile") },
                     modifier = Modifier.width(175.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60)) // Cor hexadecimal
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF454B60)
+                    )
                 ) {
-                    Text("Entrar")
+                    Text(text = if (currentLanguage.value == "PT") "Entrar" else "Login", fontFamily = PoppinsFamily) // Fonte Poppins
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
                     text = if (currentLanguage.value == "PT") "Não tem uma conta? Cadastre-se" else "Don't you have an account? Register",
                     modifier = Modifier.clickable {
                         navController.navigate("Register")
                     },
-                    fontFamily = PoppinsFamily
+                    fontFamily = PoppinsFamily // Fonte Poppins
                 )
-                Spacer(modifier = Modifier.height(25.dp))
 
-                Text("Ou entre com Google")
-                Spacer(modifier = Modifier.height(15.dp))
-                Button(
-                    onClick = { signInWithGoogle() },
-                    modifier = Modifier
-                        .width(300.dp)
-                        .height(50.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        contentColor = MaterialTheme.colorScheme.onSurface
-                    ),
-                    elevation = ButtonDefaults.buttonElevation(
-                        defaultElevation = 4.dp
-                    )
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.google),
-                            contentDescription = "Google logo",
-                            tint = androidx.compose.ui.graphics.Color.Unspecified,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = "Entrar com Google",
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                        )
-                    }
-                }
-
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
+
+        // Seletor de idioma no canto inferior direito
+        Row(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+                .clickable {
+                    // Alterna o idioma entre "PT" e "ENG"
+                    currentLanguage.value = if (currentLanguage.value == "PT") "ENG" else "PT"
+                },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = if (currentLanguage.value == "ENG") "PT | ENG" else "ENG | PT ",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = PoppinsFamily // Fonte Poppins
+            )
+        }
     }
-    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewLoginScreen() {
+    LoginScreen(navController = rememberNavController())
+}

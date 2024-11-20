@@ -44,9 +44,9 @@ fun SidebarScaffold(
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.logo),
+                                painter = painterResource(id = R.drawable.logo), // Substitua pelo seu recurso
                                 contentDescription = stringResource(id = R.string.logo_description),
-                                modifier = Modifier.size(60.dp)
+                                modifier = Modifier.size(60.dp) // Ajuste o tamanho do logotipo
                             )
                         }
                     },
@@ -61,7 +61,7 @@ fun SidebarScaffold(
                         }
                     },
                     actions = {
-                        Spacer(modifier = Modifier.size(56.dp))
+                        Spacer(modifier = Modifier.size(56.dp)) // Mesma largura do botão de menu
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
@@ -70,21 +70,21 @@ fun SidebarScaffold(
             },
             content = { padding ->
                 Box(modifier = Modifier.fillMaxSize()) {
-
+                    // Imagem de fundo
                     Image(
-                        painter = painterResource(id = R.drawable.background),
+                        painter = painterResource(id = R.drawable.background), // Substitua pela sua imagem
                         contentDescription = stringResource(id = R.string.background_description),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
 
-
+                    // Conteúdo principal, que ficará sobre a imagem
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(padding)
                     ) {
-                        content(padding)
+                        content(padding)  // O conteúdo da tela será passado aqui
                     }
                 }
             }
