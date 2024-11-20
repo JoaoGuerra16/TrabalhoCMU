@@ -13,6 +13,7 @@ import com.example.trabalhocmu.ui.screen.*
 import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.RatingViewModel
 
+
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
@@ -44,11 +45,12 @@ fun MainNavGraph(
         }
 
         composable("Register") {
-            RegisterScreen(navController)
+            RegisterScreen(navController=navController)
         }
 
         composable("Login") {
-            LoginScreen(navController)
+
+            LoginScreen( navController = navController)
         }
 
         composable("ForgotPassword") {
@@ -75,12 +77,30 @@ fun MainNavGraph(
             CreateRide(navController)
         }
 
+        composable("My Rides") {
+            MyRides(navController)
+        }
+        composable("EditProfile") {
+            EditProfileScreen(navController)
+        }
+
+
         // Tela de detalhes da carona
         composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
             val from = backStackEntry.arguments?.getString("from")
             val to = backStackEntry.arguments?.getString("to")
             val date = backStackEntry.arguments?.getString("date")
             RideDetailsScreen(navController, from, to, date)
+        }
+
+        composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
+            val from = backStackEntry.arguments?.getString("from")
+            val to = backStackEntry.arguments?.getString("to")
+            val startTime = backStackEntry.arguments?.getString("startTime")
+            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+            val date = backStackEntry.arguments?.getString("date")
+            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: "0"
+            MyRidesTakingARide(navController, from, to, startTime, arrivalTime, date, availableSeats)
         }
 
         composable("MyRidesGivingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
@@ -95,7 +115,7 @@ fun MainNavGraph(
     }
 }
 
-// Wrapper para adicionar o Sidebar ao redor de telas
+// Wrapper para adicionar o Sidebar aos screens
 @Composable
 fun DrawerWrapper(
     navController: NavHostController,

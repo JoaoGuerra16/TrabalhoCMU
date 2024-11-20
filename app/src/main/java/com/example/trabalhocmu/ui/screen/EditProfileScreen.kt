@@ -26,7 +26,7 @@ import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun EditProfileScreen(
     navController: NavController
@@ -49,7 +49,7 @@ fun EditProfileScreen(
                     .padding(top = 25.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Título Edit Profile
+
                 Text(
                     text = stringResource(R.string.edit_profile_title),
                     fontSize = 25.sp,
@@ -60,7 +60,7 @@ fun EditProfileScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Área da foto de perfil com a opção de "Mudar Foto"
+
                 Box(contentAlignment = Alignment.BottomCenter) {
                     Image(
                         painter = painterResource(id = R.drawable.profile),
@@ -70,7 +70,7 @@ fun EditProfileScreen(
                             .clip(CircleShape)
                     )
 
-                    // Ícone de câmera com fundo semitransparente
+
                     Box(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
@@ -79,7 +79,7 @@ fun EditProfileScreen(
                             .clip(CircleShape)
                             .background(Color(0x80000000))
                             .clickable {
-                                // Lógica para trocar a foto
+
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -93,7 +93,7 @@ fun EditProfileScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Campos de edição de informações
+
                 ProfileTextField(
                     value = fullName.value,
                     onValueChange = { fullName.value = it },
@@ -136,10 +136,10 @@ fun EditProfileScreen(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Botão para salvar as alterações
+
                 Button(
                     onClick = {
-                        // Salvar as alterações e navegar de volta ao perfil
+
                         navController.popBackStack()
                     },
                     colors = ButtonDefaults.buttonColors(

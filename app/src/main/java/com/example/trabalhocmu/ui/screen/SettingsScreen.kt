@@ -25,9 +25,9 @@ import java.util.Locale
 fun SettingsScreen(navController: NavController, languageViewModel: LanguageViewModel) {
     val expanded = remember { mutableStateOf(false) }
     val selectedLanguage = languageViewModel.selectedLanguage.value
-    var isLanguageChanged by remember { mutableStateOf(false) } // Verifica se houve mudança
+    var isLanguageChanged by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    var notificationsEnabled by remember { mutableStateOf(false) } // Estado para o switch de notificações
+    var notificationsEnabled by remember { mutableStateOf(false) }
 
     SidebarScaffold(navController = navController) { padding ->
         Column(
@@ -38,7 +38,7 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            // Título da tela
+
             Text(
                 text = stringResource(id = R.string.settings_title),
                 fontSize = 24.sp,
@@ -46,7 +46,6 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
                 modifier = Modifier.padding(bottom = 24.dp)
             )
 
-            // Seção para habilitar/desabilitar notificações
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -63,9 +62,9 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
                     checked = notificationsEnabled,
                     onCheckedChange = { notificationsEnabled = it },
                     colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color(0xFF4CAF50), // Verde quando ativado
-                        uncheckedThumbColor = Color.Gray,     // Cinza quando desativado
-                        checkedTrackColor = Color(0xFFC8E6C9), // Trilho verde claro quando ativado
+                        checkedThumbColor = Color(0xFF4CAF50),
+                        uncheckedThumbColor = Color.Gray,
+                        checkedTrackColor = Color(0xFFC8E6C9),
 
                     ),
 
@@ -74,7 +73,6 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
 
             }
 
-            // Seção para alteração de idioma
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -103,7 +101,7 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
                 }
             }
 
-            // Menu suspenso para selecionar o idioma
+
             DropdownMenu(
                 expanded = expanded.value,
                 onDismissRequest = { expanded.value = false },
@@ -127,7 +125,7 @@ fun SettingsScreen(navController: NavController, languageViewModel: LanguageView
                 )
             }
 
-            // Botão "Save Changes"
+
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = {

@@ -16,7 +16,7 @@ class LanguageViewModel(private val context: Context) : ViewModel() {
     // Função para mudar o idioma
     fun changeLanguage(language: String) {
         _selectedLanguage.value = language
-        saveLanguageToPrefs(language) // Salva o idioma selecionado
+        saveLanguageToPrefs(language) // guarda o idioma selecionado
         val locale = when (language) {
             "English" -> Locale("en")
             "Português" -> Locale("pt")
@@ -29,7 +29,7 @@ class LanguageViewModel(private val context: Context) : ViewModel() {
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
     }
 
-    // Função para salvar o idioma nas SharedPreferences
+    // Função para guardar o idioma nas SharedPreferences
     private fun saveLanguageToPrefs(language: String) {
         val editor = sharedPreferences.edit()
         editor.putString("selected_language", language)

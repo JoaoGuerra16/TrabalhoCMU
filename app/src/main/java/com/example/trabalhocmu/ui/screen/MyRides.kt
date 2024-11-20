@@ -38,15 +38,15 @@ fun MyRides(navController: NavController) {
         val selectedDate = remember { mutableStateOf(selectDateText) }
         val context = LocalContext.current
 
-        // Função para exibir o DatePickerDialog
+
         val showDatePicker = {
             val datePicker = DatePickerDialog(context, { _, year, month, dayOfMonth ->
                 selectedDate.value = "$dayOfMonth/${month + 1}/$year"
-            }, 2024, 0, 1)  // Data inicial (ano, mês, dia)
+            }, 2024, 0, 1)
             datePicker.show()
         }
 
-        // Rides disponíveis
+
         val rides = listOf(
             RideTeste(from = "New York", to = "Los Angeles", availableSeats = 3, startTime = "10:00 AM", arrivalTime = "6:00 PM", date = LocalDate.now(), isGivingRide = true),
             RideTeste(from = "Chicago", to = "San Francisco", availableSeats = 2, startTime = "9:00 AM", arrivalTime = "5:00 PM", date = LocalDate.now(), isGivingRide = true),
@@ -54,10 +54,10 @@ fun MyRides(navController: NavController) {
             RideTeste(from = "Dallas", to = "Austin", availableSeats = 0, startTime = "11:00 AM", arrivalTime = "7:00 PM", date = LocalDate.now(), isGivingRide = false)
         )
 
-        // Guardar as rides filtradas
+
         var filteredRides by remember { mutableStateOf(rides) }
 
-        // Filtrar rides pela data selecionada
+
         LaunchedEffect(selectedDate.value) {
             filteredRides = if (selectedDate.value != selectDateText) {
                 val selectedDateParsed = LocalDate.parse(selectedDate.value, DateTimeFormatter.ofPattern("d/M/yyyy"))
@@ -78,7 +78,7 @@ fun MyRides(navController: NavController) {
                     .verticalScroll(scrollState)
                     .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top // Ajuste para que o conteúdo fique alinhado ao topo
+                verticalArrangement = Arrangement.Top
             ) {
 
                 Row(
@@ -86,17 +86,17 @@ fun MyRides(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
-                        modifier = Modifier.size(48.dp) // Define um tamanho fixo, simulando o espaço de um ícone
+                        modifier = Modifier.size(48.dp)
                     )
                     Text(
                         text = stringResource(id = R.string.my_rides),
                         fontFamily = PoppinsFamily,
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(1f),  // Esse modificador faz com que o texto ocupe o espaço disponível
-                        textAlign = TextAlign.Center // Centraliza o texto dentro do espaço
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
                     )
-                    // Botão "+"
+
                     IconButton(
                         onClick = { navController.navigate("Create Ride") }
                     ) {
@@ -171,7 +171,7 @@ fun MyRides(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Mostra mensagem se não houver rides disponíveis
+
                 if (filteredRides.isEmpty()) {
                     Text(
                         text = stringResource(id = R.string.no_rides_available),
@@ -295,7 +295,7 @@ fun MyRidesInformation(
                 Text(text = "$arrivalTime", fontSize = 16.sp,  fontFamily = PoppinsFamily)
             }
 
-            // Mostra "Available Seats" apenas se for "giving a ride"
+
             if (isGivingRide) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -306,7 +306,7 @@ fun MyRidesInformation(
                 }
             }
 
-            // Mostra a data da viagem
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -315,10 +315,10 @@ fun MyRidesInformation(
                 Text(text = date.toString(), fontSize = 16.sp,   fontFamily = PoppinsFamily)
             }
 
-            // Botão para cancelar a ride
-            Spacer(modifier = Modifier.height(16.dp)) // Espaço antes do botão
+
+            Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { showDialog = true }, // Exibe o diálogo de confirmação
+                onClick = { showDialog = true },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(48.dp),

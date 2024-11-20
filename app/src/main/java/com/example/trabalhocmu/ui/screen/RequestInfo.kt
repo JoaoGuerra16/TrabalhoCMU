@@ -78,7 +78,7 @@ fun RequestInfo(navController: NavController, name: String, gender: String, pick
                     contentDescription = "Mapa",
                     modifier = Modifier
                         .size(350.dp)
-                        .align(Alignment.CenterHorizontally)  // Garante que o mapa está centralizado
+                        .align(Alignment.CenterHorizontally)
                 )
 
                 UserInfoRow(label = "Pick up", info = "Felgueiras")
@@ -88,7 +88,7 @@ fun RequestInfo(navController: NavController, name: String, gender: String, pick
             }
         }
 
-        // Composable para mostrar as informações do usuário com label e valor
+
         @Composable
         fun UserInfoRowRequestInfo(label: String, info: String) {
             Row(
