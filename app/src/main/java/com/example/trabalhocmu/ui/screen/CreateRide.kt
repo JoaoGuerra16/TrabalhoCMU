@@ -23,14 +23,14 @@ fun CreateRide(navController: NavController) {
     SidebarScaffold(navController = navController) { paddingValues ->
         val scrollState = rememberScrollState()
 
-        // Estados para os campos editáveis
+
         var startingPoint by remember { mutableStateOf("") }
         var finalDestination by remember { mutableStateOf("") }
         var startingDate by remember { mutableStateOf("") }
         var executedArrival by remember { mutableStateOf("") }
         var availablePlaces by remember { mutableStateOf("") }
 
-        // Estados para os checkboxes
+
         var isPetsAllowed by remember { mutableStateOf(false) }
         var isBaggageAllowed by remember { mutableStateOf(false) }
         var isSmokingAllowed by remember { mutableStateOf(false) }
@@ -44,7 +44,6 @@ fun CreateRide(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // Título principal
                 Text(
                     text = "Create Ride",
                     fontSize = 25.sp,
@@ -53,7 +52,7 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Texto "Basic trip information"
+
                 Text(
                     text = "Basic trip information",
                     fontSize = 20.sp,
@@ -62,7 +61,7 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(15.dp))
 
-                // Usando o CustomOutlinedTextField para o "Starting Point"
+
                 CustomOutlinedTextField(
                     value = startingPoint,
                     onValueChange = { startingPoint = it },
@@ -71,7 +70,7 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Usando o CustomOutlinedTextField para o "Final Destination"
+
                 CustomOutlinedTextField(
                     value = finalDestination,
                     onValueChange = { finalDestination = it },
@@ -80,18 +79,18 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Mapa
+
                 Image(
                     painter = painterResource(id = R.drawable.mapa),
                     contentDescription = "Mapa",
                     modifier = Modifier
                         .size(350.dp)
-                        .align(Alignment.CenterHorizontally)  // Garante que o mapa está centralizado
+                        .align(Alignment.CenterHorizontally)
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Usando o CustomOutlinedTextField para o "Starting Date"
+
                 CustomOutlinedTextField(
                     value = startingDate,
                     onValueChange = { startingDate = it },
@@ -100,7 +99,7 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Usando o CustomOutlinedTextField para o "Executed Arrival"
+
                 CustomOutlinedTextField(
                     value = executedArrival,
                     onValueChange = { executedArrival = it },
@@ -109,7 +108,7 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // Usando o CustomOutlinedTextField para o "Available Places"
+
                 CustomOutlinedTextField(
                     value = availablePlaces,
                     onValueChange = { availablePlaces = it },
@@ -118,7 +117,7 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Opções de checkboxes (Texto à esquerda e checkbox à direita)
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
@@ -156,12 +155,10 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(30.dp))
 
-                // Botão NEXT
+
                 Button(
                     onClick = {
-                        // Navegar para a próxima tela
-                        // Você pode colocar a navegação aqui
-                        // Exemplo: navController.navigate("next_screen")
+                        //Por enquanto nao temos nada
                     },
                     modifier = Modifier.width(200.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60))

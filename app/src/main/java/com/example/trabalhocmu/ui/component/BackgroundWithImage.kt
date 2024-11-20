@@ -18,22 +18,21 @@ fun BackgroundWithImage(content: @Composable () -> Unit) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Imagem de fundo
         Image(
-            painter = painterResource(id = R.drawable.background), // Substitua pelo seu arquivo de imagem
+            painter = painterResource(id = R.drawable.background),
             contentDescription = "Background Image",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
 
-        // Conteúdo que será sobreposto ao fundo
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            content() // Aqui o conteúdo da página será inserido
+            content()
         }
     }
 }

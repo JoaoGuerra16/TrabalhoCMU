@@ -39,11 +39,11 @@ fun FindRides(navController: NavController) {
         val selectedDate = remember { mutableStateOf("Select Date") }
         val context = LocalContext.current
 
-        // Função para exibir o DatePickerDialog
+
         val showDatePicker = {
             val datePicker = DatePickerDialog(context, { _, year, month, dayOfMonth ->
                 selectedDate.value = "$dayOfMonth/${month + 1}/$year"
-            }, 2024, 0, 1)  // Data inicial (ano, mês, dia)
+            }, 2024, 0, 1)
             datePicker.show()
         }
 
@@ -59,10 +59,10 @@ fun FindRides(navController: NavController) {
             Ride("Lisboa", "Coimbra", 2, "10:00", "12:30", LocalDate.of(2024, 11, 17))
         )
 
-        // Guardar as rides filtradas
+
         var filteredRides by remember { mutableStateOf(rides) }
 
-        // Filtrar rides pela data selecionada
+
         LaunchedEffect(selectedDate.value) {
             filteredRides = if (selectedDate.value != "Select Date") {
                 val selectedDateParsed = LocalDate.parse(selectedDate.value, DateTimeFormatter.ofPattern("d/M/yyyy"))
@@ -274,7 +274,7 @@ fun RideInformation(
                 Text(text = arrivalTime, fontSize = 16.sp)
             }
 
-            // Exibe a data da ride
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
