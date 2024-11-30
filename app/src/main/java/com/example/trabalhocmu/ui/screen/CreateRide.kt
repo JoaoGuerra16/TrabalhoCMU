@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,12 +17,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.component.SidebarScaffold
+import com.example.trabalhocmu.viewmodel.RideViewModel
 
 
 @Composable
 fun CreateRide(navController: NavController) {
     SidebarScaffold(navController = navController) { paddingValues ->
         val scrollState = rememberScrollState()
+        val rideViewModel = RideViewModel(LocalContext.current)
 
 
         var startingPoint by remember { mutableStateOf("") }
@@ -158,7 +161,21 @@ fun CreateRide(navController: NavController) {
 
                 Button(
                     onClick = {
-                        //Por enquanto nao temos nada
+                        val availablePlacesInt = availablePlaces.toIntOrNull()
+                        if (availablePlacesInt != null) {
+                            rideViewModel.createRide(
+                                startingPoint,
+                                finalDestination,
+                                startingDate,
+                                executedArrival,
+                                availablePlacesInt,
+                                isPetsAllowed,
+                                isBaggageAllowed,
+                                isSmokingAllowed
+                            )
+                        } else {
+                            // Mostre um erro ao usuário
+                        }
                     },
                     modifier = Modifier.width(200.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60))
