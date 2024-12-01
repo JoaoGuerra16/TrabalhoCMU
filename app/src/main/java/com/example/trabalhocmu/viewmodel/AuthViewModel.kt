@@ -17,11 +17,21 @@ import kotlinx.coroutines.tasks.await
 class AuthViewModel(context: Context) : ViewModel() {
     private val authRepository = AuthRepository(context)
 
+    private val _userData = MutableStateFlow<User?>(null)
+    val userData: StateFlow<User?> = _userData
+
+
     private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Idle)
     val registerState: StateFlow<RegisterState> = _registerState
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
+
+
+    init {
+        // Chama a função para buscar os dados do usuário
+        getUserData()
+    }
 
     // Função para fazer login com email e palavara passe
     fun loginUser(email: String, password: String) {
@@ -118,7 +128,36 @@ class AuthViewModel(context: Context) : ViewModel() {
             }
         }
     }
+    private fun getUserData() {
+        viewModelScope.launch {
+            // Recupera o usuário logado do Firebase
+            val firebaseUser = FirebaseAuth.getInstance().currentUser
+            if (firebaseUser != null) {
+                Log.d("AuthViewModel", "Usuário logado: ${firebaseUser.email}")  // Log para verificar se o usuário está logado
+                try {
+                    // Busca os dados do usuário no Firestore
+                    val document = FirebaseFirestore.getInstance().collection("users")
+                        .document(firebaseUser.uid).get().await()
 
+                    val user = document.toObject(User::class.java)
+                    if (user != null) {
+                        _userData.emit(user)  // Atualiza os dados do usuário
+                        Log.d("AuthViewModel", "Dados do usuário encontrados: $user")
+                    } else {
+                        Log.d("AuthViewModel", "Usuário não encontrado no Firestore")
+                        _userData.emit(null)  // Emite null se não encontrar
+                    }
+                } catch (e: Exception) {
+                    Log.e("AuthViewModel", "Erro ao buscar dados do usuário", e)
+                    _userData.emit(null)  // Emite null se ocorrer um erro
+                }
+            } else {
+                Log.d("AuthViewModel", "Nenhum usuário logado")
+                _userData.emit(null)  // Emite null se o usuário não estiver logado
+            }
+        }
+    }
+}
 
     // Função para guardar o utilizador no Firestore
     private fun saveUserToFirestore(user: User) {
@@ -138,7 +177,7 @@ class AuthViewModel(context: Context) : ViewModel() {
                 Log.w("Firestore", "Erro ao salvar usuário", e)
             }
     }
-}
+
 
 sealed class RegisterState {
     object Idle : RegisterState()

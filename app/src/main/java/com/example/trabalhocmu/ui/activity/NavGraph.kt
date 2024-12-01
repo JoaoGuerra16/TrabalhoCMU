@@ -4,12 +4,16 @@ package com.example.trabalhocmu.ui.activity
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.trabalhocmu.ui.component.Sidebar
 import com.example.trabalhocmu.ui.component.SplashScreen
 import com.example.trabalhocmu.ui.screen.*
+import com.example.trabalhocmu.viewmodel.AuthViewModel
+import com.example.trabalhocmu.viewmodel.AuthViewModelFactory
 import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.RatingViewModel
 
@@ -58,8 +62,15 @@ fun MainNavGraph(
         }
 
         composable("Profile") {
-            Profile(navController, ratingViewModel)
+            // Criar uma instância do ViewModel com o factory
+            val authViewModel: AuthViewModel = viewModel(
+                factory = AuthViewModelFactory(context = LocalContext.current)
+            )
+
+            // Passar o AuthViewModel para o ProfileScreen
+            Profile(navController = navController, authViewModel = authViewModel)
         }
+
 
         composable("Rate") {
             RateScreen(navController, ratingViewModel)

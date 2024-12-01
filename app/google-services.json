@@ -12,7 +12,20 @@
           "package_name": "com.example.trabalhocmu"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1098206102662-i0tdq9hsik9oaaj6idnhkjrd09v3d99o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trabalhocmu",
+            "certificate_hash": "51eece28637e3d000dc83178922a33252795a3a1"
+          }
+        },
+        {
+          "client_id": "1098206102662-tj2un1i0iqm0f8s4kjq204k3riua8ku8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCjn0_nAknyAbXcnfMonjwGKJH7sNE3PBc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1098206102662-tj2un1i0iqm0f8s4kjq204k3riua8ku8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

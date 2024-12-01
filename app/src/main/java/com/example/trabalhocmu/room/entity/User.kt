@@ -1,6 +1,7 @@
 package com.example.trabalhocmu.room.entity
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table")
@@ -13,4 +14,7 @@ data class User(
     val gender: String,
     val mobileNumber: String,
     val password: String
-)
+){
+    @Ignore // Para o Room, esse construtor não será usado
+    constructor() : this(0, "", "", "", "", "", "", "")
+}

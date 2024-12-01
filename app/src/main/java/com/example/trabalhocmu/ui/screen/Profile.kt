@@ -25,47 +25,43 @@ import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.R
+import com.example.trabalhocmu.room.entity.User
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import kotlin.math.roundToInt
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
+import com.example.trabalhocmu.viewmodel.AuthViewModel
 
 @Composable
 fun Profile(
     navController: NavController,
+    authViewModel: AuthViewModel = viewModel(),
     ratingViewModel: RatingViewModel = viewModel()
 ) {
-
-    val user = remember { mutableStateOf(UserData()) }
+    val user by authViewModel.userData.collectAsState()  // Coleta os dados do usuário
     val averageRating by ratingViewModel.averageRating.collectAsState()
     val roundedRating = averageRating.roundToInt()
 
     SidebarScaffold(
         navController = navController,
         content = { padding ->
-
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(15.dp)
-                        .padding(top = 10.dp),  // Ajuste do padding superior
+                        .padding(top = 10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-
                     ProfileTitle(navController)
-
-
                     ProfileImage()
-
-
-                    ProfileName(user.value.fullName)
-
-
-                    RatingStars(rating = roundedRating)
-
-
-                    ProfileDetails(user.value)
+                    if (user != null) {
+                        ProfileName(user!!.name)
+                        RatingStars(rating = roundedRating)
+                        ProfileDetails(user!!)
+                    } else {
+                        // Caso o usuário não esteja disponível, mostrar mensagem
+                        Text("Carregando dados do usuário...", fontSize = 18.sp)
+                    }
                 }
             }
         }
@@ -121,14 +117,14 @@ fun ProfileName(fullName: String) {
 }
 
 @Composable
-fun ProfileDetails(user: UserData) {
+fun ProfileDetails(user: User) {
     Spacer(modifier = Modifier.height(45.dp))
 
     Column(modifier = Modifier.fillMaxWidth()) {
         ProfileDetailRow(label = stringResource(R.string.username), value = user.username)
         Spacer(modifier = Modifier.height(25.dp))
 
-        ProfileDetailRow(label = stringResource(R.string.mobile), value = user.mobile)
+        ProfileDetailRow(label = stringResource(R.string.mobile), value = user.mobileNumber)
         Spacer(modifier = Modifier.height(25.dp))
 
         ProfileDetailRow(label = stringResource(R.string.email), value = user.email)
@@ -174,6 +170,9 @@ fun RatingStars(rating: Int) {
         }
     }
 }
+
+
+
 
 data class UserData(
     val fullName: String = "John Doe",
