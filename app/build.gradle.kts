@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.firebase.firestore.ktx)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -91,6 +92,7 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth-ktx:21.1.0")
     implementation ("com.google.android.gms:play-services-auth:20.5.0")
     implementation(kotlin("script-runtime"))
-
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation ("com.google.maps.android:android-maps-utils:3.4.0")
 
 }

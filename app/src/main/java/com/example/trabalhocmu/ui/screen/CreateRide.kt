@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.trabalhocmu.API.models.MapViewComposable
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.viewmodel.RideViewModel
@@ -81,7 +82,7 @@ fun CreateRide(navController: NavController) {
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
-
+                MapViewComposable(startingPoint = startingPoint, finalDestination = finalDestination)
 
                 Image(
                     painter = painterResource(id = R.drawable.mapa),
