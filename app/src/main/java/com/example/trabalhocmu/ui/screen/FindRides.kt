@@ -44,16 +44,22 @@ fun FindRidesScreen(navController: NavController, rideViewModel: RideViewModel) 
 
         LazyColumn {
             items(rides) { ride ->
-                RideCard(ride = ride, onAcceptClick = {
-                    rideViewModel.acceptRide(ride.id)
-                })
+                RideCard(
+                    ride = ride,
+                    onDetailsClick = {
+                        navController.navigate("RideDetails/${ride.id}")
+                    },
+                    onAcceptClick = {
+                        rideViewModel.acceptRide(ride.id)
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun RideCard(ride: Ride, onAcceptClick: () -> Unit) {
+fun RideCard(ride: Ride, onDetailsClick: () -> Unit, onAcceptClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,8 +71,19 @@ fun RideCard(ride: Ride, onAcceptClick: () -> Unit) {
             Text("To: ${ride.finalDestination}")
             Text("Date: ${ride.startingDate}")
             Text("Available Seats: ${ride.availablePlaces}")
-            Button(onClick = onAcceptClick, modifier = Modifier.align(Alignment.End)) {
-                Text("Accept Ride")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(onClick = onDetailsClick) {
+                    Text("Details")
+                }
+                Button(onClick = onAcceptClick) {
+                    Text("Accept Ride")
+                }
             }
         }
     }

@@ -167,7 +167,6 @@ fun CreateRide(navController: NavController) {
                                 isBaggageAllowed = isBaggageAllowed,
                                 isSmokingAllowed = isSmokingAllowed,
                                 ownerEmail = ownerEmail,
-                                passengers = emptyList()
                             )
                         } else {
                             // Mostre um erro ao usuário (ex.: toast ou snackbar)

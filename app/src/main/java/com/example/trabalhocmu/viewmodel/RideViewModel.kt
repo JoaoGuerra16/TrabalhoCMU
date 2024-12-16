@@ -1,6 +1,7 @@
 package com.example.trabalhocmu.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trabalhocmu.room.entity.Ride
@@ -29,8 +30,7 @@ class RideViewModel(context: Context) : ViewModel() {
         isPetsAllowed: Boolean,
         isBaggageAllowed: Boolean,
         isSmokingAllowed: Boolean,
-        ownerEmail: String, // Email do condutor
-        passengers: List<String> // Emails dos passageiros
+        ownerEmail: String,
     ) {
         viewModelScope.launch {
             _rideState.value = RideState.Loading
@@ -47,28 +47,7 @@ class RideViewModel(context: Context) : ViewModel() {
                 ownerEmail = ownerEmail
             )
 
-            // Adicione o condutor como participante
-            val participants = mutableListOf<RideParticipant>()
-            participants.add(
-                RideParticipant(
-                    rideId = ride.id,
-                    userEmail = ownerEmail,
-                    role = "DRIVER"
-                )
-            )
-
-            // Adicione os passageiros como participantes
-            passengers.forEach { email ->
-                participants.add(
-                    RideParticipant(
-                        rideId = ride.id,
-                        userEmail = email,
-                        role = "PASSENGER"
-                    )
-                )
-            }
-
-            val success = rideRepository.createRide(ride, participants)
+            val success = rideRepository.createRide(ride)
             _rideState.value = if (success) {
                 RideState.Success
             } else {
@@ -84,7 +63,7 @@ class RideViewModel(context: Context) : ViewModel() {
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
         if (currentUserEmail != null) {
             val availableRides = rideRepository.getAvailableRides(excludeEmail = currentUserEmail)
-            emit(availableRides)
+            emit(availableRides.filter { it.availablePlaces > 0 })
         } else {
             emit(emptyList()) // Caso o utilizador não esteja logado
         }
@@ -95,26 +74,46 @@ class RideViewModel(context: Context) : ViewModel() {
             val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
             if (currentUserEmail != null) {
                 val ride = rideRepository.getRideById(rideId)
-                if (ride != null && ride.availablePlaces > 0) {
-                    // Adicionar o utilizador como passageiro
-                    val participant = RideParticipant(
-                        rideId = rideId,
-                        userEmail = currentUserEmail,
-                        role = "PASSENGER"
-                    )
-                    val success = rideRepository.addParticipantToRide(participant)
+                if (ride != null) {
+                    val participants = rideRepository.getParticipantsByRide(rideId)
+                    if (participants.size < ride.availablePlaces) {
+                        val participant = RideParticipant(
+                            rideId = rideId,
+                            userEmail = currentUserEmail,
+                            role = "PASSENGER"
+                        )
+                        val success = rideRepository.addParticipantToRide(participant)
 
-                    // Atualizar lugares disponíveis
-                    if (success) {
-                        rideRepository.updateAvailablePlaces(rideId, ride.availablePlaces - 1)
+                        if (success) {
+                            // Atualiza os lugares disponíveis
+                            rideRepository.updateAvailablePlaces(rideId, ride.availablePlaces - 1)
+                        }
+                    } else {
+                        Log.e("RideViewModel", "Ride is full. Cannot accept more participants.")
                     }
                 }
             }
         }
     }
+
+    fun getParticipants(rideId: Int): Flow<List<RideParticipant>> {
+        return flow {
+            val participants = rideRepository.getParticipantsByRide(rideId)
+            emit(participants)
+        }
+    }
+    fun getRideById(rideId: Int): Flow<Ride?> {
+        return flow {
+            val ride = rideRepository.getRideById(rideId)
+            emit(ride)
+        }
+    }
+
 }
 
-sealed class RideState {
+
+
+    sealed class RideState {
     object Idle : RideState()
     object Loading : RideState()
     object Success : RideState()

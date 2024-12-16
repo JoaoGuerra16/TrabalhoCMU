@@ -38,10 +38,18 @@ fun MainNavGraph(
             }
         }
 
+        // Find Rides Screen
         composable("Find Rides") {
             DrawerWrapper(navController, drawerState) {
-                FindRidesScreen(navController, rideViewModel) // Chama a tela FindRidesScreen
+                FindRidesScreen(navController, rideViewModel) // Tela de rides disponíveis
             }
+        }
+
+        // Ride Details Screen
+        composable("RideDetails/{rideId}") { backStackEntry ->
+            val rideId = backStackEntry.arguments?.getString("rideId")?.toIntOrNull()
+                ?: return@composable
+            RideDetailsScreen(navController, rideId, rideViewModel)
         }
 
         composable("Settings") {
@@ -51,12 +59,12 @@ fun MainNavGraph(
         }
 
         composable("Register") {
-            RegisterScreen(navController=navController)
+            RegisterScreen(navController = navController)
         }
 
         composable("Login") {
 
-            LoginScreen( navController = navController)
+            LoginScreen(navController = navController)
         }
 
         composable("ForgotPassword") {
@@ -98,23 +106,18 @@ fun MainNavGraph(
         }
 
 
-        // Tela de detalhes da carona
-        composable("ride_details/{from}/{to}/{date}") { backStackEntry ->
-            val from = backStackEntry.arguments?.getString("from")
-            val to = backStackEntry.arguments?.getString("to")
-            val date = backStackEntry.arguments?.getString("date")
-            RideDetailsScreen(navController, from, to, date)
-        }
 
-        composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
-            val from = backStackEntry.arguments?.getString("from")
-            val to = backStackEntry.arguments?.getString("to")
-            val startTime = backStackEntry.arguments?.getString("startTime")
-            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
-            val date = backStackEntry.arguments?.getString("date")
-            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: "0"
-            MyRidesTakingARide(navController, from, to, startTime, arrivalTime, date, availableSeats)
-        }
+
+
+//        composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
+//            val from = backStackEntry.arguments?.getString("from")
+//            val to = backStackEntry.arguments?.getString("to")
+//            val startTime = backStackEntry.arguments?.getString("startTime")
+//            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
+//            val date = backStackEntry.arguments?.getString("date")
+//            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: "0"
+//            MyRidesTakingARide(navController, from, to, startTime, arrivalTime, date, availableSeats)
+//        }
 
         composable("MyRidesGivingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
             val from = backStackEntry.arguments?.getString("from")
