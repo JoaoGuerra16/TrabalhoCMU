@@ -174,14 +174,6 @@ fun RatingStars(rating: Int) {
 
 
 
-data class UserData(
-    val fullName: String = "John Doe",
-    val username: String = "JohnDoe",
-    val mobile: String = "+1234567890",
-    val email: String = "john.doe@example.com",
-    val age: String = "30",
-    val gender: String = "Male"
-)
 
 @Preview(showBackground = true)
 @Composable

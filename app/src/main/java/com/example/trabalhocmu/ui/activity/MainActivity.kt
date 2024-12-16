@@ -10,6 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.LanguageViewModelFactory
 import com.example.trabalhocmu.viewmodel.RatingViewModel
+import com.example.trabalhocmu.viewmodel.RideViewModel
+import com.example.trabalhocmu.viewmodel.RideViewModelFactory
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -27,13 +29,15 @@ class MainActivity : ComponentActivity() {
             val ratingViewModel: RatingViewModel = viewModel()
             val languageViewModel: LanguageViewModel =
                 viewModel(factory = LanguageViewModelFactory(this))
+            val rideViewModel: RideViewModel = viewModel(factory = RideViewModelFactory(this)) // Usando o factory
 
             // Navegação principal
             MainNavGraph(
                 navController = navController,
                 drawerState = drawerState,
                 ratingViewModel = ratingViewModel,
-                languageViewModel = languageViewModel
+                languageViewModel = languageViewModel,
+                rideViewModel = rideViewModel
             )
         }
     }

@@ -12,9 +12,13 @@ interface RideDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRide(ride: Ride)
 
-    @Query("SELECT * FROM rides WHERE id = :id")
-    suspend fun getRideById(id: Int): Ride?
+    @Query("SELECT * FROM rides WHERE ownerEmail != :excludeEmail")
+    suspend fun getAvailableRides(excludeEmail: String): List<Ride>
 
-    @Query("SELECT * FROM rides")
-    suspend fun getAllRides(): List<Ride>
+    @Query("SELECT * FROM rides WHERE id = :rideId")
+    suspend fun getRideById(rideId: Int): Ride?
+
+    @Query("UPDATE rides SET availablePlaces = :newAvailablePlaces WHERE id = :rideId")
+    suspend fun updateAvailablePlaces(rideId: Int, newAvailablePlaces: Int)
 }
+

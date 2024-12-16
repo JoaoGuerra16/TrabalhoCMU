@@ -16,6 +16,7 @@ import com.example.trabalhocmu.viewmodel.AuthViewModel
 import com.example.trabalhocmu.viewmodel.AuthViewModelFactory
 import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.RatingViewModel
+import com.example.trabalhocmu.viewmodel.RideViewModel
 
 
 @Composable
@@ -23,7 +24,8 @@ fun MainNavGraph(
     navController: NavHostController,
     drawerState: DrawerState,
     ratingViewModel: RatingViewModel,
-    languageViewModel: LanguageViewModel
+    languageViewModel: LanguageViewModel,
+    rideViewModel: RideViewModel
 ) {
     NavHost(navController = navController, startDestination = "splash_screen") {
         composable("splash_screen") {
@@ -38,7 +40,7 @@ fun MainNavGraph(
 
         composable("Find Rides") {
             DrawerWrapper(navController, drawerState) {
-                FindRides(navController)
+                FindRidesScreen(navController, rideViewModel) // Chama a tela FindRidesScreen
             }
         }
 

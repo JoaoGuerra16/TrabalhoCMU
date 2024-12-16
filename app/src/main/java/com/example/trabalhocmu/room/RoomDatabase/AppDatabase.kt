@@ -5,12 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.trabalhocmu.room.Dao.RideDao
+import com.example.trabalhocmu.room.Dao.RideParticipantDao
 import com.example.trabalhocmu.room.Dao.UserDao
 
-@Database(entities = [User::class, Ride::class], version = 3, exportSchema = false)
+@Database(entities = [User::class, Ride::class, RideParticipant::class], version = 4, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun rideDao(): RideDao
+    abstract fun rideParticipantDao(): RideParticipantDao
 
     companion object {
         @Volatile
@@ -21,8 +23,9 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "app_database"
-                ) .fallbackToDestructiveMigration() // Apaga e recria o banco automaticamente
+                    "RideMate"
+                )
+                    .fallbackToDestructiveMigration() // Atualize automaticamente o banco
                     .build()
                 INSTANCE = instance
                 instance

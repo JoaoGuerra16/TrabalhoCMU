@@ -19,6 +19,7 @@ import com.example.trabalhocmu.API.models.MapViewComposable
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.viewmodel.RideViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -34,7 +35,7 @@ fun CreateRide(navController: NavController) {
         var executedArrival by remember { mutableStateOf("") }
         var availablePlaces by remember { mutableStateOf("") }
 
-
+        val ownerEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""// Email do condutor
         var isPetsAllowed by remember { mutableStateOf(false) }
         var isBaggageAllowed by remember { mutableStateOf(false) }
         var isSmokingAllowed by remember { mutableStateOf(false) }
@@ -83,14 +84,6 @@ fun CreateRide(navController: NavController) {
 
                 Spacer(modifier = Modifier.height(20.dp))
                 MapViewComposable(startingPoint = startingPoint, finalDestination = finalDestination)
-
-                Image(
-                    painter = painterResource(id = R.drawable.mapa),
-                    contentDescription = "Mapa",
-                    modifier = Modifier
-                        .size(350.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -163,19 +156,21 @@ fun CreateRide(navController: NavController) {
                 Button(
                     onClick = {
                         val availablePlacesInt = availablePlaces.toIntOrNull()
-                        if (availablePlacesInt != null) {
+                        if (availablePlacesInt != null && ownerEmail.isNotBlank()) {
                             rideViewModel.createRide(
-                                startingPoint,
-                                finalDestination,
-                                startingDate,
-                                executedArrival,
-                                availablePlacesInt,
-                                isPetsAllowed,
-                                isBaggageAllowed,
-                                isSmokingAllowed
+                                startingPoint = startingPoint,
+                                finalDestination = finalDestination,
+                                startingDate = startingDate,
+                                executedArrival = executedArrival,
+                                availablePlaces = availablePlacesInt,
+                                isPetsAllowed = isPetsAllowed,
+                                isBaggageAllowed = isBaggageAllowed,
+                                isSmokingAllowed = isSmokingAllowed,
+                                ownerEmail = ownerEmail,
+                                passengers = emptyList()
                             )
                         } else {
-                            // Mostre um erro ao usuário
+                            // Mostre um erro ao usuário (ex.: toast ou snackbar)
                         }
                     },
                     modifier = Modifier.width(200.dp),

@@ -4,6 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
+import androidx.annotation.Keep
+
 @Entity(tableName = "rides")
 data class Ride(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -14,5 +16,6 @@ data class Ride(
     val availablePlaces: Int,
     val isPetsAllowed: Boolean,
     val isBaggageAllowed: Boolean,
-    val isSmokingAllowed: Boolean
+    val isSmokingAllowed: Boolean,
+    val ownerEmail: String // Associar o condutor (User.email)
 )
