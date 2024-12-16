@@ -21,6 +21,7 @@ class RideViewModel(context: Context) : ViewModel() {
     private val _rideState = MutableStateFlow<RideState>(RideState.Idle)
     val rideState: StateFlow<RideState> = _rideState
 
+
     fun createRide(
         startingPoint: String,
         finalDestination: String,
@@ -75,8 +76,8 @@ class RideViewModel(context: Context) : ViewModel() {
             if (currentUserEmail != null) {
                 val ride = rideRepository.getRideById(rideId)
                 if (ride != null) {
-                    val participants = rideRepository.getParticipantsByRide(rideId)
-                    if (participants.size < ride.availablePlaces) {
+                    val passengerCount = rideRepository.getParticipantsByRide(rideId).size
+                    if (passengerCount < ride.availablePlaces) {
                         val participant = RideParticipant(
                             rideId = rideId,
                             userEmail = currentUserEmail,
@@ -85,7 +86,6 @@ class RideViewModel(context: Context) : ViewModel() {
                         val success = rideRepository.addParticipantToRide(participant)
 
                         if (success) {
-                            // Atualiza os lugares disponíveis
                             rideRepository.updateAvailablePlaces(rideId, ride.availablePlaces - 1)
                         }
                     } else {
@@ -95,6 +95,7 @@ class RideViewModel(context: Context) : ViewModel() {
             }
         }
     }
+
 
     fun getParticipants(rideId: Int): Flow<List<RideParticipant>> {
         return flow {
@@ -109,11 +110,32 @@ class RideViewModel(context: Context) : ViewModel() {
         }
     }
 
+    fun getRidesAsDriver(): Flow<List<Ride>> = flow {
+        val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+        if (currentUserEmail != null) {
+            val rides = rideRepository.getRidesByOwnerEmail(currentUserEmail)
+            emit(rides)
+        } else {
+            emit(emptyList())
+        }
+    }
+
+    fun getRidesAsPassenger(): Flow<List<Ride>> = flow {
+        val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+        if (currentUserEmail != null) {
+            val rides = rideRepository.getRidesByRole(currentUserEmail, "PASSENGER")
+            emit(rides)
+        } else {
+            emit(emptyList())
+        }
+    }
+
+
 }
 
 
 
-    sealed class RideState {
+sealed class RideState {
     object Idle : RideState()
     object Loading : RideState()
     object Success : RideState()

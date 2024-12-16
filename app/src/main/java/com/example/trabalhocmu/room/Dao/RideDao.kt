@@ -10,7 +10,7 @@ import com.example.trabalhocmu.room.entity.Ride
 @Dao
 interface RideDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRide(ride: Ride)
+    suspend fun insertRide(ride: Ride): Long
 
     @Query("SELECT * FROM rides WHERE ownerEmail != :excludeEmail")
     suspend fun getAvailableRides(excludeEmail: String): List<Ride>
@@ -20,5 +20,8 @@ interface RideDao {
 
     @Query("UPDATE rides SET availablePlaces = :newAvailablePlaces WHERE id = :rideId")
     suspend fun updateAvailablePlaces(rideId: Int, newAvailablePlaces: Int)
+
+    @Query("SELECT * FROM rides WHERE ownerEmail = :ownerEmail")
+    suspend fun getRidesByOwnerEmail(ownerEmail: String): List<Ride>
 }
 

@@ -99,7 +99,9 @@ fun MainNavGraph(
         }
 
         composable("My Rides") {
-            MyRides(navController)
+            DrawerWrapper(navController, drawerState) {
+                MyRides(navController, rideViewModel)
+            }
         }
         composable("EditProfile") {
             EditProfileScreen(navController)

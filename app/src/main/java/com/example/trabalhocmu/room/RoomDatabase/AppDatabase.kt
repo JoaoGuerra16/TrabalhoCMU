@@ -8,7 +8,7 @@ import com.example.trabalhocmu.room.Dao.RideDao
 import com.example.trabalhocmu.room.Dao.RideParticipantDao
 import com.example.trabalhocmu.room.Dao.UserDao
 
-@Database(entities = [User::class, Ride::class, RideParticipant::class], version = 4, exportSchema = false)
+@Database(entities = [User::class, Ride::class, RideParticipant::class], version = 5, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun rideDao(): RideDao
@@ -32,4 +32,6 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
     }
+
+
 }

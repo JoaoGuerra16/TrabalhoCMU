@@ -13,4 +13,10 @@ interface RideParticipantDao {
 
     @Query("SELECT * FROM RideParticipant WHERE rideId = :rideId")
     suspend fun getParticipantsByRide(rideId: Int): List<RideParticipant>
+
+    @Query("SELECT * FROM RideParticipant WHERE userEmail = :userEmail AND role = :role")
+    suspend fun getRidesByUserAndRole(userEmail: String, role: String): List<RideParticipant>
+
+    @Query("SELECT * FROM RideParticipant WHERE rideId = :rideId AND role = 'PASSENGER'")
+    suspend fun getPassengersByRide(rideId: Int): List<RideParticipant>
 }

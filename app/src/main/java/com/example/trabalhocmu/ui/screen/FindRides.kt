@@ -37,42 +37,57 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun FindRidesScreen(navController: NavController, rideViewModel: RideViewModel) {
-    val rides by rideViewModel.getAvailableRides().collectAsState(initial = emptyList())
+    SidebarScaffold(navController = navController) { paddingValues ->
+        val selectDateText = stringResource(id = R.string.select_date)
+        val scrollState = rememberScrollState()
+        var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+        val selectedDate = remember { mutableStateOf(selectDateText) }
+        val context = LocalContext.current
+        val rides by rideViewModel.getAvailableRides().collectAsState(initial = emptyList())
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Available Rides", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        val showDatePicker = {
+            val datePicker = DatePickerDialog(context, { _, year, month, dayOfMonth ->
+                selectedDate.value = "$dayOfMonth/${month + 1}/$year"
+            }, 2024, 0, 1)
+            datePicker.show()
+        }
 
-        LazyColumn {
-            items(rides) { ride ->
-                RideCard(
-                    ride = ride,
-                    onDetailsClick = {
-                        navController.navigate("RideDetails/${ride.id}")
-                    },
-                    onAcceptClick = {
-                        rideViewModel.acceptRide(ride.id)
-                    }
-                )
+
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+            Text("Available Rides", fontSize = 25.sp, fontWeight = FontWeight.Bold, fontFamily = PoppinsFamily)
+
+            LazyColumn {
+                items(rides) { ride ->
+                    RideCard(
+                        ride = ride,
+                        onDetailsClick = {
+                            navController.navigate("RideDetails/${ride.id}")
+                        },
+                        onAcceptClick = {
+                            rideViewModel.acceptRide(ride.id)
+                        }
+                    )
+                }
             }
         }
     }
 }
-
 @Composable
 fun RideCard(ride: Ride, onDetailsClick: () -> Unit, onAcceptClick: () -> Unit) {
     Card(
+        shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
 
-    ) {
+        ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("From: ${ride.startingPoint}")
             Text("To: ${ride.finalDestination}")
             Text("Date: ${ride.startingDate}")
             Text("Available Seats: ${ride.availablePlaces}")
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -88,6 +103,3 @@ fun RideCard(ride: Ride, onDetailsClick: () -> Unit, onAcceptClick: () -> Unit) 
         }
     }
 }
-
-
-
