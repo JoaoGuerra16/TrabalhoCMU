@@ -106,8 +106,18 @@ fun MainNavGraph(
         composable("EditProfile") {
             EditProfileScreen(navController)
         }
+        composable("ManageRequests/{rideId}") { backStackEntry ->
+            val rideId = backStackEntry.arguments?.getString("rideId")?.toIntOrNull()
+                ?: return@composable
+            ManageRequestsScreen(navController, rideViewModel, rideId)
+        }
 
-
+        composable("ManagePassengers/{rideId}") { backStackEntry ->
+            val rideId = backStackEntry.arguments?.getString("rideId")?.toIntOrNull()
+            if (rideId != null) {
+                ManagePassengersScreen(rideId, rideViewModel, navController)
+            }
+        }
 
 
 

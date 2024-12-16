@@ -6,13 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.trabalhocmu.room.Dao.RideDao
 import com.example.trabalhocmu.room.Dao.RideParticipantDao
+import com.example.trabalhocmu.room.Dao.RideRequestDao
 import com.example.trabalhocmu.room.Dao.UserDao
 
-@Database(entities = [User::class, Ride::class, RideParticipant::class], version = 5, exportSchema = false)
+@Database(entities = [User::class, Ride::class, RideParticipant::class, RideRequest::class], version = 6, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun rideDao(): RideDao
     abstract fun rideParticipantDao(): RideParticipantDao
+    abstract fun RideRequestDao(): RideRequestDao
 
     companion object {
         @Volatile

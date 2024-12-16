@@ -19,4 +19,7 @@ interface RideParticipantDao {
 
     @Query("SELECT * FROM RideParticipant WHERE rideId = :rideId AND role = 'PASSENGER'")
     suspend fun getPassengersByRide(rideId: Int): List<RideParticipant>
+
+    @Query("DELETE FROM RideParticipant WHERE rideId = :rideId AND userEmail = :userEmail")
+    suspend fun deleteParticipant(rideId: Int, userEmail: String)
 }

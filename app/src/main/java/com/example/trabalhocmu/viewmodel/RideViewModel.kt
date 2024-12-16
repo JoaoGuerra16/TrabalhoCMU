@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trabalhocmu.room.entity.Ride
 import com.example.trabalhocmu.room.entity.RideParticipant
+import com.example.trabalhocmu.room.entity.RideRequest
 import com.example.trabalhocmu.room.repository.RideRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.Flow
@@ -103,6 +104,7 @@ class RideViewModel(context: Context) : ViewModel() {
             emit(participants)
         }
     }
+
     fun getRideById(rideId: Int): Flow<Ride?> {
         return flow {
             val ride = rideRepository.getRideById(rideId)
@@ -130,9 +132,81 @@ class RideViewModel(context: Context) : ViewModel() {
         }
     }
 
+    fun requestToJoinRide(rideId: Int) {
+        viewModelScope.launch {
+            val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+            if (currentUserEmail != null) {
+                val request = RideRequest(
+                    rideId = rideId,
+                    requesterEmail = currentUserEmail,
+                    status = "PENDING"
+                )
+                rideRepository.createRideRequest(request)
+            }
+        }
+    }
+
+    fun getRequestsForRide(rideId: Int): Flow<List<RideRequest>> = flow {
+        emit(rideRepository.getRequestsByRide(rideId))
+    }
+
+    fun respondToRequest(requestId: Int, status: String) {
+        viewModelScope.launch {
+            val request = rideRepository.getRequestById(requestId)
+            if (request != null) {
+                // Atualizar o estado no Room
+                rideRepository.updateRequestStatus(requestId, status)
+
+                // Atualizar o estado no Firestore usando o ID do documento
+                val firestoreId = request.id.toString() // Certifique-se de que isso é o ID do Firestore
+                rideRepository.updateRequestStatusInFirestore(firestoreId, status)
+
+                if (status == "ACCEPTED") {
+                    val participant = RideParticipant(
+                        rideId = request.rideId,
+                        userEmail = request.requesterEmail,
+                        role = "PASSENGER"
+                    )
+                    rideRepository.addParticipantToRide(participant)
+
+                    // Atualizar lugares disponíveis
+                    val ride = rideRepository.getRideById(request.rideId)
+                    if (ride != null && ride.availablePlaces > 0) {
+                        rideRepository.updateAvailablePlaces(
+                            rideId = ride.id,
+                            newAvailablePlaces = ride.availablePlaces - 1
+                        )
+                    }
+                }
+            }
+        }
+    }
+    fun removePassenger(rideId: Int, userEmail: String) {
+        viewModelScope.launch {
+            val success = rideRepository.removeParticipant(rideId, userEmail)
+            if (success) {
+                rideRepository.incrementAvailablePlaces(rideId)
+            } else {
+                Log.e("RideViewModel", "Erro ao remover passageiro.")
+            }
+        }
+    }
+    fun leaveRide(rideId: Int) {
+        viewModelScope.launch {
+            val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+            if (currentUserEmail != null) {
+                val success = rideRepository.removeParticipant(rideId, currentUserEmail)
+                if (success) {
+                    rideRepository.incrementAvailablePlaces(rideId)
+                } else {
+                    Log.e("RideViewModel", "Erro ao sair da ride.")
+                }
+            }
+        }
+    }
+
 
 }
-
 
 
 sealed class RideState {

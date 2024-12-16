@@ -63,8 +63,8 @@ fun FindRidesScreen(navController: NavController, rideViewModel: RideViewModel) 
                         onDetailsClick = {
                             navController.navigate("RideDetails/${ride.id}")
                         },
-                        onAcceptClick = {
-                            rideViewModel.acceptRide(ride.id)
+                        onRequestClick = { // Nova lógica aqui
+                            rideViewModel.requestToJoinRide(ride.id)
                         }
                     )
                 }
@@ -72,15 +72,15 @@ fun FindRidesScreen(navController: NavController, rideViewModel: RideViewModel) 
         }
     }
 }
+
 @Composable
-fun RideCard(ride: Ride, onDetailsClick: () -> Unit, onAcceptClick: () -> Unit) {
+fun RideCard(ride: Ride, onDetailsClick: () -> Unit, onRequestClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-
-        ) {
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text("From: ${ride.startingPoint}")
             Text("To: ${ride.finalDestination}")
@@ -96,8 +96,8 @@ fun RideCard(ride: Ride, onDetailsClick: () -> Unit, onAcceptClick: () -> Unit) 
                 Button(onClick = onDetailsClick) {
                     Text("Details")
                 }
-                Button(onClick = onAcceptClick) {
-                    Text("Accept Ride")
+                Button(onClick = onRequestClick) { // Mudança aqui
+                    Text("Request Ride")
                 }
             }
         }
