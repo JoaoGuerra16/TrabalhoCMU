@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.trabalhocmu.room.Dao.RideDao
 import com.example.trabalhocmu.room.Dao.UserDao
 
-@Database(entities = [User::class, Ride::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Ride::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun rideDao(): RideDao
@@ -22,7 +22,8 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "app_database"
-                ).build()
+                ) .fallbackToDestructiveMigration() // Apaga e recria o banco automaticamente
+                    .build()
                 INSTANCE = instance
                 instance
             }
