@@ -61,15 +61,18 @@ class RideViewModel(context: Context) : ViewModel() {
 
     }
 
+
     fun getAvailableRides(): Flow<List<Ride>> = flow {
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
         if (currentUserEmail != null) {
-            val availableRides = rideRepository.getAvailableRides(excludeEmail = currentUserEmail)
-            emit(availableRides.filter { it.availablePlaces > 0 })
+            val rides = rideRepository.syncRidesFromFirestoreToLocal()
+            emit(rides.filter { it.ownerEmail != currentUserEmail && it.availablePlaces > 0 })
         } else {
-            emit(emptyList()) // Caso o utilizador não esteja logado
+            emit(emptyList())
         }
     }
+
+
 
     fun acceptRide(rideId: Int) {
         viewModelScope.launch {
@@ -111,26 +114,27 @@ class RideViewModel(context: Context) : ViewModel() {
             emit(ride)
         }
     }
-
     fun getRidesAsDriver(): Flow<List<Ride>> = flow {
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
         if (currentUserEmail != null) {
-            val rides = rideRepository.getRidesByOwnerEmail(currentUserEmail)
+            val rides = rideRepository.getRidesAsDriverFromFirestore(currentUserEmail)
             emit(rides)
         } else {
             emit(emptyList())
         }
     }
+
 
     fun getRidesAsPassenger(): Flow<List<Ride>> = flow {
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
         if (currentUserEmail != null) {
-            val rides = rideRepository.getRidesByRole(currentUserEmail, "PASSENGER")
+            val rides = rideRepository.getRidesAsPassengerFromFirestore(currentUserEmail)
             emit(rides)
         } else {
             emit(emptyList())
         }
     }
+
 
     fun requestToJoinRide(rideId: Int) {
         viewModelScope.launch {

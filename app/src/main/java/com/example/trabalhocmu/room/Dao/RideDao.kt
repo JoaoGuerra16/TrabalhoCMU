@@ -23,5 +23,13 @@ interface RideDao {
 
     @Query("SELECT * FROM rides WHERE ownerEmail = :ownerEmail")
     suspend fun getRidesByOwnerEmail(ownerEmail: String): List<Ride>
+
+    @Query("DELETE FROM rides")
+    suspend fun clearRides()
+    @Query("SELECT * FROM rides")
+    suspend fun getAllRides(): List<Ride>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRides(rides: List<Ride>)
 }
 

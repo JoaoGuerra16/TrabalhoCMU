@@ -18,15 +18,14 @@ class RideRepository(private val context: Context) {
 
     suspend fun createRide(ride: Ride): Boolean {
         return try {
-            // 1. Salvar a ride no Room e obter o ID gerado
-            val rideId = db.rideDao().insertRide(ride).toInt()
+            val rideDocument = firestore.collection("rides").document() // Gera um novo ID
+            val rideWithId = ride.copy(id = rideDocument.id.toIntOrNull() ?: 0)
 
-            // 2. Criar uma cópia da ride com o ID gerado
-            val rideWithId = ride.copy(id = rideId)
+            // Salva no Firestore
+            rideDocument.set(rideWithId).await()
 
-            // 3. Salvar no Firestore com o ID correto
-            firestore.collection("rides").document(rideId.toString()).set(rideWithId).await()
-
+            // Sincroniza localmente
+            db.rideDao().insertRide(rideWithId)
 
             true
         } catch (e: Exception) {
@@ -35,6 +34,60 @@ class RideRepository(private val context: Context) {
         }
     }
 
+
+    suspend fun syncRidesFromFirestoreToLocal(): List<Ride> {
+        return try {
+            val snapshot = firestore.collection("rides").get().await()
+            val ridesFromFirestore = snapshot.documents.mapNotNull { document ->
+                document.toObject(Ride::class.java)?.copy(id = document.id.toIntOrNull() ?: 0)
+            }
+
+            // Atualiza os dados locais no Room para refletir os dados do Firestore
+            db.rideDao().clearRides()
+            db.rideDao().insertRides(ridesFromFirestore)
+
+            ridesFromFirestore
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao sincronizar rides: ${e.message}")
+            db.rideDao().getAllRides() // Retorna os dados locais como fallback
+        }
+    }
+
+
+
+    // Busca as rides do condutor (Giving Rides)
+    suspend fun getRidesAsDriverFromFirestore(userEmail: String): List<Ride> {
+        return try {
+            val snapshot = firestore.collection("rides")
+                .whereEqualTo("ownerEmail", userEmail).get().await()
+            snapshot.toObjects(Ride::class.java)
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao buscar Giving Rides: ${e.message}")
+            emptyList()
+        }
+    }
+
+    // Busca as rides em que o usuário é passageiro
+    suspend fun getRidesAsPassengerFromFirestore(userEmail: String): List<Ride> {
+        return try {
+            val participantsSnapshot = firestore.collection("rideParticipants")
+                .whereEqualTo("userEmail", userEmail)
+                .whereEqualTo("role", "PASSENGER").get().await()
+
+            val rideIds = participantsSnapshot.documents.mapNotNull { it["rideId"].toString().toIntOrNull() }
+            val rides = mutableListOf<Ride>()
+
+            for (rideId in rideIds) {
+                val rideSnapshot = firestore.collection("rides").document(rideId.toString()).get().await()
+                val ride = rideSnapshot.toObject(Ride::class.java)
+                if (ride != null) rides.add(ride)
+            }
+            rides
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao buscar Taking Rides: ${e.message}")
+            emptyList()
+        }
+    }
 
 
     suspend fun acceptRide(rideId: Int, userEmail: String): Boolean {
@@ -85,7 +138,6 @@ class RideRepository(private val context: Context) {
 
     suspend fun addParticipantToRide(participant: RideParticipant): Boolean {
         return try {
-            db.rideParticipantDao().insertRideParticipant(participant)
             firestore.collection("rideParticipants").add(participant).await()
             true
         } catch (e: Exception) {
@@ -93,6 +145,7 @@ class RideRepository(private val context: Context) {
             false
         }
     }
+
 
 
 
