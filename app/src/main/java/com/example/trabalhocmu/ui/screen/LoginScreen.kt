@@ -1,6 +1,7 @@
 package com.example.trabalhocmu.ui.screen
 
 
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,12 +29,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trabalhocmu.ui.component.BackgroundWithImage
 import com.example.trabalhocmu.R
+import com.example.trabalhocmu.notificacoes.createNotification
+import com.example.trabalhocmu.notificacoes.createNotificationChannel
+import com.example.trabalhocmu.notificacoes.sendNotification
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import com.example.trabalhocmu.viewmodel.AuthViewModel
 import com.example.trabalhocmu.viewmodel.AuthViewModelFactory
 import com.example.trabalhocmu.viewmodel.LoginState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.example.trabalhocmu.notificacoes.createNotificationChannel
+import com.google.android.gms.auth.api.signin.GoogleSignIn.requestPermissions
+import com.example.trabalhocmu.notificacoes.sendNotification
 
 
 @Composable
@@ -43,12 +50,9 @@ fun LoginScreen(navController: NavController) {
         factory = AuthViewModelFactory(context)  // Usamos uma Factory personalizada para a app nao crashar
     )
     val currentLanguage = remember { mutableStateOf("PT") }
-
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val passwordVisible = remember { mutableStateOf(false) }
-
-
     val loginState by viewModel.loginState.collectAsState()
 
     val signInResultLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -71,6 +75,10 @@ fun LoginScreen(navController: NavController) {
         val googleSignInClient = GoogleSignIn.getClient(context, gso)
         val signInIntent = googleSignInClient.signInIntent
         signInResultLauncher.launch(signInIntent)
+    }
+
+    LaunchedEffect(Unit) {
+        createNotification(context)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -148,6 +156,7 @@ fun LoginScreen(navController: NavController) {
                 LaunchedEffect(loginState) {
                     when (loginState) {
                         is LoginState.Success -> {
+                            sendNotification(context, "Login", "Uau que fixe fizeste login que fixe")
                             navController.navigate("Profile") {
                                 popUpTo("Login") { inclusive = true }
                             }

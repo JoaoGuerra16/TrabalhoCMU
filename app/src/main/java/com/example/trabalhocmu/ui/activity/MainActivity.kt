@@ -1,12 +1,15 @@
 package com.example.trabalhocmu.ui.activity
 
+import android.Manifest
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,13 +21,9 @@ import com.example.trabalhocmu.viewmodel.RideViewModel
 import com.example.trabalhocmu.viewmodel.RideViewModelFactory
 import java.util.Locale
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.Composable
-import androidx.compose.material3.Text
-import androidx.compose.foundation.layout.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.trabalhocmu.notificacoes.createNotificationChannel
+import com.example.trabalhocmu.notificacoes.sendNotification
+
 
 class MainActivity : ComponentActivity() {
 
@@ -33,9 +32,22 @@ class MainActivity : ComponentActivity() {
     private var lightSensor: Sensor? = null
     private lateinit var lightSensorListener: SensorEventListener
     private val lightValue = mutableStateOf(0f) // Shared state for the light sensor
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            sendNotification(this, "Permissão Concedida", "Você agora pode receber notificações.")
+        } else {
+            // Ver esta parte, faz alguma coisa quando a autorização é negada
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
 
         setAppLanguage()
         initializeLightSensor()
