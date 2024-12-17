@@ -9,6 +9,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -44,8 +49,6 @@ fun RidesHistory(navController: NavController, rideViewModel: RideViewModel) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .background(Color.White)
         ) {
             Column(
                 modifier = Modifier
@@ -84,20 +87,6 @@ fun RidesHistory(navController: NavController, rideViewModel: RideViewModel) {
                         }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Botão de Voltar
-                Button(
-                    onClick = { navController.popBackStack() },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60)),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text("Back", color = Color.White, fontSize = 18.sp)
-                }
             }
         }
     }
@@ -113,40 +102,131 @@ fun RidesHistoryItem(
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+            .padding(vertical = 8.dp, horizontal = 8.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "From: $from",
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                fontSize = 18.sp
-            )
-            Text(
-                text = "To: $to",
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                fontSize = 18.sp
-            )
-            Text(
-                text = "Start Time: $startTime",
-                color = Color.Gray,
-                fontSize = 16.sp
-            )
-            Text(
-                text = "Available Seats: $availableSeats",
-                color = Color.Gray,
-                fontSize = 16.sp
-            )
-            Text(
-                text = "Status: $status",
-                color = if (status == "COMPLETED") Color.Green else Color.Red,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
+        Column(
+            modifier = Modifier
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFFFAFAFA),
+                            Color(0xFFF0F0F0)
+                        )
+                    )
+                )
+                .padding(16.dp)
+        ) {
+            // Header Row with From and To
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Place,
+                            contentDescription = "Location Icon",
+                            tint = Color(0xFF3F51B5),
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "From: $from",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black
+                        )
+                    }
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Place,
+                            contentDescription = "Destination Icon",
+                            tint = Color(0xFF4CAF50),
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = "To: $to",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                // Status with Icon
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = if (status == "COMPLETED") Icons.Default.CheckCircle else Icons.Default.Close,
+                        contentDescription = "Status Icon",
+                        tint = if (status == "COMPLETED") Color(0xFF4CAF50) else Color(0xFFF44336),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = status,
+                        color = if (status == "COMPLETED") Color(0xFF4CAF50) else Color(0xFFF44336),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Ride Details
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column {
+                    Text(
+                        text = "Start Time",
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.Schedule,
+                            contentDescription = "Time Icon",
+                            tint = Color(0xFF3F51B5),
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = startTime,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.Black,
+                            fontSize = 15.sp
+                        )
+                    }
+                }
+
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = "Seats Available",
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "$availableSeats",
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF3F51B5),
+                        fontSize = 15.sp,
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
         }
     }
 }

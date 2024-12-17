@@ -33,6 +33,7 @@ import com.example.trabalhocmu.room.entity.Ride
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.viewmodel.RideViewModel
 import androidx.compose.foundation.Image
+import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,13 +42,12 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
-    LaunchedEffect(Unit) {
-        rideViewModel.syncAllData()
-    }
 
     val ridesAsDriver by rideViewModel.getRidesAsDriver().collectAsState(initial = emptyList())
     val ridesAsPassenger by rideViewModel.getRidesAsPassenger().collectAsState(initial = emptyList())
-
+    LaunchedEffect(Unit) {
+        rideViewModel.syncAllData()
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -165,43 +165,114 @@ fun RideCard(
     onRemoveOrLeaveClick: (() -> Unit)? = null
 ) {
     Card(
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text("Role: $role", fontWeight = FontWeight.Bold)
-            Text("From: ${ride.startingPoint}")
-            Text("To: ${ride.finalDestination}")
-            Text("Date: ${ride.startingDate}")
-            Text("Available Seats: ${ride.availablePlaces}")
-
-            Spacer(modifier = Modifier.height(8.dp))
-
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Header com ícone e título
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(onClick = onDetailsClick) {
-                    Text("Details")
+                Icon(
+                    imageVector = Icons.Default.DirectionsCar,
+                    contentDescription = "Ride Icon",
+                    tint = Color(0xFF3F51B5),
+                    modifier = Modifier.size(36.dp)
+                )
+
+                Text(
+                    text = "Role: $role",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF3F51B5),
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Informações da ride
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Text("From: ${ride.startingPoint}", fontWeight = FontWeight.SemiBold, color = Color.Black)
+                Text("To: ${ride.finalDestination}", fontWeight = FontWeight.SemiBold, color = Color.Black)
+                Text("Date: ${ride.startingDate}", color = Color.Gray)
+                Text("Available Seats: ${ride.availablePlaces}", color = Color.Gray)
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Botões
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween // Espaça os botões igualmente
+            ) {
+                Button(
+                    onClick = onDetailsClick,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3F51B5)),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 4.dp)
+                ) {
+                    Text(
+                        text = "Details",
+                        color = Color.White,
+                        fontSize = 13.sp, // Reduz a fonte
+                        maxLines = 1
+                    )
                 }
+
                 if (role == "Giving Ride" && onManageRequestsClick != null) {
-                    Button(onClick = onManageRequestsClick) {
-                        Text("Manage Requests")
+                    Button(
+                        onClick = onManageRequestsClick,
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 4.dp)
+                    ) {
+                        Text(
+                            text = "Requests",
+                            color = Color.White,
+                            fontSize = 13.sp, // Fonte menor
+                            maxLines = 1
+                        )
                     }
                 }
+
                 if (onRemoveOrLeaveClick != null) {
-                    Button(onClick = onRemoveOrLeaveClick) {
-                        Text(if (role == "Giving Ride") "Manage Passengers" else "Leave Ride")
+                    Button(
+                        onClick = onRemoveOrLeaveClick,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (role == "Giving Ride") Color(0xFFFF9800) else Color(0xFFF44336)
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 4.dp)
+                    ) {
+                        Text(
+                            text = if (role == "Giving Ride") "Travelers" else "Leave",
+                            color = Color.White,
+                            fontSize = 13.sp, // Reduz o tamanho da fonte
+                            maxLines = 1
+                        )
                     }
                 }
             }
+
         }
     }
 }
-
-
-
 
 
 

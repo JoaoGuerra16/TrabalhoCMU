@@ -8,8 +8,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.outlined.CheckBoxOutlineBlank
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -179,98 +181,123 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
 fun RideDetailCard(ride: Ride) {
     Card(
         shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
         elevation = CardDefaults.cardElevation(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFFf2f2f2), Color(0xFFe6e6e6))
-                ),
-                shape = RoundedCornerShape(16.dp)
-            )
+            .padding(vertical = 8.dp, horizontal = 8.dp)
     ) {
         Column(
             modifier = Modifier
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(Color(0xFFF9F9F9), Color(0xFFEAEAEA))
+                    )
+                )
                 .padding(16.dp)
-                .fillMaxWidth()
         ) {
+            // Título
             Text(
-                text = "From: ${ride.startingPoint}",
+                text = "Ride Details",
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333),
-                fontSize = 18.sp
+                color = Color(0xFF333333)
             )
-            Text(
-                text = "To: ${ride.finalDestination}",
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF333333),
-                fontSize = 18.sp
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text("Date Inicio: ${ride.startingDate}", color = Color(0xFF777777), fontSize = 16.sp)
-            Text("Date Termino: ${ride.executedArrival}", color = Color(0xFF777777), fontSize = 16.sp)
-            Text(
-                "Available Seats: ${ride.availablePlaces}",
-                color = Color(0xFF777777),
-                fontSize = 16.sp
-            )
-            Text("Driver Email: ${ride.ownerEmail}", color = Color(0xFF777777), fontSize = 16.sp)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Informações do Ride
+            InfoRow("From", ride.startingPoint)
+            InfoRow("To", ride.finalDestination)
+            InfoRow("Start Date", ride.startingDate)
+            InfoRow("End Date", ride.executedArrival)
+            InfoRow("Available Seats", "${ride.availablePlaces}")
+            InfoRow("Driver Email", ride.ownerEmail)
+
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Campos Pets, Baggage e Smoking
-            RowField("Pets allowed", ride.isPetsAllowed)
-            RowField("Baggage allowed", ride.isBaggageAllowed)
-            RowField("Smoking allowed", ride.isSmokingAllowed)
-
+            // Opções Pets, Baggage e Smoking
+            RowField("Pets Allowed", ride.isPetsAllowed)
+            RowField("Baggage Allowed", ride.isBaggageAllowed)
+            RowField("Smoking Allowed", ride.isSmokingAllowed)
         }
     }
 }
+
 @Composable
 fun RowField(label: String, isAllowed: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
+            .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = label,
-            color = Color(0xFF777777),
-            fontSize = 16.sp
+            fontSize = 16.sp,
+            color = Color(0xFF777777)
         )
         Icon(
-            imageVector = if (isAllowed) Icons.Default.CheckBox else Icons.Outlined.CheckBoxOutlineBlank,
+            imageVector = if (isAllowed) Icons.Filled.Check else Icons.Outlined.Close,
             contentDescription = null,
-            tint = if (isAllowed) Color(0xFF4CAF50) else Color.Gray // Verde se true, cinza se false
+            tint = if (isAllowed) Color(0xFF4CAF50) else Color(0xFFF44336)
         )
     }
 }
+
+@Composable
+fun InfoRow(label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            fontSize = 16.sp,
+            color = Color(0xFF555555),
+            fontWeight = FontWeight.Medium
+        )
+        Text(
+            text = value,
+            fontSize = 16.sp,
+            color = Color.Black,
+            fontWeight = FontWeight.SemiBold
+        )
+    }
+}
+
 @Composable
 fun ParticipantCard(participant: RideParticipant) {
     Card(
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
+        elevation = CardDefaults.cardElevation(4.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .fillMaxWidth()
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "User email: ${participant.userEmail}",
-                fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF454B60),
-                fontSize = 16.sp
-            )
+            Column {
+                Text(
+                    text = "Participant Email",
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = participant.userEmail,
+                    fontSize = 16.sp,
+                    color = Color(0xFF454B60),
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         }
     }
 }
-
