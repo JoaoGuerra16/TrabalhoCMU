@@ -27,7 +27,8 @@ fun MainNavGraph(
     drawerState: DrawerState,
     ratingViewModel: RatingViewModel,
     languageViewModel: LanguageViewModel,
-    rideViewModel: RideViewModel
+    rideViewModel: RideViewModel,
+    lightValue: Float
 ) {
     NavHost(navController = navController, startDestination = "splash_screen") {
         composable("splash_screen") {
