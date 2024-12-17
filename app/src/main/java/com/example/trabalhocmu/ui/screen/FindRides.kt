@@ -37,6 +37,10 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun FindRidesScreen(navController: NavController, rideViewModel: RideViewModel) {
+    LaunchedEffect(Unit) {
+        rideViewModel.syncAllData()
+    }
+
     SidebarScaffold(navController = navController) { paddingValues ->
         val selectDateText = stringResource(id = R.string.select_date)
         val scrollState = rememberScrollState()

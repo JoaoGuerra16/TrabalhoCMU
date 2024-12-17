@@ -22,4 +22,14 @@ interface RideParticipantDao {
 
     @Query("DELETE FROM RideParticipant WHERE rideId = :rideId AND userEmail = :userEmail")
     suspend fun deleteParticipant(rideId: Int, userEmail: String)
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertParticipants(participants: List<RideParticipant>)
+
+    @Query("DELETE FROM RideParticipant")
+    suspend fun clearAllParticipants()
+
+
+
 }

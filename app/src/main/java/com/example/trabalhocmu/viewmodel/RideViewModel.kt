@@ -205,6 +205,13 @@ class RideViewModel(context: Context) : ViewModel() {
         }
     }
 
+    fun syncAllData() {
+        viewModelScope.launch {
+            rideRepository.syncAllDataFromFirestoreToLocal()
+        }
+    }
+
+
 
 }
 

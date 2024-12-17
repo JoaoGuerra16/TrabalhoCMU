@@ -19,6 +19,10 @@ fun ManagePassengersScreen(
     rideViewModel: RideViewModel,
     navController: NavController
 ) {
+    // Sincronizar dados ao abrir a tela
+    LaunchedEffect(Unit) {
+        rideViewModel.syncAllData()
+    }
     val participants by rideViewModel.getParticipants(rideId).collectAsState(initial = emptyList())
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {

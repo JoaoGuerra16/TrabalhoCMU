@@ -22,4 +22,10 @@ interface RideRequestDao {
 
     @Query("SELECT * FROM ride_requests WHERE id = :requestId")
     suspend fun getRequestById(requestId: Int): RideRequest?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRideRequests(requests: List<RideRequest>)
+
+    @Query("DELETE FROM ride_requests")
+    suspend fun clearAllRequests()
 }

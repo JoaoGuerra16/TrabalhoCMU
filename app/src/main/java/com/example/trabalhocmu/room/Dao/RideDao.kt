@@ -9,6 +9,13 @@ import com.example.trabalhocmu.room.entity.Ride
 
 @Dao
 interface RideDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRides(rides: List<Ride>)
+
+    @Query("DELETE FROM rides")
+    suspend fun clearRides()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRide(ride: Ride): Long
 

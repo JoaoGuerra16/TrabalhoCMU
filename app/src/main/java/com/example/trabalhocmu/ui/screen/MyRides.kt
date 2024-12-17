@@ -41,6 +41,10 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
+    LaunchedEffect(Unit) {
+        rideViewModel.syncAllData()
+    }
+
     val ridesAsDriver by rideViewModel.getRidesAsDriver().collectAsState(initial = emptyList())
     val ridesAsPassenger by rideViewModel.getRidesAsPassenger().collectAsState(initial = emptyList())
 

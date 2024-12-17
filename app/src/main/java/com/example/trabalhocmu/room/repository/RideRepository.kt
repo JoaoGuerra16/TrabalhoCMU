@@ -226,4 +226,64 @@ class RideRepository(private val context: Context) {
     }
 
 
+
+    //////////////////////TENTATICA DE SINCRONIZACAO DA FIREBASE
+
+    // Sincronizar Rides
+    suspend fun syncRidesFromFirestoreToLocal() {
+        try {
+            val snapshot = firestore.collection("rides").get().await()
+            val rides = snapshot.toObjects(Ride::class.java)
+
+            // Atualizar dados locais no Room
+            db.rideDao().clearRides()
+            db.rideDao().insertRides(rides)
+
+            Log.d("RideRepository", "Rides sincronizadas com sucesso.")
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao sincronizar rides: ${e.message}")
+        }
+    }
+
+    // Sincronizar Participantes
+    suspend fun syncParticipantsFromFirestoreToLocal() {
+        try {
+            val snapshot = firestore.collection("rideParticipants").get().await()
+            val participants = snapshot.toObjects(RideParticipant::class.java)
+
+            db.rideParticipantDao().clearAllParticipants()
+            db.rideParticipantDao().insertParticipants(participants)
+
+            Log.d("RideRepository", "Participantes sincronizados com sucesso.")
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao sincronizar participantes: ${e.message}")
+        }
+    }
+
+    // Sincronizar Requests
+    suspend fun syncRequestsFromFirestoreToLocal() {
+        try {
+            val snapshot = firestore.collection("rideRequests").get().await()
+            val requests = snapshot.toObjects(RideRequest::class.java)
+
+            db.RideRequestDao().clearAllRequests()
+            db.RideRequestDao().insertRideRequests(requests)
+
+            Log.d("RideRepository", "Requests sincronizados com sucesso.")
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao sincronizar requests: ${e.message}")
+        }
+    }
+
+
+    suspend fun syncAllDataFromFirestoreToLocal() {
+        syncRidesFromFirestoreToLocal()
+        syncParticipantsFromFirestoreToLocal()
+        syncRequestsFromFirestoreToLocal()
+        Log.d("RideRepository", "Todos os dados foram sincronizados com sucesso.")
+    }
+
+
+
+
 }

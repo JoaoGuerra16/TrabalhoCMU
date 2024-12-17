@@ -28,7 +28,10 @@ import com.google.firebase.auth.FirebaseAuth
 @Composable
 fun ManageRequestsScreen(navController: NavController, rideViewModel: RideViewModel, rideId: Int) {
     val requests by rideViewModel.getRequestsForRide(rideId).collectAsState(initial = emptyList())
-
+    // Sincronizar dados ao abrir a tela
+    LaunchedEffect(Unit) {
+        rideViewModel.syncAllData()
+    }
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Manage Requests", fontSize = 24.sp, fontWeight = FontWeight.Bold)
 

@@ -4,7 +4,11 @@ import androidx.room.Entity
 
 @Entity(primaryKeys = ["rideId", "userEmail"])
 data class RideParticipant(
-    val rideId: Int, // Refere-se ao Ride.id
-    val userEmail: String, // Refere-se ao User.email
-    val role: String // "DRIVER" ou "PASSENGER"
-)
+    val id: Int = 0,
+    val rideId: Int = 0,
+    val userEmail: String = "",
+    val role: String = ""
+) {
+    // Construtor sem argumentos para Firestore
+    constructor() : this(0, 0, "", "")
+}
