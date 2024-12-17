@@ -97,8 +97,10 @@ fun MainNavGraph(
         }
 
         composable("RidesHistory") {
-            RidesHistory(navController)
+            val rideViewModel = RideViewModel(LocalContext.current)
+            RidesHistory(navController = navController, rideViewModel = rideViewModel)
         }
+
 
         composable("Create Ride") {
             CreateRide(navController)

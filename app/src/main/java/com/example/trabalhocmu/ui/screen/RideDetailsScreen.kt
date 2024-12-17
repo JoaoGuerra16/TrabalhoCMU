@@ -29,7 +29,7 @@ import com.example.trabalhocmu.room.entity.RideParticipant
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import com.example.trabalhocmu.viewmodel.RideViewModel
-
+import com.google.firebase.auth.FirebaseAuth
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,11 +37,11 @@ import com.example.trabalhocmu.viewmodel.RideViewModel
 fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: RideViewModel) {
     val participants by rideViewModel.getParticipants(rideId).collectAsState(initial = emptyList())
     val ride = rideViewModel.getRideById(rideId).collectAsState(initial = null)
+    val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         Image(
-            painter = painterResource(id = R.drawable.background), // Substitua pelo nome da imagem
+            painter = painterResource(id = R.drawable.background),
             contentDescription = "Background",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
@@ -76,10 +76,68 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
                         horizontalAlignment = Alignment.Start
                     ) {
                         // Detalhes da Ride
-                        ride.value?.let {
-                            RideDetailCard(it)
+                        ride.value?.let { currentRide ->
+                            RideDetailCard(currentRide)
                             Spacer(modifier = Modifier.height(16.dp))
+
+                            if (currentRide.ownerEmail == currentUserEmail) {
+                                when (currentRide.status) {
+                                    "PLANNED" -> {
+                                        Button(
+                                            onClick = {
+                                                rideViewModel.startRide(rideId)
+                                            },
+                                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(50.dp),
+                                            shape = RoundedCornerShape(12.dp)
+                                        ) {
+                                            Text("Start Ride", color = Color.White, fontSize = 18.sp)
+                                        }
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Button(
+                                            onClick = {
+                                                rideViewModel.cancelRide(rideId)
+                                                navController.popBackStack()
+                                            },
+                                            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(50.dp),
+                                            shape = RoundedCornerShape(12.dp)
+                                        ) {
+                                            Text("Cancel Ride", color = Color.White, fontSize = 18.sp)
+                                        }
+                                    }
+                                    "IN_PROGRESS" -> {
+                                        Button(
+                                            onClick = {
+                                                rideViewModel.completeRide(rideId)
+                                            },
+                                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)),
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(50.dp),
+                                            shape = RoundedCornerShape(12.dp)
+                                        ) {
+                                            Text("Complete Ride", color = Color.White, fontSize = 18.sp)
+                                        }
+                                    }
+                                    "COMPLETED" -> {
+                                        Text(
+                                            "Ride Completed",
+                                            fontSize = 18.sp,
+                                            color = Color.Gray,
+                                            fontWeight = FontWeight.Bold,
+                                            modifier = Modifier.fillMaxWidth()
+                                        )
+                                    }
+                                }
+                            }
                         }
+
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         // Título da seção de participantes
                         Text(
@@ -116,6 +174,7 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
         }
     }
 }
+
 @Composable
 fun RideDetailCard(ride: Ride) {
     Card(
@@ -149,7 +208,8 @@ fun RideDetailCard(ride: Ride) {
                 fontSize = 18.sp
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text("Date: ${ride.startingDate}", color = Color(0xFF777777), fontSize = 16.sp)
+            Text("Date Inicio: ${ride.startingDate}", color = Color(0xFF777777), fontSize = 16.sp)
+            Text("Date Termino: ${ride.executedArrival}", color = Color(0xFF777777), fontSize = 16.sp)
             Text(
                 "Available Seats: ${ride.availablePlaces}",
                 color = Color(0xFF777777),

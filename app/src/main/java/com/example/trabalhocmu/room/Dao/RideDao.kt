@@ -30,5 +30,14 @@ interface RideDao {
 
     @Query("SELECT * FROM rides WHERE ownerEmail = :ownerEmail")
     suspend fun getRidesByOwnerEmail(ownerEmail: String): List<Ride>
+
+    @Query("DELETE FROM rides WHERE id = :rideId")
+    suspend fun deleteRideById(rideId: Int)
+
+    @Query("UPDATE rides SET status = :status WHERE id = :rideId")
+    suspend fun updateRideStatus(rideId: Int, status: String)
+
+    @Query("SELECT * FROM rides WHERE status = :status")
+    suspend fun getRidesByStatus(status: String): List<Ride>
 }
 

@@ -18,8 +18,9 @@ data class Ride(
     val isPetsAllowed: Boolean = false,
     val isBaggageAllowed: Boolean = false,
     val isSmokingAllowed: Boolean = false,
-    val ownerEmail: String = ""
+    val ownerEmail: String = "",
+    val status: String = "PLANNED"
 ) {
     // Construtor sem argumentos para Firestore
-    constructor() : this(0, "", "", "", "", 0, false, false, false, "")
+    constructor() : this(0, "", "", "", "", 0, false, false, false, "", "")
 }

@@ -309,7 +309,59 @@ class RideRepository(private val context: Context) {
         Log.d("RideRepository", "Todos os dados foram sincronizados com sucesso.")
     }
 
+    suspend fun cancelRide(rideId: Int): Boolean {
+        return try {
+            // Deletar a ride da Room
+            db.rideDao().deleteRideById(rideId)
 
+            // Deletar a ride no Firestore
+            firestore.collection("rides").document(rideId.toString()).delete().await()
 
+            // Deletar participantes associados à ride
+            val participants = firestore.collection("rideParticipants")
+                .whereEqualTo("rideId", rideId)
+                .get().await()
+            participants.documents.forEach { it.reference.delete().await() }
+
+            // Deletar pedidos associados à ride
+            val requests = firestore.collection("rideRequests")
+                .whereEqualTo("rideId", rideId)
+                .get().await()
+            requests.documents.forEach { it.reference.delete().await() }
+
+            true
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao cancelar ride: ${e.message}")
+            false
+        }
+    }
+    suspend fun startRide(rideId: Int): Boolean {
+        return try {
+            db.rideDao().updateRideStatus(rideId, "IN_PROGRESS")
+            firestore.collection("rides").document(rideId.toString())
+                .update("status", "IN_PROGRESS").await()
+            Log.d("RideRepository", "Ride iniciada com sucesso.")
+            true
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao iniciar ride: ${e.message}")
+            false
+        }
+    }
+
+    suspend fun completeRide(rideId: Int): Boolean {
+        return try {
+            db.rideDao().updateRideStatus(rideId, "COMPLETED")
+            firestore.collection("rides").document(rideId.toString())
+                .update("status", "COMPLETED").await()
+            Log.d("RideRepository", "Ride concluída com sucesso.")
+            true
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao concluir ride: ${e.message}")
+            false
+        }
+    }
+    suspend fun getCompletedRides(): List<Ride> {
+        return db.rideDao().getRidesByStatus("COMPLETED")
+    }
 
 }

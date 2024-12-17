@@ -238,6 +238,31 @@ class RideViewModel(context: Context) : ViewModel() {
     }
 
 
+    fun cancelRide(rideId: Int) {
+        viewModelScope.launch {
+            val success = rideRepository.cancelRide(rideId)
+            if (success) {
+                Log.d("RideViewModel", "Ride cancelada com sucesso.")
+            } else {
+                Log.e("RideViewModel", "Erro ao cancelar a ride.")
+            }
+        }
+    }
+    fun startRide(rideId: Int) {
+        viewModelScope.launch {
+            rideRepository.startRide(rideId)
+        }
+    }
+
+    fun completeRide(rideId: Int) {
+        viewModelScope.launch {
+            rideRepository.completeRide(rideId)
+        }
+    }
+
+    fun getCompletedRides(): Flow<List<Ride>> = flow {
+        emit(rideRepository.getCompletedRides())
+    }
 
 }
 
