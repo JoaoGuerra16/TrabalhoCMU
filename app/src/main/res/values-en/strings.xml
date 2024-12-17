@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RideMate</string>
+    <string name="how_would_you_rate">How would you rate this user?</string>
+    <string name="rating">Rating: %1$d Star%2$s</string>
+    <string name="submit_rating">Submit Rating</string>
+    <string name="profile_image_desc">Profile Image</string>
+    <string name="profile_title">Profile</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="username">Username</string>
+    <string name="Rider_profile">Rider Profile</string>
+    <string name="mobile">Mobile</string>
+    <string name="email">Email</string>
+    <string name="age">Age</string>
+    <string name="gender">Gender</string>
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="full_name">Full Name</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="my_rides">My Rides</string>
+    <string name="add_ride">Add Ride</string>
+    <string name="search">Search</string>
+    <string name="select_date">Select Date</string>
+    <string name="cancel_date">Cancel Date</string>
+    <string name="selected_date">Selected Date</string>
+    <string name="no_rides_available">No rides available</string>
+    <string name="confirm_cancellation">Confirm Cancellation</string>
+    <string name="confirm_cancel_message">Are you sure you want to cancel this ride?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="route">Route</string>
+    <string name="start">Start</string>
+    <string name="arrival">Arrival</string>
+    <string name="available_seats">Available Seats</string>
+    <string name="date">Date</string>
+    <string name="cancel_ride">Cancel Ride</string>
+    <string name="giving_ride">Giving a Ride</string>
+    <string name="taking_ride">Taking a Ride</string>
+    <string name="have_account">Do you have an account?</string>
+    <string name="login">Login</string>
+    <string name="create_account">Or create one!</string>
+    <string name="register">Register</string>
+    <string name="switch_language">PT | ENG</string>
+
+    <string name="ride_details_title">Ride Details</string>
+    <string name="starting_point">Starting point</string>
+    <string name="finish_point">Finish point</string>
+    <string name="starting_date">Starting date</string>
+    <string name="expected_arrival">Expected arrival</string>
+    <string name="available_places">Available places</string>
+    <string name="pets_allowed">Pets allowed</string>
+    <string name="baggage_allowed">Baggage allowed</string>
+    <string name="smoking_allowed">Smoking allowed</string>
+    <string name="need_for_pickup">Need for a pick up?</string>
+    <string name="order_sent">Order sent</string>
+    <string name="ask_for_ride">Ask for ride</string>
+    <string name="pickup_location">Pick up - Felgueiras, rua do jardim</string>
+    <string name="dropoff_location">Drop off - Amarante, rua do Juíz</string>
+    <string name="profile_image_description">Profile Image</string>
+    <string name="map_image_description">Mapa</string>
+
+    <string name="find_rides">Find Rides</string>
+    <string name="ride_information">Ride Information</string>
+    <string name="from">From:</string>
+    <string name="to">To:</string>
+    <string name="start_time">Start Time:</string>
+    <string name="arrival_time">Arrival Time:</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+
+
+    <string name="logo_description">Logo</string>
+    <string name="open_menu">Open Menu</string>
+    <string name="background_description">Background Image</string>
+    <string name="close_menu">Close Menu</string>
+    <string name="profile">Profile</string>
+
+
+    <string name="ride_history">Rides History</string>
+    <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+
+
+    <string name="settings_title">Settings</string>
+    <string name="change_language">Change Language</string>
+
+    <string name="english">English</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="notifications">Enable / Disable Notifications</string>
+
+    <string name="rides_history_title">Rides History</string>
+    <string name="search_label">Search</string>
+    <string name="select_date_button">Select Date</string>
+    <string name="cancel_date_button">Cancel Date</string>
+
+
+    <string name="no_rides_message">No rides available</string>
+    <string name="route_label">Route:</string>
+    <string name="start_label">Start:</string>
+    <string name="arrival_label">Arrival:</string>
+    <string name="available_seats_label">Available Seats:</string>
+    <string name="date_label">Date:</string>
+
+
+
+    //Create Ride
+    <string name="create_ride_title">Create Ride</string>
+    <string name="basic_trip_information">Basic information</string>
+    <string name="final_destination">Final Destination</string>
+    <string name="creation_successful">Sucesseful creation</string>
+    <string name="fill_fields_error">Fields error</string>
+    <string name="next">Next</string>
+
+    //Find Ride
+    <string name="request">Request</string>
+    <string name="details">Details</string>
+    <string name="available_rides">Available Rides</string>
+    <string name="available_ride">Available Ride</string>
+
+    //Manage Passengers
+    <string name="manage_passengers">Manage Passenger</string>
+
+    //Manage Request
+    <string name="route_normal_route">Route: Normal Route</string>
+    <string name="reject">Reject</string>
+    <string name="accept">Accept</string>
+
+
+    //My Rides Giving a ride
+    <string name="people_request">People request</string>
+
+    //Profile
+    <string name="carregar_dados">Loading user data...</string>
+
+
+
+    //Ride details
+    <string name="ride_details">Ride details</string>
+    <string name="planned">PLANNED</string>
+    <string name="in_progress">IN_PROGRESS</string>
+    <string name="completed">COMPLETED</string>
+    <string name="passengers">Passengers</string>
+    <string name="back">Back</string>
+    <string name="end_date">End date</string>
+    <string name="driver_email">Driver email</string>
+    <string name="choose_your_request_option">Choose your request option</string>
+
+    <string name="send_request">Send request</string>
+    <string name="no_completed_rides_available">No completed Rides available</string>
+    <string name="select_pickup"> Select Pickup and Dropoff on the map:</string>
+
+    <string name="end_ride">End ride</string>
+
+    <string name="google_maps_key">AIzaSyCX1Mm5eBdk2CwCQ1YFSW8ear3NjSRI1Y4</string>
+</resources>
