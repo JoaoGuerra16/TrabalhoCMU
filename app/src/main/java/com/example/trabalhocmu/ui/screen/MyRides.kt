@@ -302,14 +302,3 @@ fun RideCard(
 
 
 
-
-// Data class para representar uma viagem
-data class RideTeste(
-    val from: String,
-    val to: String,
-    val availableSeats: Int,
-    val startTime: String,
-    val arrivalTime: String,
-    val date: LocalDate,
-    val isGivingRide: Boolean
-)

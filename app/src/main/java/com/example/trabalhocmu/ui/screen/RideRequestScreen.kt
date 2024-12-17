@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.trabalhocmu.API.models.MapViewComposable
+import com.example.trabalhocmu.API.util.MapViewComposable
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.viewmodel.RideViewModel
 import androidx.compose.foundation.Image

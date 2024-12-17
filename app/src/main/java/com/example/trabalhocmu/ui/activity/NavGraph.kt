@@ -100,9 +100,6 @@ fun MainNavGraph(
             RateScreen(navController, rideId, driverEmail, viewModel)
         }
 
-        composable("RequestForRide") {
-            RequestForRide(navController)
-        }
 
         composable("RidesHistory") {
             val context = LocalContext.current
@@ -138,25 +135,6 @@ fun MainNavGraph(
 
 
 
-//        composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
-//            val from = backStackEntry.arguments?.getString("from")
-//            val to = backStackEntry.arguments?.getString("to")
-//            val startTime = backStackEntry.arguments?.getString("startTime")
-//            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
-//            val date = backStackEntry.arguments?.getString("date")
-//            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: "0"
-//            MyRidesTakingARide(navController, from, to, startTime, arrivalTime, date, availableSeats)
-//        }
-
-        composable("MyRidesGivingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
-            val from = backStackEntry.arguments?.getString("from")
-            val to = backStackEntry.arguments?.getString("to")
-            val startTime = backStackEntry.arguments?.getString("startTime")
-            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
-            val date = backStackEntry.arguments?.getString("date")
-            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: "0"
-            MyRidesGivingARide(navController, from, to, startTime, arrivalTime, date, availableSeats)
-        }
     }
 }
 
