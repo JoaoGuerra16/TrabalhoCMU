@@ -82,17 +82,42 @@ class RideRepository(private val context: Context) {
         return db.rideDao().getAvailableRides(excludeEmail)
     }
 
-
     suspend fun addParticipantToRide(participant: RideParticipant): Boolean {
         return try {
+            val rideRef = firestore.collection("rides").document(participant.rideId.toString())
+
+            // Variável para armazenar os novos lugares disponíveis
+            var newAvailablePlaces = 0
+
+            // Transação do Firestore: verifica e atualiza o Firestore
+            firestore.runTransaction { transaction ->
+                val rideSnapshot = transaction.get(rideRef)
+                val ride = rideSnapshot.toObject(Ride::class.java)
+
+                if (ride != null && ride.availablePlaces > 0) {
+                    newAvailablePlaces = ride.availablePlaces - 1
+                    transaction.update(rideRef, "availablePlaces", newAvailablePlaces)
+
+                    // Adiciona o participante no Firestore
+                    val participantRef = firestore.collection("rideParticipants").document()
+                    transaction.set(participantRef, participant)
+                } else {
+                    throw Exception("Não há lugares disponíveis na ride.")
+                }
+            }.await()
+
+            // Atualizar o Room fora da transação
+            db.rideDao().updateAvailablePlaces(participant.rideId, newAvailablePlaces)
             db.rideParticipantDao().insertRideParticipant(participant)
-            firestore.collection("rideParticipants").add(participant).await()
+
+            Log.d("RideRepository", "Participante adicionado com sucesso e dados locais atualizados.")
             true
         } catch (e: Exception) {
             Log.e("RideRepository", "Erro ao adicionar participante: ${e.message}")
             false
         }
     }
+
 
 
 
