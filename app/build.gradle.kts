@@ -97,5 +97,7 @@ dependencies {
     implementation ("com.google.maps.android:android-maps-utils:3.4.0")
     implementation ("com.google.android.gms:play-services-maps:18.0.2")
     implementation ("com.google.maps.android:maps-compose:4.2.0")
+    implementation ("com.google.firebase:firebase-messaging:23.2.1")
+    implementation ("com.google.firebase:firebase-firestore:24.9.0")
 
 }

@@ -1,6 +1,7 @@
 package com.example.trabalhocmu.ui.screen
 
 import android.app.DatePickerDialog
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.room.entity.Ride
@@ -37,13 +39,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import com.example.trabalhocmu.viewmodel.RideViewModel
+import com.example.trabalhocmu.viewmodel.RideViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
 import kotlin.random.Random
 
 
 @Composable
-fun RidesHistory(navController: NavController, rideViewModel: RideViewModel) {
-    // Obter as rides completadas do ViewModel
-    val completedRides by rideViewModel.getCompletedRides().collectAsState(initial = emptyList())
+fun RidesHistory(navController: NavController, viewModel: RideViewModel) {
+    val completedRides by viewModel.getCompletedRides().collectAsState(initial = emptyList())
+    val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
 
     SidebarScaffold(navController = navController) { paddingValues ->
         Box(
@@ -82,7 +86,11 @@ fun RidesHistory(navController: NavController, rideViewModel: RideViewModel) {
                                 to = ride.finalDestination,
                                 startTime = ride.startingDate,
                                 availableSeats = ride.availablePlaces,
-                                status = ride.status
+                                status = ride.status,
+                                rideId = ride.id,
+                                driverEmail = ride.ownerEmail,
+                                navController = navController,
+                                rideViewModel = viewModel
                             )
                         }
                     }
@@ -98,8 +106,20 @@ fun RidesHistoryItem(
     to: String,
     startTime: String,
     availableSeats: Int,
-    status: String
+    status: String,
+    rideId: Int,
+    driverEmail: String,
+    navController: NavController,
+    rideViewModel: RideViewModel
 ) {
+    val userEmail = FirebaseAuth.getInstance().currentUser?.email ?: ""
+
+    // Verificar se o passageiro já avaliou
+    var hasRated by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        hasRated = rideViewModel.hasUserRated(rideId, userEmail)
+    }
+
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
@@ -161,9 +181,7 @@ fun RidesHistoryItem(
                 }
 
                 // Status with Icon
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = if (status == "COMPLETED") Icons.Default.CheckCircle else Icons.Default.Close,
                         contentDescription = "Status Icon",
@@ -210,22 +228,26 @@ fun RidesHistoryItem(
                         )
                     }
                 }
+            }
 
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(
-                        text = "Seats Available",
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Gray,
-                        fontSize = 14.sp
-                    )
-                    Text(
-                        text = "$availableSeats",
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF3F51B5),
-                        fontSize = 15.sp,
-                        textAlign = TextAlign.End
-                    )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Botão para avaliar
+            if (status == "COMPLETED" && !hasRated) {
+                Button(
+                    onClick = {
+                        navController.navigate("RateScreen/$rideId/$driverEmail")
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                ) {
+                    Text("Rate this Ride", color = Color.White)
                 }
+            } else if (hasRated) {
+                Text(
+                    text = "You've already rated this ride.",
+                    color = Color.Gray,
+                    fontSize = 14.sp
+                )
             }
         }
     }

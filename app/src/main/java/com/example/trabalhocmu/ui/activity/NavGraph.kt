@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.trabalhocmu.room.entity.Ride
 import com.example.trabalhocmu.ui.component.Sidebar
 import com.example.trabalhocmu.ui.component.SplashScreen
 import com.example.trabalhocmu.ui.screen.*
@@ -17,6 +18,7 @@ import com.example.trabalhocmu.viewmodel.AuthViewModelFactory
 import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.RatingViewModel
 import com.example.trabalhocmu.viewmodel.RideViewModel
+import com.example.trabalhocmu.viewmodel.RideViewModelFactory
 
 
 @Composable
@@ -82,28 +84,29 @@ fun MainNavGraph(
             val authViewModel: AuthViewModel = viewModel(
                 factory = AuthViewModelFactory(context = LocalContext.current)
             )
+            val rideViewModel: RideViewModel = viewModel(
+                factory = RideViewModelFactory(context = LocalContext.current)
+            )
 
             // Passar o AuthViewModel para o ProfileScreen
-            Profile(navController = navController, authViewModel = authViewModel)
+            Profile(navController = navController, authViewModel = authViewModel, rideViewModel)
         }
-
-//        composable("RateScreen/{rideId}") { backStackEntry ->
-//            val rideId = backStackEntry.arguments?.getString("rideId")?.toInt() ?: 0
-//            RateScreen(navController, rideId, rideViewModel)
-//        }
-//
-
-//        composable("Rate") {
-//            RateScreen(navController, ratingViewModel)
-//        }
+        composable("RateScreen/{rideId}/{driverEmail}") { backStackEntry ->
+            val context = LocalContext.current
+            val rideId = backStackEntry.arguments?.getString("rideId")?.toInt() ?: 0
+            val driverEmail = backStackEntry.arguments?.getString("driverEmail") ?: ""
+            val viewModel: RideViewModel = viewModel(factory = RideViewModelFactory(context))
+            RateScreen(navController, rideId, driverEmail, viewModel)
+        }
 
         composable("RequestForRide") {
             RequestForRide(navController)
         }
 
         composable("RidesHistory") {
-            val rideViewModel = RideViewModel(LocalContext.current)
-            RidesHistory(navController = navController, rideViewModel = rideViewModel)
+            val context = LocalContext.current
+            val viewModel: RideViewModel = viewModel(factory = RideViewModelFactory(context))
+            RidesHistory(navController, viewModel)
         }
 
 

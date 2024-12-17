@@ -247,7 +247,20 @@ class RideViewModel(context: Context) : ViewModel() {
             emit(emptyList())
         }
     }
+    fun submitRating(rideId: Int, driverEmail: String, rating: Int) {
+        val passengerEmail = FirebaseAuth.getInstance().currentUser?.email ?: return
+        viewModelScope.launch {
+            rideRepository.submitRating(rideId, driverEmail, rating, passengerEmail)
+        }
+    }
 
+    fun loadDriverAverageRating(driverEmail: String) = flow {
+        val average = rideRepository.getDriverAverageRatingFromFirestore(driverEmail)
+        emit(average)
+    }
+    suspend fun hasUserRated(rideId: Int, userEmail: String): Boolean {
+        return rideRepository.hasUserRated(rideId, userEmail)
+    }
 
 }
 

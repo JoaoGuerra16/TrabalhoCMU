@@ -3,6 +3,7 @@ package com.example.trabalhocmu.room.repository
 import android.content.Context
 import android.util.Log
 import com.example.trabalhocmu.room.entity.AppDatabase
+import com.example.trabalhocmu.room.entity.Rating
 import com.example.trabalhocmu.room.entity.Ride
 import com.example.trabalhocmu.room.entity.RideParticipant
 import com.example.trabalhocmu.room.entity.RideRequest
@@ -375,6 +376,51 @@ class RideRepository(private val context: Context) {
         return (ridesAsDriver + participantRides).distinctBy { it.id }
     }
 
+    suspend fun submitRating(rideId: Int, driverEmail: String, rating: Int, passengerEmail: String) {
+        try {
+            // Salva a avaliação no Firestore
+            val ratingData = Rating(rideId, driverEmail, passengerEmail, rating)
+            firestore.collection("ratings").add(ratingData).await()
 
+            // Recalcula e atualiza a média do condutor
+            db.rideParticipantDao().markAsRated(rideId, passengerEmail)
+            updateDriverAverageRating(driverEmail)
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao enviar avaliação: ${e.message}")
+        }
+    }
+
+    private suspend fun updateDriverAverageRating(driverEmail: String) {
+        // Busca todas as avaliações do condutor
+        val ratings = firestore.collection("ratings")
+            .whereEqualTo("driverEmail", driverEmail)
+            .get().await()
+
+        val ratingValues = ratings.documents.map { it.getLong("rating")?.toFloat() ?: 0f }
+        val newAverage = if (ratingValues.isNotEmpty()) ratingValues.average().toFloat() else 0f
+
+        // Atualiza a média no Firestore
+        firestore.collection("users").document(driverEmail)
+            .update("averageRating", newAverage).await()
+    }
+    suspend fun getDriverAverageRatingFromFirestore(driverEmail: String): Float {
+        return try {
+            val ratings = firestore.collection("ratings")
+                .whereEqualTo("driverEmail", driverEmail)
+                .get().await()
+
+            val ratingValues = ratings.documents.map { it.getLong("rating")?.toFloat() ?: 0f }
+            if (ratingValues.isNotEmpty()) ratingValues.average().toFloat() else 0f
+        } catch (e: Exception) {
+            Log.e("RideRepository", "Erro ao obter média de avaliações: ${e.message}")
+            0f
+        }
+    }
+    suspend fun hasUserRated(rideId: Int, userEmail: String): Boolean {
+        return db.rideParticipantDao().getParticipant(rideId, userEmail)?.hasRated ?: false
+    }
+    suspend fun markUserAsRated(rideId: Int, userEmail: String) {
+        db.rideParticipantDao().markAsRated(rideId, userEmail)
+    }
 
 }

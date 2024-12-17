@@ -31,5 +31,10 @@ interface RideParticipantDao {
     suspend fun clearAllParticipants()
 
 
+    @Query("SELECT * FROM RideParticipant WHERE rideId = :rideId AND userEmail = :userEmail")
+    suspend fun getParticipant(rideId: Int, userEmail: String): RideParticipant?
+
+    @Query("UPDATE RideParticipant SET hasRated = 1 WHERE rideId = :rideId AND userEmail = :userEmail")
+    suspend fun markAsRated(rideId: Int, userEmail: String)
 
 }

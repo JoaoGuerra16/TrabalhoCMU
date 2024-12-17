@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,15 +31,19 @@ import com.example.trabalhocmu.ui.component.SidebarScaffold
 import kotlin.math.roundToInt
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 import com.example.trabalhocmu.viewmodel.AuthViewModel
+import com.example.trabalhocmu.viewmodel.RideViewModel
+import com.example.trabalhocmu.viewmodel.RideViewModelFactory
 
 @Composable
 fun Profile(
     navController: NavController,
-    authViewModel: AuthViewModel = viewModel(),
-    ratingViewModel: RatingViewModel = viewModel()
+    authViewModel: AuthViewModel = viewModel(),viewModel: RideViewModel
+
 ) {
+    val context = LocalContext.current
+
     val user by authViewModel.userData.collectAsState()  // Coleta os dados do usuário
-    val averageRating by ratingViewModel.averageRating.collectAsState()
+    val averageRating by viewModel.loadDriverAverageRating(user?.email ?: "").collectAsState(initial = 0f)
     val roundedRating = averageRating.roundToInt()
 
     SidebarScaffold(
@@ -56,7 +61,7 @@ fun Profile(
                     ProfileImage()
                     if (user != null) {
                         ProfileName(user!!.name)
-                        RatingStars(rating = roundedRating)
+                        RatingStars(rating = averageRating.roundToInt())
                         ProfileDetails(user!!)
                     } else {
                         // Caso o usuário não esteja disponível, mostrar mensagem
@@ -175,8 +180,3 @@ fun RatingStars(rating: Int) {
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewProfile() {
-    Profile(navController = rememberNavController())
-}

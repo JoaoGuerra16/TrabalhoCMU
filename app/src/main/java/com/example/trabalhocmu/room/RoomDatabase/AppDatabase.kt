@@ -12,7 +12,7 @@ import com.example.trabalhocmu.room.Dao.RideRequestDao
 import com.example.trabalhocmu.room.Dao.UserDao
 
 
-@Database(entities = [User::class, Ride::class, RideParticipant::class, RideRequest::class], version = 12, exportSchema = false)
+@Database(entities = [User::class, Ride::class, RideParticipant::class, RideRequest::class], version = 13, exportSchema = false)
 @TypeConverters(BooleanConverter::class) // Adicione o TypeConverter aqui
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao

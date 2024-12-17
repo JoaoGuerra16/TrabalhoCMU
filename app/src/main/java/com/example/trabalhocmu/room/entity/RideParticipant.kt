@@ -7,8 +7,9 @@ data class RideParticipant(
     val id: Int = 0,
     val rideId: Int = 0,
     val userEmail: String = "",
-    val role: String = ""
+    val role: String = "",
+    val hasRated: Boolean = false
 ) {
     // Construtor sem argumentos para Firestore
-    constructor() : this(0, 0, "", "")
+    constructor() : this(0, 0, "", "", false)
 }
