@@ -27,9 +27,10 @@ class AuthViewModel(context: Context) : ViewModel() {
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState> = _loginState
 
+    private val firestore = FirebaseFirestore.getInstance()
 
     init {
-        // Chama a função para buscar os dados do usuário
+        // Chama a função para buscar os dados do utilizador
         getUserData()
     }
 
@@ -170,11 +171,11 @@ class AuthViewModel(context: Context) : ViewModel() {
         userRef.set(user)
             .addOnSuccessListener {
 
-                Log.d("Firestore", "Usuário salvo com sucesso!")
+                Log.d("Firestore", "utilziador salvo com sucesso!")
             }
             .addOnFailureListener { e ->
 
-                Log.w("Firestore", "Erro ao salvar usuário", e)
+                Log.w("Firestore", "Erro ao salvar utilizador", e)
             }
     }
 

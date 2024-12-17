@@ -99,8 +99,52 @@
         <string name="available_seats_label">Assentos Disponíveis:</string>
         <string name="date_label">Data:</string>
 
-    <string name="google_maps_key">AIzaSyCX1Mm5eBdk2CwCQ1YFSW8ear3NjSRI1Y4</string>
+    //Create Ride
+    <string name="create_ride_title">Criar boleia</string>
+    <string name="basic_trip_information">Informação básica</string>
+    <string name="final_destination">Destino final</string>
+    <string name="creation_successful">Criado com sucesso</string>
+    <string name="fill_fields_error">Erro nos campos</string>
+    <string name="next">Próximo</string>
 
+    //find Rides
+    <string name="request">Pedir</string>
+    <string name="details">Detalhes</string>
+    <string name="available_rides">Boleias disponíveis</string>
+    <string name="available_ride">Boleia disponível</string>
+
+    //Manage Passengers
+    <string name="manage_passengers">Gerir passageiros</string>
+    <string name="route_normal_route">Rota: rota normal</string>
+    <string name="reject">Rejeitar</string>
+    <string name="accept">Aceitar</string>
+
+    //My rides
+    <string name="people_request">Pedidos</string>
+
+    //Profile
+    <string name="carregar_dados">A carregar dados do utilizador...</string>
+
+
+
+    <string name="ride_details">Detalhes da boleia</string>
+    <string name="planned">PLANEADO</string>
+    <string name="in_progress">EM_PROGRESSO</string>
+    <string name="completed">COMPLETADA</string>
+    <string name="passengers">Passageiros</string>
+    <string name="back">Voltar</string>
+    <string name="end_date">Fim previsto</string>
+    <string name="driver_email">Email do condutor</string>
+
+    <string name="choose_your_request_option">Escolha a sua opção</string>
+    <string name="send_request">Enviar pedido</string>
+    <string name="no_completed_rides_available">Sem rides acabadas</string>
+    <string name="select_pickup">Seleciona pickup e drpoff no mapa:</string>
+
+
+    <string name="end_ride">Acabar boleia</string>
+
+    <string name="google_maps_key">AIzaSyCX1Mm5eBdk2CwCQ1YFSW8ear3NjSRI1Y4</string>
 
     <string name="default_web_client_id">1098206102662-tj2un1i0iqm0f8s4kjq204k3riua8ku8.apps.googleusercontent.com</string>
 </resources>

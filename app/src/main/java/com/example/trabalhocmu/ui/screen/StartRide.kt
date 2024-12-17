@@ -11,6 +11,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,14 +40,14 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
             ) {
 
                 Text(
-                    text = "My rides",
+                    text = stringResource(id = R.string.my_rides),
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = PoppinsFamily
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "Giving a ride",
+                    text = stringResource(id = R.string.giving_ride),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = PoppinsFamily
@@ -54,11 +55,11 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
                 Spacer(modifier = Modifier.height(10.dp))
 
 
-                UserInfoStartRide(label = "Starting point", info = from ?: "N/A")
-                UserInfoStartRide(label = "Final destination", info = to ?: "N/A")
-                UserInfoStartRide(label = "Starting date", info = date ?: "N/A")
-                UserInfoStartRide(label = "Expected arrival", info = arrivalTime ?: "N/A")
-                UserInfoStartRide(label = "Available places", info = availableSeats)
+                UserInfoStartRide(label = stringResource(id = R.string.starting_point), info = from ?: "N/A")
+                UserInfoStartRide(label = stringResource(id = R.string.final_destination), info = to ?: "N/A")
+                UserInfoStartRide(label = stringResource(id = R.string.starting_date), info = date ?: "N/A")
+                UserInfoStartRide(label = stringResource(id = R.string.expected_arrival), info = arrivalTime ?: "N/A")
+                UserInfoStartRide(label = stringResource(id = R.string.available_seats), info = availableSeats)
 
                 Spacer(modifier = Modifier.height(15.dp))
 
@@ -70,7 +71,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Pets allowed", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(id = R.string.pets_allowed), fontWeight = FontWeight.Bold)
                     Checkbox(checked = true, onCheckedChange = null) // Marcação fixa
                 }
                 Spacer(modifier = Modifier.height(15.dp))
@@ -82,7 +83,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Baggage allowed", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(id = R.string.baggage_allowed), fontWeight = FontWeight.Bold)
                     Checkbox(checked = false, onCheckedChange = null) // Marcação fixa
                 }
                 Spacer(modifier = Modifier.height(15.dp))
@@ -94,7 +95,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Smoking allowed", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(id = R.string.smoking_allowed), fontWeight = FontWeight.Bold)
                     Checkbox(checked = true, onCheckedChange = null) // Marcação fixa
                 }
 
@@ -102,7 +103,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
 
 
                 Text(
-                    text = "Passengers:",
+                    text = stringResource(id = R.string.passengers),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -126,7 +127,7 @@ fun StartRide(navController: NavController, from: String?, to: String?, startTim
                         onClick = { showDialog = true },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                     ) {
-                        Text(text = "End ride", color = Color.White, fontFamily = PoppinsFamily)
+                        Text(text = stringResource(id = R.string.end_ride), color = Color.White, fontFamily = PoppinsFamily)
                     }
                 }
             }

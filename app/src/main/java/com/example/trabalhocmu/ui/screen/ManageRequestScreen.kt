@@ -13,6 +13,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -130,7 +131,7 @@ fun RequestItemCard(
             // Route Information
             if (isNormalRoute) {
                 Text(
-                    text = "Route: Normal Route",
+                    text = stringResource(id = R.string.route_normal_route),
                     fontSize = 14.sp,
                     color = Color.Black
                 )
@@ -161,7 +162,7 @@ fun RequestItemCard(
                         contentColor = Color.White
                     )
                 ) {
-                    Text("Reject")
+                    Text(stringResource(id = R.string.reject))
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -174,7 +175,7 @@ fun RequestItemCard(
                         )
                     )
                 ) {
-                    Text("Accept", color = Color.White)
+                    Text(stringResource(id = R.string.accept), color = Color.White)
                 }
             }
         }

@@ -72,7 +72,7 @@ fun RegisterScreen(navController: NavController) {
                 showToast((registerState as RegisterState.Error).message)
             }
             is RegisterState.Success -> {
-                showToast("Registro realizado com sucesso!")
+                showToast("Registo realizado com sucesso!")
                 navController.navigate("Login")
             }
             else -> {}

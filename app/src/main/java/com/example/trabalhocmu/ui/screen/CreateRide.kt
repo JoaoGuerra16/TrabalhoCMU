@@ -10,6 +10,7 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,7 @@ fun CreateRide(navController: NavController) {
             ) {
 
                 Text(
-                    text = "Create Ride",
+                    text = stringResource(id = R.string.create_ride_title),
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                 )
@@ -60,7 +61,7 @@ fun CreateRide(navController: NavController) {
 
 
                 Text(
-                    text = "Basic trip information",
+                    text = stringResource(id = R.string.basic_trip_information),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                 )
@@ -71,7 +72,7 @@ fun CreateRide(navController: NavController) {
                 CustomOutlinedTextField(
                     value = startingPoint,
                     onValueChange = { startingPoint = it },
-                    label = "Starting Point"
+                    label = stringResource(id = R.string.starting_point)
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -80,7 +81,7 @@ fun CreateRide(navController: NavController) {
                 CustomOutlinedTextField(
                     value = finalDestination,
                     onValueChange = { finalDestination = it },
-                    label = "Final Destination"
+                    label = stringResource(id = R.string.final_destination)
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -120,7 +121,7 @@ fun CreateRide(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Pets Allowed", fontSize = 18.sp, modifier = Modifier.padding(end = 8.dp))
+                    Text(stringResource(id = R.string.pets_allowed), fontSize = 18.sp, modifier = Modifier.padding(end = 8.dp))
                     Checkbox(
                         checked = isPetsAllowed,
                         onCheckedChange = { isPetsAllowed = it }
@@ -132,7 +133,7 @@ fun CreateRide(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Baggage Allowed", fontSize = 18.sp, modifier = Modifier.padding(end = 8.dp))
+                    Text(stringResource(id = R.string.baggage_allowed), fontSize = 18.sp, modifier = Modifier.padding(end = 8.dp))
                     Checkbox(
                         checked = isBaggageAllowed,
                         onCheckedChange = { isBaggageAllowed = it }
@@ -144,7 +145,7 @@ fun CreateRide(navController: NavController) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Smoking Allowed", fontSize = 18.sp, modifier = Modifier.padding(end = 8.dp))
+                    Text(stringResource(id = R.string.smoking_allowed), fontSize = 18.sp, modifier = Modifier.padding(end = 8.dp))
                     Checkbox(
                         checked = isSmokingAllowed,
                         onCheckedChange = { isSmokingAllowed = it }
@@ -173,7 +174,7 @@ fun CreateRide(navController: NavController) {
                             // Mostrar Toast de sucesso
                             Toast.makeText(
                                 context, // Usar o contexto obtido
-                                "Criação bem-sucedida!",
+                                context.getString(R.string.creation_successful),
                                 Toast.LENGTH_SHORT
                             ).show()
 
@@ -182,10 +183,10 @@ fun CreateRide(navController: NavController) {
                                 popUpTo("create_ride") { inclusive = true }
                             }
                         } else {
-                            // Mostrar um erro ao usuário
+                            // Mostrar um erro ao utilizador
                             Toast.makeText(
                                 context, // Usar o contexto obtido
-                                "Preencha todos os campos corretamente.",
+                                context.getString(R.string.fill_fields_error),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -194,7 +195,7 @@ fun CreateRide(navController: NavController) {
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60))
                 ) {
                     Text(
-                        text = "NEXT",
+                        text = stringResource(id = R.string.next),
                         color = Color.White,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold

@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.tasks.await
-
+import com.example.trabalhocmu.room.Dao.UserDao
 class AuthRepository(private val context: Context) {
 
     private val auth = FirebaseAuth.getInstance()
@@ -36,6 +36,13 @@ class AuthRepository(private val context: Context) {
             false
         }
     }
+
+    class UserRepository(private val userDao: UserDao) {
+        suspend fun updateUser(user: User) {
+            userDao.updateUser(user)
+        }
+    }
+
 
     // Função para registar um utilizador
     suspend fun registerUser(

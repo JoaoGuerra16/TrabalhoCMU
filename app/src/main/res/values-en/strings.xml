@@ -89,12 +89,11 @@
     <string name="portuguese">Portuguese</string>
     <string name="notifications">Enable / Disable Notifications</string>
 
-
-
     <string name="rides_history_title">Rides History</string>
     <string name="search_label">Search</string>
     <string name="select_date_button">Select Date</string>
     <string name="cancel_date_button">Cancel Date</string>
+
 
     <string name="no_rides_message">No rides available</string>
     <string name="route_label">Route:</string>
@@ -102,6 +101,56 @@
     <string name="arrival_label">Arrival:</string>
     <string name="available_seats_label">Available Seats:</string>
     <string name="date_label">Date:</string>
+
+
+
+    //Create Ride
+    <string name="create_ride_title">Create Ride</string>
+    <string name="basic_trip_information">Basic information</string>
+    <string name="final_destination">Final Destination</string>
+    <string name="creation_successful">Sucesseful creation</string>
+    <string name="fill_fields_error">Fields error</string>
+    <string name="next">Next</string>
+
+    //Find Ride
+    <string name="request">Request</string>
+    <string name="details">Details</string>
+    <string name="available_rides">Available Rides</string>
+    <string name="available_ride">Available Ride</string>
+
+    //Manage Passengers
+    <string name="manage_passengers">Manage Passenger</string>
+
+    //Manage Request
+    <string name="route_normal_route">Route: Normal Route</string>
+    <string name="reject">Reject</string>
+    <string name="accept">Accept</string>
+
+
+    //My Rides Giving a ride
+    <string name="people_request">People request</string>
+
+    //Profile
+    <string name="carregar_dados">Loading user data...</string>
+
+
+
+    //Ride details
+    <string name="ride_details">Ride details</string>
+    <string name="planned">PLANNED</string>
+    <string name="in_progress">IN_PROGRESS</string>
+    <string name="completed">COMPLETED</string>
+    <string name="passengers">Passengers</string>
+    <string name="back">Back</string>
+    <string name="end_date">End date</string>
+    <string name="driver_email">Driver email</string>
+    <string name="choose_your_request_option">Choose your request option</string>
+
+    <string name="send_request">Send request</string>
+    <string name="no_completed_rides_available">No completed Rides available</string>
+    <string name="select_pickup"> Select Pickup and Dropoff on the map:</string>
+
+    <string name="end_ride">End ride</string>
 
     <string name="google_maps_key">AIzaSyCX1Mm5eBdk2CwCQ1YFSW8ear3NjSRI1Y4</string>
 </resources>

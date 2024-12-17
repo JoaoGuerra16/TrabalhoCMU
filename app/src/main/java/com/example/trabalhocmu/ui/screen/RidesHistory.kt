@@ -59,7 +59,7 @@ fun RidesHistory(navController: NavController, rideViewModel: RideViewModel) {
             ) {
                 // Título
                 Text(
-                    text = "Rides History",
+                    text = stringResource(id = R.string.ride_history),
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -70,7 +70,7 @@ fun RidesHistory(navController: NavController, rideViewModel: RideViewModel) {
                 // Verificar se há rides completadas
                 if (completedRides.isEmpty()) {
                     Text(
-                        text = "No completed rides available.",
+                        text = stringResource(id = R.string.no_completed_rides_available),
                         fontSize = 18.sp,
                         color = Color.Gray
                     )
@@ -165,15 +165,15 @@ fun RidesHistoryItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = if (status == "COMPLETED") Icons.Default.CheckCircle else Icons.Default.Close,
+                        imageVector = if (status == stringResource(id = R.string.completed)) Icons.Default.CheckCircle else Icons.Default.Close,
                         contentDescription = "Status Icon",
-                        tint = if (status == "COMPLETED") Color(0xFF4CAF50) else Color(0xFFF44336),
+                        tint = if (status ==stringResource(id = R.string.completed)) Color(0xFF4CAF50) else Color(0xFFF44336),
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = status,
-                        color = if (status == "COMPLETED") Color(0xFF4CAF50) else Color(0xFFF44336),
+                        color = if (status == stringResource(id = R.string.completed)) Color(0xFF4CAF50) else Color(0xFFF44336),
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
                     )
@@ -189,7 +189,7 @@ fun RidesHistoryItem(
             ) {
                 Column {
                     Text(
-                        text = "Start Time",
+                        text = stringResource(id = R.string.start_time),
                         fontWeight = FontWeight.Medium,
                         color = Color.Gray,
                         fontSize = 14.sp
@@ -213,7 +213,7 @@ fun RidesHistoryItem(
 
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = "Seats Available",
+                        text = stringResource(id = R.string.available_seats),
                         fontWeight = FontWeight.Medium,
                         color = Color.Gray,
                         fontSize = 14.sp
