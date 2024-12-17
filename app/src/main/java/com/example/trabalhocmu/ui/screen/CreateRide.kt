@@ -1,5 +1,6 @@
 package com.example.trabalhocmu.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +28,7 @@ fun CreateRide(navController: NavController) {
     SidebarScaffold(navController = navController) { paddingValues ->
         val scrollState = rememberScrollState()
         val rideViewModel = RideViewModel(LocalContext.current)
-
+        val context = LocalContext.current
 
         var startingPoint by remember { mutableStateOf("") }
         var finalDestination by remember { mutableStateOf("") }
@@ -168,8 +169,25 @@ fun CreateRide(navController: NavController) {
                                 isSmokingAllowed = isSmokingAllowed,
                                 ownerEmail = ownerEmail,
                             )
+
+                            // Mostrar Toast de sucesso
+                            Toast.makeText(
+                                context, // Usar o contexto obtido
+                                "Criação bem-sucedida!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                            // Navegar para a tela "My Rides"
+                            navController.navigate("My Rides") {
+                                popUpTo("create_ride") { inclusive = true }
+                            }
                         } else {
-                            // Mostre um erro ao usuário (ex.: toast ou snackbar)
+                            // Mostrar um erro ao usuário
+                            Toast.makeText(
+                                context, // Usar o contexto obtido
+                                "Preencha todos os campos corretamente.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     },
                     modifier = Modifier.width(200.dp),

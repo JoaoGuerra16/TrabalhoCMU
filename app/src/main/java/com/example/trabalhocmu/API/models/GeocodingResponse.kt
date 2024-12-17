@@ -5,6 +5,7 @@ data class GeocodingResponse(
 )
 
 data class GeocodingResult(
+    val formatted_address: String,
     val geometry: Geometry
 )
 

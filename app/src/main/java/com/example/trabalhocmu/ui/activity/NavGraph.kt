@@ -87,10 +87,15 @@ fun MainNavGraph(
             Profile(navController = navController, authViewModel = authViewModel)
         }
 
+//        composable("RateScreen/{rideId}") { backStackEntry ->
+//            val rideId = backStackEntry.arguments?.getString("rideId")?.toInt() ?: 0
+//            RateScreen(navController, rideId, rideViewModel)
+//        }
+//
 
-        composable("Rate") {
-            RateScreen(navController, ratingViewModel)
-        }
+//        composable("Rate") {
+//            RateScreen(navController, ratingViewModel)
+//        }
 
         composable("RequestForRide") {
             RequestForRide(navController)

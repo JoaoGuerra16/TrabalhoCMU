@@ -152,6 +152,14 @@ class RideViewModel(context: Context) : ViewModel() {
         emit(rideRepository.getRequestsByRide(rideId))
     }
 
+
+    fun getPendingRequestsForRide(rideId: Int): Flow<List<RideRequest>> = flow {
+        val allRequests = rideRepository.getRequestsByRide(rideId)
+        val pendingRequests = allRequests.filter { it.status == "PENDING" } // Filtro apenas os requests pendentes
+        emit(pendingRequests)
+    }
+
+
     fun respondToRequest(requestId: Int, status: String) {
         viewModelScope.launch {
             val request = rideRepository.getRequestById(requestId)
