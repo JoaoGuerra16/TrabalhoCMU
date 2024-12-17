@@ -165,6 +165,17 @@ fun Sidebar(navController: NavController, drawerState: DrawerState) {
             modifier = Modifier.padding(8.dp)
         )
 
+        NavigationDrawerItem(
+            label = { Text("Luminosidade") },
+            selected = false,
+            onClick = {
+                navController.navigate("LightSensorScreen")
+                scope.launch { drawerState.close() }
+            },
+            modifier = Modifier.padding(8.dp)
+        )
+
+
         Spacer(modifier = Modifier.weight(1f)) // Para empurrar os itens de navegação para cima
 
         // Logout e seletor de idioma na mesma linha no fundo

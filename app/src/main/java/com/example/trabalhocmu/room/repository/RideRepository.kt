@@ -34,8 +34,6 @@ class RideRepository(private val context: Context) {
         }
     }
 
-
-
     suspend fun acceptRide(rideId: Int, userEmail: String): Boolean {
         return try {
             // 1. Obter todos os participantes da ride

@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,76 +32,110 @@ import com.example.trabalhocmu.R
 import com.example.trabalhocmu.room.entity.Ride
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.viewmodel.RideViewModel
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
     val ridesAsDriver by rideViewModel.getRidesAsDriver().collectAsState(initial = emptyList())
-    val ridesAsPassenger by rideViewModel.getRidesAsPassenger().collectAsState(initial = emptyList())
+    val ridesAsPassenger by rideViewModel.getRidesAsPassenger()
+        .collectAsState(initial = emptyList())
 
-    // Scaffold para gerenciar a estrutura de layout com um botão flutuante
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "My Rides",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = PoppinsFamily
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) { Image(
+        painter = painterResource(id = R.drawable.background), // Substitua pelo nome da imagem
+        contentDescription = "Background",
+        modifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Crop,
+        alpha = 0.8f
+    )
+
+
+        SidebarScaffold(navController = navController) { paddingValues ->
+            Scaffold(
+                topBar = {
+                    CenterAlignedTopAppBar(
+                        title = {
+                            Text(
+                                text = "My Rides",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = PoppinsFamily,
+                                color = Color.Black
+                            )
+                        },
+                        actions = {
+                            IconButton(onClick = { navController.navigate("Create Ride") }) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Add Ride",
+                                    tint = Color.Black
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                            containerColor = Color.Transparent, // Remove a barra de cor abaixo
+                        )
                     )
                 },
-                actions = {
-                    // Botão no canto superior direito
-                    IconButton(onClick = {
-                        navController.navigate("Create Ride")
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = stringResource(id = R.string.add_ride),
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF454B60)
-                )
-            )
-        },
-        content = { padding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding)
-                    .padding(16.dp)
-            ) {
-                Text("Giving Rides", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                LazyColumn {
-                    items(ridesAsDriver) { ride ->
-                        RideCard(
-                            ride = ride,
-                            role = "Giving Ride",
-                            onDetailsClick = { navController.navigate("RideDetails/${ride.id}") }
-                        )
-                    }
-                }
+                content = { padding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(padding)
+                            .padding(16.dp)
+                    ) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        SectionTitle(title = "Giving Rides")
+                        LazyColumn {
+                            items(ridesAsDriver) { ride ->
+                                RideCard(
+                                    ride = ride,
+                                    role = "Giving Ride",
+                                    onDetailsClick = { navController.navigate("RideDetails/${ride.id}") }
+                                )
+                            }
+                        }
 
-                Spacer(modifier = Modifier.height(16.dp))
-                Text("Taking Rides", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                LazyColumn {
-                    items(ridesAsPassenger) { ride ->
-                        RideCard(
-                            ride = ride,
-                            role = "Taking Ride",
-                            onDetailsClick = { navController.navigate("RideDetails/${ride.id}") }
-                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        SectionTitle(title = "Taking Rides")
+                        LazyColumn {
+                            items(ridesAsPassenger) { ride ->
+                                RideCard(
+                                    ride = ride,
+                                    role = "Taking Ride",
+                                    onDetailsClick = { navController.navigate("RideDetails/${ride.id}") }
+                                )
+                            }
+                        }
                     }
                 }
-            }
+            )
         }
+    }
+}
+@Composable
+fun SectionTitle(title: String) {
+    Text(
+        text = title,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
+        fontFamily = PoppinsFamily,
+        color = Color(0xFF454B60),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        textAlign = TextAlign.Start
     )
 }
-
 
 @Composable
 fun RideCard(ride: Ride, role: String, onDetailsClick: () -> Unit) {
@@ -108,30 +143,27 @@ fun RideCard(ride: Ride, role: String, onDetailsClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-
-        ) {
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Role: $role", fontWeight = FontWeight.Bold)
-            Text("From: ${ride.startingPoint}")
-            Text("To: ${ride.finalDestination}")
-            Text("Date: ${ride.startingDate}")
-            Text("Available Seats: ${ride.availablePlaces}")
+            Text("Role: $role", fontWeight = FontWeight.Bold, color = Color(0xFF454B60))
+            Text("From: ${ride.startingPoint}", color = Color.Gray)
+            Text("To: ${ride.finalDestination}", color = Color.Gray)
+            Text("Date: ${ride.startingDate}", color = Color.Gray)
+            Text("Available Seats: ${ride.availablePlaces}", color = Color.Gray)
+
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = onDetailsClick, modifier = Modifier.align(Alignment.End)) {
-                Text("Details")
+            Button(
+                onClick = onDetailsClick,
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF454B60)),
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text("Details", color = Color.White)
             }
         }
     }
 }
 
 
-// Data class para representar uma viagem
-data class RideTeste(
-    val from: String,
-    val to: String,
-    val availableSeats: Int,
-    val startTime: String,
-    val arrivalTime: String,
-    val date: LocalDate,
-    val isGivingRide: Boolean
-)
+

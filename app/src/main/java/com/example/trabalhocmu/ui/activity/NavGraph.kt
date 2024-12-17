@@ -1,10 +1,17 @@
 package com.example.trabalhocmu.ui.activity
 
-
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,14 +25,14 @@ import com.example.trabalhocmu.viewmodel.LanguageViewModel
 import com.example.trabalhocmu.viewmodel.RatingViewModel
 import com.example.trabalhocmu.viewmodel.RideViewModel
 
-
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
     drawerState: DrawerState,
     ratingViewModel: RatingViewModel,
     languageViewModel: LanguageViewModel,
-    rideViewModel: RideViewModel
+    rideViewModel: RideViewModel,
+    lightValue: Float // Novo parâmetro do sensor de luz
 ) {
     NavHost(navController = navController, startDestination = "splash_screen") {
         composable("splash_screen") {
@@ -41,7 +48,7 @@ fun MainNavGraph(
         // Find Rides Screen
         composable("Find Rides") {
             DrawerWrapper(navController, drawerState) {
-                FindRidesScreen(navController, rideViewModel) // Tela de rides disponíveis
+                FindRidesScreen(navController, rideViewModel)
             }
         }
 
@@ -63,7 +70,6 @@ fun MainNavGraph(
         }
 
         composable("Login") {
-
             LoginScreen(navController = navController)
         }
 
@@ -72,15 +78,11 @@ fun MainNavGraph(
         }
 
         composable("Profile") {
-            // Criar uma instância do ViewModel com o factory
             val authViewModel: AuthViewModel = viewModel(
                 factory = AuthViewModelFactory(context = LocalContext.current)
             )
-
-            // Passar o AuthViewModel para o ProfileScreen
             Profile(navController = navController, authViewModel = authViewModel)
         }
-
 
         composable("Rate") {
             RateScreen(navController, ratingViewModel)
@@ -103,23 +105,10 @@ fun MainNavGraph(
                 MyRides(navController, rideViewModel)
             }
         }
+
         composable("EditProfile") {
             EditProfileScreen(navController)
         }
-
-
-
-
-
-//        composable("MyRidesTakingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
-//            val from = backStackEntry.arguments?.getString("from")
-//            val to = backStackEntry.arguments?.getString("to")
-//            val startTime = backStackEntry.arguments?.getString("startTime")
-//            val arrivalTime = backStackEntry.arguments?.getString("arrivalTime")
-//            val date = backStackEntry.arguments?.getString("date")
-//            val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: "0"
-//            MyRidesTakingARide(navController, from, to, startTime, arrivalTime, date, availableSeats)
-//        }
 
         composable("MyRidesGivingARide/{from}/{to}/{startTime}/{arrivalTime}/{date}/{availableSeats}") { backStackEntry ->
             val from = backStackEntry.arguments?.getString("from")
@@ -129,6 +118,11 @@ fun MainNavGraph(
             val date = backStackEntry.arguments?.getString("date")
             val availableSeats = backStackEntry.arguments?.getString("availableSeats") ?: "0"
             MyRidesGivingARide(navController, from, to, startTime, arrivalTime, date, availableSeats)
+        }
+
+        // Tela para exibir o sensor de luz
+        composable("LightSensorScreen") {
+            LightSensorDisplay(lightValue = lightValue)
         }
     }
 }
@@ -147,5 +141,20 @@ fun DrawerWrapper(
         }
     ) {
         content()
+    }
+}
+
+@Composable
+fun LightSensorDisplay(lightValue: Float) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Current Light Level: ${lightValue.toInt()} lux",
+            fontSize = 18.sp
+        )
     }
 }
