@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -23,24 +24,31 @@ fun ManagePassengersScreen(
     LaunchedEffect(Unit) {
         rideViewModel.syncAllData()
     }
-    val participants by rideViewModel.getParticipants(rideId).collectAsState(initial = emptyList())
+    val participantsWithDetails by rideViewModel.getParticipantsWithDetails(rideId)
+        .collectAsState(initial = emptyList())
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Manage Passengers", fontSize = 24.sp, fontWeight = FontWeight.Bold)
 
         LazyColumn {
-            items(participants.filter { it.role == "PASSENGER" }) { passenger ->
-                Row(
+            items(participantsWithDetails) { (participant, routeInfo) ->
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    elevation = CardDefaults.cardElevation(4.dp)
                 ) {
-                    Text(text = passenger.userEmail)
-                    Button(onClick = {
-                        rideViewModel.removePassenger(rideId, passenger.userEmail)
-                    }) {
-                        Text("Remove")
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text("Email: ${participant.userEmail}", fontWeight = FontWeight.Bold)
+                        Text("Route Info: $routeInfo")
+
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Button(
+                            onClick = { rideViewModel.removePassenger(rideId, participant.userEmail) },
+                            modifier = Modifier.align(Alignment.End)
+                        ) {
+                            Text("Remove")
+                        }
                     }
                 }
             }

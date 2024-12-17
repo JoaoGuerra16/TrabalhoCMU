@@ -9,8 +9,18 @@ data class RideRequest(
     val id: Int = 0,
     val rideId: Int = 0,
     val requesterEmail: String = "",
-    val status: String = "PENDING"
+    val status: String = "PENDING",
+    var isNormalRouteInt: Int = 1, // Armazena como Int diretamente
+    val pickupLocation: String? = null,
+    val dropoffLocation: String? = null
 ) {
-    // Construtor sem argumentos para Firestore
-    constructor() : this(0, 0, "", "PENDING")
+    // Getter e Setter para converter Int em Boolean
+    var isNormalRoute: Boolean
+        get() = isNormalRouteInt == 1
+        set(value) {
+            isNormalRouteInt = if (value) 1 else 0
+        }
+
+    // Construtor sem argumentos para a Firebase deserializar
+    constructor() : this(0, 0, "", "PENDING", 1, null, null)
 }

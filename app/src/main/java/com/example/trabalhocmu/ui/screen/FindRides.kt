@@ -67,8 +67,8 @@ fun FindRidesScreen(navController: NavController, rideViewModel: RideViewModel) 
                         onDetailsClick = {
                             navController.navigate("RideDetails/${ride.id}")
                         },
-                        onRequestClick = { // Nova lógica aqui
-                            rideViewModel.requestToJoinRide(ride.id)
+                        onRequestClick = {
+                            navController.navigate("RideRequestScreen/${ride.id}")
                         }
                     )
                 }

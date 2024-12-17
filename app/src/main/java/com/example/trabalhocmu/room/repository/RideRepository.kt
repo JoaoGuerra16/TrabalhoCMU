@@ -149,9 +149,10 @@ class RideRepository(private val context: Context) {
 
 
     suspend fun createRideRequest(request: RideRequest): Boolean {
+        Log.d("RideRepository", "Creating RideRequest: isNormalRoute=${request.isNormalRoute}")
         return try {
             // 1. Salvar o pedido no Room e obter o ID gerado
-            val requestId = db.RideRequestDao().insertRideRequest(request).toInt()
+            val requestId = db.rideRequestDao().insertRideRequest(request).toInt()
 
             // 2. Criar uma cópia do pedido com o ID gerado
             val requestWithId = request.copy(id = requestId)
@@ -169,17 +170,17 @@ class RideRepository(private val context: Context) {
 
 
     suspend fun getRequestsByRide(rideId: Int): List<RideRequest> {
-        return db.RideRequestDao().getRequestsByRide(rideId)
+        return db.rideRequestDao().getRequestsByRide(rideId)
     }
 
     suspend fun getRequestsByUser(email: String): List<RideRequest> {
-        return db.RideRequestDao().getRequestsByUser(email)
+        return db.rideRequestDao().getRequestsByUser(email)
     }
 
     suspend fun updateRequestStatus(requestId: Int, status: String): Boolean {
         return try {
             // Atualiza o status no Room
-            db.RideRequestDao().updateRequestStatus(requestId, status)
+            db.rideRequestDao().updateRequestStatus(requestId, status)
 
             // Atualiza o status no Firestore
             firestore.collection("rideRequests")
@@ -195,7 +196,7 @@ class RideRepository(private val context: Context) {
     }
 
     suspend fun getRequestById(requestId: Int): RideRequest? {
-        return db.RideRequestDao().getRequestById(requestId)
+        return db.rideRequestDao().getRequestById(requestId)
     }
     suspend fun updateRequestStatusInFirestore(firestoreId: String, status: String): Boolean {
         return try {
@@ -291,8 +292,8 @@ class RideRepository(private val context: Context) {
             val snapshot = firestore.collection("rideRequests").get().await()
             val requests = snapshot.toObjects(RideRequest::class.java)
 
-            db.RideRequestDao().clearAllRequests()
-            db.RideRequestDao().insertRideRequests(requests)
+            db.rideRequestDao().clearAllRequests()
+            db.rideRequestDao().insertRideRequests(requests)
 
             Log.d("RideRepository", "Requests sincronizados com sucesso.")
         } catch (e: Exception) {

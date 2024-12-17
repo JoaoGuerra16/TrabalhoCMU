@@ -41,13 +41,32 @@ fun ManageRequestsScreen(navController: NavController, rideViewModel: RideViewMo
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text("Requester: ${request.requesterEmail}")
                         Text("Status: ${request.status}")
+                        if (request.isNormalRoute) {
+                            Text("Route: Normal Route")
+                        } else {
+                            Text("Pickup: ${request.pickupLocation ?: "Not specified"}")
+                            Text("Dropoff: ${request.dropoffLocation ?: "Not specified"}")
+                        }
 
-                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                            Button(onClick = { rideViewModel.respondToRequest(request.id, "ACCEPTED") }) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            Button(onClick = {
+                                rideViewModel.respondToRequest(
+                                    request.id,
+                                    "ACCEPTED"
+                                )
+                            }) {
                                 Text("Accept")
                             }
                             Spacer(modifier = Modifier.width(8.dp))
-                            Button(onClick = { rideViewModel.respondToRequest(request.id, "REJECTED") }) {
+                            Button(onClick = {
+                                rideViewModel.respondToRequest(
+                                    request.id,
+                                    "REJECTED"
+                                )
+                            }) {
                                 Text("Reject")
                             }
                         }

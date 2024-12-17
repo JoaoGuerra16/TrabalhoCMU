@@ -131,20 +131,45 @@ class RideViewModel(context: Context) : ViewModel() {
             emit(emptyList())
         }
     }
+    fun getParticipantsWithDetails(rideId: Int): Flow<List<Pair<RideParticipant, String>>> = flow {
+        val participants = rideRepository.getParticipantsByRide(rideId)
+        val requests = rideRepository.getRequestsByRide(rideId)
 
-    fun requestToJoinRide(rideId: Int) {
+        val participantDetails = participants.map { participant ->
+            val request = requests.find { it.requesterEmail == participant.userEmail }
+            val routeInfo = if (request?.isNormalRoute == true) {
+                "Normal Route"
+            } else {
+                "Pickup: ${request?.pickupLocation ?: "N/A"} | Dropoff: ${request?.dropoffLocation ?: "N/A"}"
+            }
+            Pair(participant, routeInfo)
+        }
+
+        emit(participantDetails)
+    }
+
+    fun requestToJoinRide(
+        rideId: Int,
+        isNormalRoute: Boolean,
+        pickupLocation: String? = null,
+        dropoffLocation: String? = null
+    ) {
         viewModelScope.launch {
             val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
             if (currentUserEmail != null) {
                 val request = RideRequest(
                     rideId = rideId,
                     requesterEmail = currentUserEmail,
-                    status = "PENDING"
+                    status = "PENDING",
+                    isNormalRouteInt = if (isNormalRoute) 1 else 0, // Aqui a correção
+                    pickupLocation = pickupLocation,
+                    dropoffLocation = dropoffLocation
                 )
                 rideRepository.createRideRequest(request)
             }
         }
     }
+
 
     fun getRequestsForRide(rideId: Int): Flow<List<RideRequest>> = flow {
         emit(rideRepository.getRequestsByRide(rideId))
@@ -153,6 +178,7 @@ class RideViewModel(context: Context) : ViewModel() {
     fun respondToRequest(requestId: Int, status: String) {
         viewModelScope.launch {
             val request = rideRepository.getRequestById(requestId)
+            Log.d("RideViewModel", "Request ID: $requestId, isNormalRoute: ${request?.isNormalRoute}")
             if (request != null) {
                 // Atualizar o estado no Room
                 rideRepository.updateRequestStatus(requestId, status)

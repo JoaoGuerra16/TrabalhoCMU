@@ -52,6 +52,12 @@ fun MainNavGraph(
             RideDetailsScreen(navController, rideId, rideViewModel)
         }
 
+        composable("RideRequestScreen/{rideId}") { backStackEntry ->
+            val rideId = backStackEntry.arguments?.getString("rideId")?.toInt() ?: 0
+            RideRequestScreen(rideId = rideId, rideViewModel = rideViewModel, navController = navController)
+        }
+
+
         composable("Settings") {
             DrawerWrapper(navController, drawerState) {
                 SettingsScreen(navController, languageViewModel)
