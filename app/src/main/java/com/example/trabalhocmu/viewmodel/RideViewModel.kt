@@ -71,31 +71,6 @@ class RideViewModel(context: Context) : ViewModel() {
         }
     }
 
-    fun acceptRide(rideId: Int) {
-        viewModelScope.launch {
-            val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
-            if (currentUserEmail != null) {
-                val ride = rideRepository.getRideById(rideId)
-                if (ride != null) {
-                    val passengerCount = rideRepository.getParticipantsByRide(rideId).size
-                    if (passengerCount < ride.availablePlaces) {
-                        val participant = RideParticipant(
-                            rideId = rideId,
-                            userEmail = currentUserEmail,
-                            role = "PASSENGER"
-                        )
-                        val success = rideRepository.addParticipantToRide(participant)
-
-                        if (success) {
-                            rideRepository.updateAvailablePlaces(rideId, ride.availablePlaces - 1)
-                        }
-                    } else {
-                        Log.e("RideViewModel", "Ride is full. Cannot accept more participants.")
-                    }
-                }
-            }
-        }
-    }
 
 
     fun getParticipants(rideId: Int): Flow<List<RideParticipant>> {
@@ -116,6 +91,7 @@ class RideViewModel(context: Context) : ViewModel() {
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
         if (currentUserEmail != null) {
             val rides = rideRepository.getRidesByOwnerEmail(currentUserEmail)
+                .filter { it.status == "PLANNED" || it.status == "IN_PROGRESS" } // Filtra apenas as rides ativas
             emit(rides)
         } else {
             emit(emptyList())
@@ -126,6 +102,7 @@ class RideViewModel(context: Context) : ViewModel() {
         val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
         if (currentUserEmail != null) {
             val rides = rideRepository.getRidesByRole(currentUserEmail, "PASSENGER")
+                .filter { it.status == "PLANNED" || it.status == "IN_PROGRESS" } // Filtra apenas as rides ativas
             emit(rides)
         } else {
             emit(emptyList())
@@ -195,14 +172,7 @@ class RideViewModel(context: Context) : ViewModel() {
                     )
                     rideRepository.addParticipantToRide(participant)
 
-                    // Atualizar lugares disponíveis
-                    val ride = rideRepository.getRideById(request.rideId)
-                    if (ride != null && ride.availablePlaces > 0) {
-                        rideRepository.updateAvailablePlaces(
-                            rideId = ride.id,
-                            newAvailablePlaces = ride.availablePlaces - 1
-                        )
-                    }
+
                 }
             }
         }
@@ -261,8 +231,15 @@ class RideViewModel(context: Context) : ViewModel() {
     }
 
     fun getCompletedRides(): Flow<List<Ride>> = flow {
-        emit(rideRepository.getCompletedRides())
+        val currentUserEmail = FirebaseAuth.getInstance().currentUser?.email
+        if (currentUserEmail != null) {
+            val rides = rideRepository.getCompletedRidesForUser(currentUserEmail)
+            emit(rides)
+        } else {
+            emit(emptyList())
+        }
     }
+
 
 }
 

@@ -79,8 +79,9 @@ class RideRepository(private val context: Context) {
 
 
     suspend fun getAvailableRides(excludeEmail: String): List<Ride> {
-        return db.rideDao().getAvailableRides(excludeEmail)
+        return db.rideDao().getAvailableRides(excludeEmail).filter { it.status=="PLANNED" }
     }
+
 
     suspend fun addParticipantToRide(participant: RideParticipant): Boolean {
         return try {
@@ -362,6 +363,16 @@ class RideRepository(private val context: Context) {
     }
     suspend fun getCompletedRides(): List<Ride> {
         return db.rideDao().getRidesByStatus("COMPLETED")
+    }
+
+    suspend fun getCompletedRidesForUser(userEmail: String): List<Ride> {
+        val ridesAsDriver = db.rideDao().getRidesByOwnerEmail(userEmail).filter { it.status == "COMPLETED" }
+
+        val participantRides = db.rideParticipantDao().getRidesByUserAndRole(userEmail, "PASSENGER")
+            .mapNotNull { db.rideDao().getRideById(it.rideId) }
+            .filter { it.status == "COMPLETED" }
+
+        return (ridesAsDriver + participantRides).distinctBy { it.id }
     }
 
 }
