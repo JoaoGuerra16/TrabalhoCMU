@@ -36,12 +36,13 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            sendNotification(this, "Permissão Concedida", "Você agora pode receber notificações.")
+            sendNotification(this, "Permissão Concedida", "Agora pode receber notificações.")
         } else {
             // Ver esta parte, faz alguma coisa quando a autorização é negada
         }
     }
 
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +85,7 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-                // Não necessário neste exemplo
+
             }
         }
     }
