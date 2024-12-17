@@ -33,8 +33,8 @@
     <string name="available_seats">Assentos Disponíveis</string>
     <string name="date">Data</string>
     <string name="cancel_ride">Cancelar Viagem</string>
-    <string name="giving_ride">A Oferecer uma Viagem</string>
-    <string name="taking_ride">A Tomar uma Viagem</string>
+    <string name="giving_ride">A Dar boleia</string>
+    <string name="taking_ride">Receber Boleia</string>
 
     <string name="have_account">Tem uma conta?</string>
     <string name="login">Entrar</string>
@@ -87,20 +87,64 @@
 
 
 
-        <string name="rides_history_title">Histórico de Viagens</string>
-        <string name="search_label">Pesquisar</string>
-        <string name="select_date_button">Selecionar Data</string>
-        <string name="cancel_date_button">Cancelar Data</string>
+    <string name="rides_history_title">Histórico de Viagens</string>
+    <string name="search_label">Pesquisar</string>
+    <string name="select_date_button">Selecionar Data</string>
+    <string name="cancel_date_button">Cancelar Data</string>
 
-        <string name="no_rides_message">Nenhuma viagem disponível</string>
-        <string name="route_label">Rota:</string>
-        <string name="start_label">Início:</string>
-        <string name="arrival_label">Chegada:</string>
-        <string name="available_seats_label">Assentos Disponíveis:</string>
-        <string name="date_label">Data:</string>
+    <string name="no_rides_message">Nenhuma viagem disponível</string>
+    <string name="route_label">Rota:</string>
+    <string name="start_label">Início:</string>
+    <string name="arrival_label">Chegada:</string>
+    <string name="available_seats_label">Assentos Disponíveis:</string>
+    <string name="date_label">Data:</string>
+
+    //Create Ride
+    <string name="create_ride_title">Criar boleia</string>
+    <string name="basic_trip_information">Informação básica</string>
+    <string name="final_destination">Destino final</string>
+    <string name="creation_successful">Criado com sucesso</string>
+    <string name="fill_fields_error">Erro nos campos</string>
+    <string name="next">Próximo</string>
+
+    //find Rides
+    <string name="request">Pedir</string>
+    <string name="details">Detalhes</string>
+    <string name="available_rides">Boleias disponíveis</string>
+    <string name="available_ride">Boleia disponível</string>
+
+    //Manage Passengers
+    <string name="manage_passengers">Gerir passageiros</string>
+    <string name="route_normal_route">Rota: rota normal</string>
+    <string name="reject">Rejeitar</string>
+    <string name="accept">Aceitar</string>
+
+    //My rides
+    <string name="people_request">Pedidos</string>
+
+    //Profile
+    <string name="carregar_dados">A carregar dados do utilizador...</string>
+
+
+
+    <string name="ride_details">Detalhes da boleia</string>
+    <string name="planned">PLANEADO</string>
+    <string name="in_progress">EM_PROGRESSO</string>
+    <string name="completed">COMPLETADA</string>
+    <string name="passengers">Passageiros</string>
+    <string name="back">Voltar</string>
+    <string name="end_date">Fim previsto</string>
+    <string name="driver_email">Email do condutor</string>
+
+    <string name="choose_your_request_option">Escolha a sua opção</string>
+    <string name="send_request">Enviar pedido</string>
+    <string name="no_completed_rides_available">Sem rides acabadas</string>
+    <string name="select_pickup">Seleciona pickup e drpoff no mapa:</string>
+
+
+    <string name="end_ride">Acabar boleia</string>
 
     <string name="google_maps_key">AIzaSyCX1Mm5eBdk2CwCQ1YFSW8ear3NjSRI1Y4</string>
-
 
     <string name="default_web_client_id">1098206102662-tj2un1i0iqm0f8s4kjq204k3riua8ku8.apps.googleusercontent.com</string>
 </resources>

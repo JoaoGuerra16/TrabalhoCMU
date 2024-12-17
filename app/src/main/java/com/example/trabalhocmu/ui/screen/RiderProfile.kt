@@ -1,4 +1,4 @@
-package com.example.trabalhocmu.ui.screen
+ackage com.example.trabalhocmu.ui.screen
 
 import com.example.trabalhocmu.viewmodel.RatingViewModel
 import androidx.compose.foundation.Image

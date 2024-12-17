@@ -66,7 +66,7 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
                     CenterAlignedTopAppBar(
                         title = {
                             Text(
-                                text = "My Rides",
+                                text = stringResource(id = R.string.my_rides),
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = PoppinsFamily,
@@ -77,7 +77,7 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
                             IconButton(onClick = { navController.navigate("Create Ride") }) {
                                 Icon(
                                     imageVector = Icons.Default.Add,
-                                    contentDescription = "Add Ride",
+                                    contentDescription = stringResource(id = R.string.add_ride),
                                     tint = Color.Black
                                 )
                             }
@@ -97,14 +97,14 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
                     ) {
                         // Giving Rides Section
                         item {
-                            SectionTitle(title = "Giving Rides")
+                            SectionTitle(title = stringResource(id = R.string.giving_ride))
                         }
 
                         if (ridesAsDriver.isNotEmpty()) {
                             items(ridesAsDriver) { ride ->
                                 RideCard(
                                     ride = ride,
-                                    role = "Giving Ride",
+                                    role = stringResource(id = R.string.giving_ride),
                                     onDetailsClick = {
                                         navController.navigate("RideDetails/${ride.id}")
                                     },
@@ -119,7 +119,7 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
                         } else {
                             item {
                                 Text(
-                                    text = "No rides available in this section.",
+                                    text = stringResource(id = R.string.no_rides_available),
                                     color = Color.Gray,
                                     fontSize = 16.sp
                                 )
@@ -133,14 +133,14 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
 
                         // Taking Rides Section
                         item {
-                            SectionTitle(title = "Taking Rides")
+                            SectionTitle(title = stringResource(id = R.string.taking_ride))
                         }
 
                         if (ridesAsPassenger.isNotEmpty()) {
                             items(ridesAsPassenger) { ride ->
                                 RideCard(
                                     ride = ride,
-                                    role = "Taking Ride",
+                                    role = stringResource(id = R.string.taking_ride),
                                     onDetailsClick = {
                                         navController.navigate("RideDetails/${ride.id}")
                                     },
@@ -152,7 +152,7 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
                         } else {
                             item {
                                 Text(
-                                    text = "No rides available in this section.",
+                                    text = stringResource(id = R.string.no_rides_available),
                                     color = Color.Gray,
                                     fontSize = 16.sp
                                 )
@@ -299,3 +299,17 @@ fun RideCard(
     }
 }
 
+
+
+
+
+// Data class para representar uma viagem
+data class RideTeste(
+    val from: String,
+    val to: String,
+    val availableSeats: Int,
+    val startTime: String,
+    val arrivalTime: String,
+    val date: LocalDate,
+    val isGivingRide: Boolean
+)

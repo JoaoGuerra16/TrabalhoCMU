@@ -63,7 +63,7 @@ fun RidesHistory(navController: NavController, viewModel: RideViewModel) {
             ) {
                 // Título
                 Text(
-                    text = "Rides History",
+                    text = stringResource(id = R.string.ride_history),
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -74,7 +74,7 @@ fun RidesHistory(navController: NavController, viewModel: RideViewModel) {
                 // Verificar se há rides completadas
                 if (completedRides.isEmpty()) {
                     Text(
-                        text = "No completed rides available.",
+                        text = stringResource(id = R.string.no_completed_rides_available),
                         fontSize = 18.sp,
                         color = Color.Gray
                     )
@@ -207,7 +207,7 @@ fun RidesHistoryItem(
             ) {
                 Column {
                     Text(
-                        text = "Start Time",
+                        text = stringResource(id = R.string.start_time),
                         fontWeight = FontWeight.Medium,
                         color = Color.Gray,
                         fontSize = 14.sp

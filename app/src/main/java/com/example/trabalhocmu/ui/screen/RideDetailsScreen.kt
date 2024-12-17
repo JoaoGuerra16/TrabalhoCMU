@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.trabalhocmu.R
 import com.example.trabalhocmu.room.entity.Ride
@@ -55,7 +56,7 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
                     CenterAlignedTopAppBar(
                         title = {
                             Text(
-                                text = "Ride Details",
+                                text = stringResource(id = R.string.ride_details),
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = PoppinsFamily,
@@ -84,7 +85,7 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
 
                             if (currentRide.ownerEmail == currentUserEmail) {
                                 when (currentRide.status) {
-                                    "PLANNED" -> {
+                                    stringResource(id = R.string.planned)  -> {
                                         Button(
                                             onClick = {
                                                 rideViewModel.startRide(rideId)
@@ -112,7 +113,7 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
                                             Text("Cancel Ride", color = Color.White, fontSize = 18.sp)
                                         }
                                     }
-                                    "IN_PROGRESS" -> {
+                                    stringResource(id = R.string.in_progress) -> {
                                         Button(
                                             onClick = {
                                                 rideViewModel.completeRide(rideId)
@@ -126,7 +127,7 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
                                             Text("Complete Ride", color = Color.White, fontSize = 18.sp)
                                         }
                                     }
-                                    "COMPLETED" -> {
+                                    stringResource(id = R.string.completed)-> {
                                         Text(
                                             "Ride Completed",
                                             fontSize = 18.sp,
@@ -143,7 +144,7 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
 
                         // Título da seção de participantes
                         Text(
-                            "Passengers",
+                            stringResource(id = R.string.passengers) ,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black,
@@ -168,7 +169,7 @@ fun RideDetailsScreen(navController: NavController, rideId: Int, rideViewModel: 
                                 .height(50.dp),
                             shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("Back", color = Color.White, fontSize = 18.sp)
+                            Text(stringResource(id = R.string.back), color = Color.White, fontSize = 18.sp)
                         }
                     }
                 }
@@ -198,7 +199,7 @@ fun RideDetailCard(ride: Ride) {
         ) {
             // Título
             Text(
-                text = "Ride Details",
+                text = stringResource(id = R.string.ride_details),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF333333)
@@ -206,19 +207,19 @@ fun RideDetailCard(ride: Ride) {
             Spacer(modifier = Modifier.height(12.dp))
 
             // Informações do Ride
-            InfoRow("From", ride.startingPoint)
-            InfoRow("To", ride.finalDestination)
-            InfoRow("Start Date", ride.startingDate)
-            InfoRow("End Date", ride.executedArrival)
-            InfoRow("Available Seats", "${ride.availablePlaces}")
-            InfoRow("Driver Email", ride.ownerEmail)
+            InfoRow(stringResource(id = R.string.from), ride.startingPoint)
+            InfoRow(stringResource(id = R.string.to), ride.finalDestination)
+            InfoRow(stringResource(id = R.string.starting_date), ride.startingDate)
+            InfoRow(stringResource(id = R.string.end_date), ride.executedArrival)
+            InfoRow(stringResource(id = R.string.available_seats), "${ride.availablePlaces}")
+            InfoRow(stringResource(id = R.string.driver_email), ride.ownerEmail)
 
             Spacer(modifier = Modifier.height(8.dp))
 
             // Opções Pets, Baggage e Smoking
-            RowField("Pets Allowed", ride.isPetsAllowed)
-            RowField("Baggage Allowed", ride.isBaggageAllowed)
-            RowField("Smoking Allowed", ride.isSmokingAllowed)
+            RowField(stringResource(id = R.string.pets_allowed), ride.isPetsAllowed)
+            RowField(stringResource(id = R.string.baggage_allowed), ride.isBaggageAllowed)
+            RowField(stringResource(id = R.string.smoking_allowed), ride.isSmokingAllowed)
         }
     }
 }

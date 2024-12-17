@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import com.example.trabalhocmu.R
 
 
@@ -73,7 +74,7 @@ fun RideRequestScreen(
                     CenterAlignedTopAppBar(
                         title = {
                             Text(
-                                text = "Request Ride",
+                                text = stringResource(id = R.string.request),
                                 fontSize = 22.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black
@@ -96,7 +97,7 @@ fun RideRequestScreen(
                         ) {
                             // Título
                             Text(
-                                "Ride Details",
+                                stringResource(id = R.string.ride_details),
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFF333333)
@@ -105,7 +106,7 @@ fun RideRequestScreen(
 
                             Row {
                                 Text(
-                                    text = "From: ",
+                                    text = stringResource(id = R.string.from),
                                     fontWeight = FontWeight.Bold,
                                     color = Color.Black,
                                     fontSize = 16.sp
@@ -119,7 +120,7 @@ fun RideRequestScreen(
 
                             Row {
                                 Text(
-                                    text = "To: ",
+                                    text = stringResource(id = R.string.to),
                                     fontWeight = FontWeight.Bold,
                                     color = Color.Black,
                                     fontSize = 16.sp
@@ -137,12 +138,12 @@ fun RideRequestScreen(
                             )
 
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text("Choose your request option:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                            Text(stringResource(id = R.string.choose_your_request_option), fontWeight = FontWeight.Bold, fontSize = 18.sp)
 
                             // Botões de Opção
                             Row(modifier = Modifier.padding(top = 8.dp)) {
                                 RadioButton(selected = isNormalRoute, onClick = { isNormalRoute = true })
-                                Text("Normal Route", fontSize = 16.sp)
+                                Text(stringResource(id = R.string.route_normal_route), fontSize = 16.sp)
                                 Spacer(modifier = Modifier.width(16.dp))
                                 RadioButton(selected = !isNormalRoute, onClick = { isNormalRoute = false })
                                 Text("Custom Pickup/Dropoff", fontSize = 16.sp)
@@ -152,7 +153,7 @@ fun RideRequestScreen(
 
                             // Mapa
                             if (!isNormalRoute) {
-                                Text("Select Pickup and Dropoff on the map:", fontWeight = FontWeight.Bold)
+                                Text(stringResource(id = R.string.select_pickup), fontWeight = FontWeight.Bold)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 MapViewComposable(
                                     startingPoint = rideDetails.startingPoint,
@@ -166,11 +167,12 @@ fun RideRequestScreen(
                                 if (pickupLocation.isNotEmpty()) {
                                     Text("Selected Pickup: $pickupLocation", color = Color(0xFF757575))
                                 }
+
                                 if (dropoffLocation.isNotEmpty()) {
                                     Text("Selected Dropoff: $dropoffLocation", color = Color(0xFF757575))
                                 }
                             } else {
-                                Text("Normal Route:", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                                Text(stringResource(id = R.string.route_normal_route), fontWeight = FontWeight.Bold, fontSize = 18.sp)
                                 Spacer(modifier = Modifier.height(8.dp))
                                 MapViewComposable(
                                     startingPoint = rideDetails.startingPoint,
@@ -197,7 +199,7 @@ fun RideRequestScreen(
                                     .height(50.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
                             ) {
-                                Text("Send Request", color = Color.White, fontSize = 18.sp)
+                                Text(stringResource(id = R.string.send_request), color = Color.White, fontSize = 18.sp)
                             }
                         }
                     } ?: run {

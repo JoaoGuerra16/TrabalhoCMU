@@ -65,7 +65,7 @@ fun Profile(
                         ProfileDetails(user!!)
                     } else {
                         // Caso o usuário não esteja disponível, mostrar mensagem
-                        Text("Carregando dados do usuário...", fontSize = 18.sp)
+                        Text(stringResource(id = R.string.carregar_dados), fontSize = 18.sp)
                     }
                 }
             }

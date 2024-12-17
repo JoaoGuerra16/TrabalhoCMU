@@ -23,10 +23,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.trabalhocmu.R
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.ui.theme.PoppinsFamily
 
@@ -51,7 +53,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
             ) {
 
                 Text(
-                    text = "My rides",
+                    text = stringResource(id = R.string.my_rides),
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = PoppinsFamily
@@ -59,7 +61,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "Giving a ride",
+                    text = stringResource(id = R.string.giving_ride),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = PoppinsFamily
@@ -67,15 +69,15 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
-                UserInfoRowGivingARide(label = "Starting point", info = from ?: "N/A")
+                UserInfoRowGivingARide(label = stringResource(id = R.string.starting_point), info = from ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
-                UserInfoRowGivingARide(label = "Final destination", info = to ?: "N/A")
+                UserInfoRowGivingARide(label = stringResource(id = R.string.final_destination), info = to ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
-                UserInfoRowGivingARide(label = "Starting date", info = date ?: "N/A")
+                UserInfoRowGivingARide(label = stringResource(id = R.string.starting_date), info = date ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
-                UserInfoRowGivingARide(label = "Expected arrival", info = date ?: "N/A")
+                UserInfoRowGivingARide(label = stringResource(id = R.string.expected_arrival), info = date ?: "N/A")
                 Spacer(modifier = Modifier.height(15.dp))
-                UserInfoRowGivingARide(label = "Available places", info = availableSeats ?: "N/A")
+                UserInfoRowGivingARide(label = stringResource(id = R.string.available_seats), info = availableSeats ?: "N/A")
 
                 Spacer(modifier = Modifier.height(15.dp))
 
@@ -87,7 +89,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Pets allowed", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(id = R.string.pets_allowed), fontWeight = FontWeight.Bold)
                     Checkbox(checked = true, onCheckedChange = null)  // Marcação fixa
                 }
                 Spacer(modifier = Modifier.height(15.dp))
@@ -98,7 +100,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Baggage allowed", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(id = R.string.baggage_allowed), fontWeight = FontWeight.Bold)
                     Checkbox(checked = false, onCheckedChange = null)  // Marcação fixa
                 }
                 Spacer(modifier = Modifier.height(15.dp))
@@ -110,7 +112,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Smoking allowed", fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(id = R.string.smoking_allowed), fontWeight = FontWeight.Bold)
                     Checkbox(checked = true, onCheckedChange = null)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
@@ -126,7 +128,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                         colors = ButtonDefaults.buttonColors(containerColor = darkBlue) // Cor azul
                     ) {
                         Text(
-                            text = "People Requests",
+                            text = stringResource(id = R.string.people_request),
                             color = Color.White,
                             fontFamily = PoppinsFamily
                         )
@@ -136,7 +138,7 @@ fun MyRidesGivingARide(  navController: NavController, from: String?, to: String
                         onClick = { (navController.navigate(  "StartRide/$from/$to/$startTime/$arrivalTime/$date/$availableSeats")) },
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Green)
                     ) {
-                        Text(text = "Start", color = Color.White, fontFamily = PoppinsFamily)
+                        Text(text = stringResource(id = R.string.start), color = Color.White, fontFamily = PoppinsFamily)
                     }
 
 
