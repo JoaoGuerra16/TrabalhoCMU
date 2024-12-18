@@ -45,15 +45,15 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
 
     val ridesAsDriver by rideViewModel.getRidesAsDriver().collectAsState(initial = emptyList())
     val ridesAsPassenger by rideViewModel.getRidesAsPassenger().collectAsState(initial = emptyList())
-
     LaunchedEffect(Unit) {
         rideViewModel.syncAllData()
     }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        // Fundo com imagem
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Image(
-            painter = painterResource(id = R.drawable.background),
+            painter = painterResource(id = R.drawable.background), // Substitua pelo nome da imagem
             contentDescription = "Background",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -66,7 +66,7 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
                     CenterAlignedTopAppBar(
                         title = {
                             Text(
-                                text = stringResource(id = R.string.my_rides),
+                                text = "My Rides",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 fontFamily = PoppinsFamily,
@@ -77,34 +77,31 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
                             IconButton(onClick = { navController.navigate("Create Ride") }) {
                                 Icon(
                                     imageVector = Icons.Default.Add,
-                                    contentDescription = stringResource(id = R.string.add_ride),
+                                    contentDescription = "Add Ride",
                                     tint = Color.Black
                                 )
                             }
                         },
                         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            containerColor = Color.Transparent
+                            containerColor = Color.Transparent // Garantir fundo transparente
                         )
                     )
                 },
                 containerColor = Color.Transparent,
                 content = { padding ->
-                    LazyColumn(
+                    Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(padding)
                             .padding(16.dp)
                     ) {
-                        // Giving Rides Section
-                        item {
-                            SectionTitle(title = stringResource(id = R.string.giving_ride))
-                        }
-
-                        if (ridesAsDriver.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        SectionTitle(title = "Giving Rides")
+                        LazyColumn {
                             items(ridesAsDriver) { ride ->
                                 RideCard(
                                     ride = ride,
-                                    role = stringResource(id = R.string.giving_ride),
+                                    role = "Giving Ride",
                                     onDetailsClick = {
                                         navController.navigate("RideDetails/${ride.id}")
                                     },
@@ -112,49 +109,28 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
                                         navController.navigate("ManageRequests/${ride.id}")
                                     },
                                     onRemoveOrLeaveClick = {
+                                        // Remover passageiros (mostrar tela de gerenciamento)
                                         navController.navigate("ManagePassengers/${ride.id}")
                                     }
                                 )
                             }
-                        } else {
-                            item {
-                                Text(
-                                    text = stringResource(id = R.string.no_rides_available),
-                                    color = Color.Gray,
-                                    fontSize = 16.sp
-                                )
-                            }
                         }
 
-                        // Spacer between sections
-                        item {
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
+                        Spacer(modifier = Modifier.height(16.dp))
 
-                        // Taking Rides Section
-                        item {
-                            SectionTitle(title = stringResource(id = R.string.taking_ride))
-                        }
-
-                        if (ridesAsPassenger.isNotEmpty()) {
+                        SectionTitle(title = "Taking Rides")
+                        LazyColumn {
                             items(ridesAsPassenger) { ride ->
                                 RideCard(
                                     ride = ride,
-                                    role = stringResource(id = R.string.taking_ride),
+                                    role = "Taking Ride",
                                     onDetailsClick = {
                                         navController.navigate("RideDetails/${ride.id}")
                                     },
                                     onRemoveOrLeaveClick = {
+                                        // Sair da ride
                                         rideViewModel.leaveRide(ride.id)
                                     }
-                                )
-                            }
-                        } else {
-                            item {
-                                Text(
-                                    text = stringResource(id = R.string.no_rides_available),
-                                    color = Color.Gray,
-                                    fontSize = 16.sp
                                 )
                             }
                         }
@@ -164,7 +140,6 @@ fun MyRides(navController: NavController, rideViewModel: RideViewModel) {
         }
     }
 }
-
 
 @Composable
 fun SectionTitle(title: String) {
@@ -298,6 +273,7 @@ fun RideCard(
         }
     }
 }
+
 
 
 
