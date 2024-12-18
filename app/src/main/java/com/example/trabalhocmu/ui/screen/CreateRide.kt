@@ -18,6 +18,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.trabalhocmu.API.util.MapViewComposable
 import com.example.trabalhocmu.R
+import com.example.trabalhocmu.notificacoes.createNotification
+import com.example.trabalhocmu.notificacoes.sendNotification
 import com.example.trabalhocmu.ui.component.SidebarScaffold
 import com.example.trabalhocmu.viewmodel.RideViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +42,9 @@ fun CreateRide(navController: NavController) {
         var isPetsAllowed by remember { mutableStateOf(false) }
         var isBaggageAllowed by remember { mutableStateOf(false) }
         var isSmokingAllowed by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            createNotification(context)
+        }
 
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
@@ -180,6 +185,7 @@ fun CreateRide(navController: NavController) {
                             // Navegar para a tela "My Rides"
                             navController.navigate("My Rides") {
                                 popUpTo("create_ride") { inclusive = true }
+                                sendNotification(context, "Create", "Ride criada com sucesso")
                             }
                         } else {
                             // Mostrar um erro ao utilizador
