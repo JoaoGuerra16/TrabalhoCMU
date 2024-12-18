@@ -26,6 +26,7 @@ import java.util.Locale
 import androidx.compose.runtime.mutableStateOf
 import com.example.trabalhocmu.notificacoes.createNotificationChannel
 import com.example.trabalhocmu.notificacoes.sendNotification
+import com.example.trabalhocmu.ui.component.requestWriteSettingsPermission
 
 class MainActivity : ComponentActivity() {
 
@@ -53,7 +54,8 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
-
+        requestWriteSettingsPermission(this)
+        initializeBatteryReceiver()
         setAppLanguage()
         initializeLightSensor()
         initializeBatteryReceiver()
